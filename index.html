@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b3762">
-<title>MB Aufmaß – v0.11</title>
+<title>MB Aufmaß – v0.13</title>
 <style>
 :root{--navy:#0b3762;--navy2:#072948;--gold:#c9a454;--gold2:#ead8a3;--bg:#f3f5f7;--card:#fff;--line:#d7dde4;--text:#152238;--muted:#6c7787;--ok:#2f8a46;--danger:#b54848;--blue:#2876b7;--raw:#9aa3ae}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}.app{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}.side{background:linear-gradient(180deg,var(--navy),var(--navy2));color:white;padding:16px 12px;position:sticky;top:0;height:100vh;overflow:auto}.brand{background:white;border-radius:12px;padding:12px;margin-bottom:14px}.brand img{width:100%;max-height:82px;object-fit:contain}.brand-fallback{color:var(--navy);font-size:24px;font-weight:900;letter-spacing:.03em;text-align:center}.version{text-align:center;font-size:11px;color:#dbe5ef;margin-top:5px}.nav{display:grid;gap:7px}.nav button{border:0;border-radius:10px;background:transparent;color:white;padding:12px;text-align:left;font-weight:800;cursor:pointer}.nav button.active,.nav button:hover{background:white;color:var(--navy)}.workspace{min-width:0}.top{background:#fff;border-bottom:1px solid var(--line);padding:16px 20px;position:sticky;top:0;z-index:20}.toprow{display:flex;gap:12px;justify-content:space-between;align-items:center}.title h1{margin:0;color:var(--navy);font-size:25px}.title small{color:var(--gold);font-weight:800}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:white;color:var(--navy);padding:9px 12px;border-radius:9px;font-weight:800;cursor:pointer}.btn.primary{background:var(--navy);color:white;border-color:var(--navy)}.btn.gold{background:var(--gold);color:#0a2c4f;border-color:var(--gold)}.btn.danger{background:#fff1f1;color:var(--danger);border-color:#e9bcbc}.btn.small{padding:6px 9px;font-size:12px}.main{padding:18px;max-width:1540px;margin:auto}.page{display:none}.page.active{display:block}.grid{display:grid;gap:14px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;box-shadow:0 2px 10px rgba(15,45,75,.04)}.card h2,.card h3{margin:0 0 12px;color:var(--navy)}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.field label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin:0 0 5px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;background:white;color:var(--text)}.field textarea{min-height:82px}.note{font-size:12px;color:var(--muted);line-height:1.45}.ok{color:var(--ok);font-weight:800}.warn{color:#9a6508;font-weight:800}.dangertext{color:var(--danger);font-weight:800}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tabs button{border:1px solid var(--line);background:white;border-radius:8px;padding:7px 10px;color:var(--navy);font-weight:800;cursor:pointer}.tabs button.active{background:var(--gold);border-color:var(--gold)}.partsbar{display:flex;gap:7px;overflow:auto;padding:3px 0 10px}.chip{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;padding:7px 11px;font-weight:800;color:var(--navy);cursor:pointer}.chip.active{background:var(--navy);color:white}.measure-layout{display:grid;grid-template-columns:minmax(330px,390px) minmax(0,1fr) minmax(260px,310px);gap:14px}.svgbox{min-height:390px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#fff,#fafbfc);border:1px dashed #ccd4dd;border-radius:12px;overflow:hidden}.svgbox svg{width:100%;height:auto;max-height:520px}.edgegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.edgeitem{border:1px solid var(--line);border-radius:9px;padding:8px}.edgeitem b{font-size:12px;color:var(--navy)}.edgeitem select{width:100%;margin-top:5px;border:1px solid var(--line);border-radius:7px;padding:7px}.summarytable{width:100%;border-collapse:collapse;font-size:12px}.summarytable th,.summarytable td{padding:8px;border-bottom:1px solid var(--line);text-align:left}.summarytable th{color:var(--navy);background:#f5f7f9}.plategrid{display:grid;gap:5px;min-height:330px}.plate{border:2px solid var(--navy);background:#fbfbf8;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--navy);cursor:pointer;position:relative}.plate.selected{outline:4px solid var(--gold);z-index:2}.plate.cut:after{content:"Ausklinkung";position:absolute;right:3px;bottom:3px;font-size:9px;background:#fff0f0;color:var(--danger);padding:2px 4px;border-radius:3px}.banner{padding:10px 12px;border-radius:10px;background:#fff8e7;border:1px solid #ead7a4;color:#6a4e0d;font-size:12px}.printsheet{display:grid;gap:14px}.element-sheet{break-inside:avoid;background:white;border:1px solid #bbb;padding:10mm;min-height:125mm}.element-sheet h3{margin:0 0 5mm;color:#000}.element-sheet .meta{font-size:10pt;margin-bottom:3mm}.element-sheet svg{width:100%;height:75mm;border:1px solid #ddd}.hidden{display:none!important}@media(max-width:1400px){.measure-layout{grid-template-columns:minmax(320px,380px) minmax(0,1fr)}.measure-layout>.card:last-child{grid-column:1/-1}.fields{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:1050px){.app{grid-template-columns:82px minmax(0,1fr)}.side{padding:10px 7px}.brand{padding:6px}.brand img{max-height:45px}.nav button{font-size:0;text-align:center;padding:12px 4px}.nav button:before{font-size:18px}.nav button[data-icon]:before{content:attr(data-icon)}.version{display:none}.measure-layout,.grid2,.grid3{grid-template-columns:1fr}.fields{grid-template-columns:repeat(2,minmax(0,1fr))}.measure-layout>.card:last-child{grid-column:auto}.toprow{align-items:flex-start;flex-direction:column}.top{position:static}}@media(max-width:620px){.app{display:block}.side{height:auto;position:static;display:flex;gap:6px;overflow:auto}.brand,.version{display:none}.nav{display:flex}.nav button{min-width:58px}.main{padding:10px}.fields{grid-template-columns:1fr 1fr}.actions{width:100%}.actions .btn{flex:1}.svgbox{min-height:280px}}@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}body{background:white}.side,.top,.noprint{display:none!important}.app{display:block}.main{padding:0;max-width:none}.page{display:none!important}#page-print{display:block!important}.element-sheet{border:0;page-break-after:always;min-height:260mm;padding:8mm}.element-sheet:last-child{page-break-after:auto}}
@@ -28,12 +28,12 @@
     <button data-icon="⇩" onclick="showPage('import',this)">IMPORT</button>
     <button data-icon="▣" onclick="showPage('summary',this)">FERTIGUNG / EXPORT</button>
   </div>
-  <div class="version">MB Aufmaß v0.11<br>Fertigungs-Arbeitsstand</div>
+  <div class="version">MB Aufmaß v0.13<br>Fertigungs-Arbeitsstand</div>
 </aside>
 <div class="workspace">
 <header class="top">
   <div class="toprow">
-    <div class="title"><h1>MB AUFMASS</h1><small>NATURSTEIN · TREPPEN · PLATTEN · v0.11</small></div>
+    <div class="title"><h1>MB AUFMASS</h1><small>NATURSTEIN · TREPPEN · PLATTEN · v0.13</small></div>
     <div class="actions">
       <button class="btn primary" onclick="newProject()">Neues Projekt</button><button class="btn" onclick="saveLocal()">Speichern</button>
       <button class="btn" onclick="showProjects()">Öffnen</button>
@@ -133,10 +133,10 @@
 </section>
 
 <section id="page-summary" class="page">
-  <div class="section-title"><h2>Fertigung / Export</h2><div><button class="btn" onclick="buildPrintSheets()">Fertigblatt aktualisieren</button><button class="btn primary" onclick="printSheets()">PDF / Drucken</button></div></div>
+  <div class="section-title"><h2>Fertigung / Export</h2><div><button class="btn" onclick="buildPrintSheets()">Fertigblatt aktualisieren</button><button class="btn" onclick="downloadCombinedDXF()">Gesamt-DXF</button><button class="btn primary" onclick="printSheets()">PDF / Drucken</button></div></div>
   <div class="grid grid2 noprint">
     <div class="card"><h3>Elemente</h3><div id="summaryList"></div></div>
-    <div class="card"><h3>DXF Export</h3><p class="note">Jedes Fertigungselement kann einzeln als echte ASCII-DXF-Kontur exportiert werden. Das ist bewusst getrennt, damit der Steinmetz jede Platte als eigene Maßdatei bekommt.</p><button class="btn gold" onclick="downloadAllDXFSequential()">Alle DXF nacheinander</button><p class="note">Safari kann bei mehreren Downloads nachfragen. Alternativ im Element auf „DXF“ klicken.</p></div>
+    <div class="card"><h3>DXF Export</h3><p class="note">Jedes Fertigungselement kann einzeln als echte ASCII-DXF-Kontur exportiert werden. Das ist bewusst getrennt, damit der Steinmetz jede Platte als eigene Maßdatei bekommt.</p><button class="btn gold" onclick="downloadAllDXFSequential()">Einzel-DXF: alle nacheinander</button><p class="note">Safari kann bei mehreren Downloads nachfragen. Alternativ im Element auf „DXF“ klicken.</p></div>
   </div>
   <div style="height:14px"></div>
   <div class="card noprint"><h3>Fertigblatt-Vorschau</h3><p class="note">Die Druckversion enthält jetzt die Geometrie jedes einzelnen Elements.</p></div>
@@ -222,7 +222,7 @@ function printLegend(){
 
 function svgForStair(p){const pts=stairPoints(p,true),map=fitSvg(pts,620,300,75),P=pts.map(map),f=stairFinish(p);let s=`<svg viewBox="0 0 620 330"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="#f7f3e8" stroke="#000" stroke-width="2"/>`;s+=printEdgeLines(P,p.edges);if(p.diag1)s+=`<line x1="${P[0].x}" y1="${P[0].y}" x2="${P[2].x}" y2="${P[2].y}" stroke="#2d8a57" stroke-width="1.5" stroke-dasharray="6 4"/><text x="${(P[0].x+P[2].x)/2}" y="${(P[0].y+P[2].y)/2-6}" text-anchor="middle" font-size="12" fill="#2d8a57">D1 ${fmt(p.diag1)}</text>`;if(p.diag2)s+=`<line x1="${P[1].x}" y1="${P[1].y}" x2="${P[3].x}" y2="${P[3].y}" stroke="#2d8a57" stroke-width="1.5" stroke-dasharray="6 4"/><text x="${(P[1].x+P[3].x)/2}" y="${(P[1].y+P[3].y)/2+16}" text-anchor="middle" font-size="12" fill="#2d8a57">D2 ${fmt(p.diag2)}</text>`;s+=`<text x="310" y="25" text-anchor="middle" font-size="15">hinten ${fmt(f.backW)} mm</text><text x="310" y="315" text-anchor="middle" font-size="15">vorne ${fmt(f.frontW)} mm</text><text x="20" y="170" font-size="13">L ${fmt(f.leftD)}</text><text x="520" y="170" font-size="13">R ${fmt(f.rightD)}</text>${frontMarker((P[2].x+P[3].x)/2,Math.min(292,(P[2].y+P[3].y)/2+28))}${printLegend()}</svg>`;return s}
 function svgForRiser(p){const pts=riserPoints(p),map=fitSvg(pts,620,300,75),P=pts.map(map);let s=`<svg viewBox="0 0 620 330"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="#f7f3e8" stroke="#000" stroke-width="2"/>`;s+=printEdgeLines(P,p.edges);s+=`<text x="310" y="25" text-anchor="middle" font-size="15">oben ${fmt(p.topW)} mm</text><text x="310" y="315" text-anchor="middle" font-size="15">unten ${fmt(p.bottomW)} mm</text><text x="20" y="170" font-size="13">L ${fmt(p.hL)}</text><text x="520" y="170" font-size="13">R ${fmt(p.hR)}</text>${frontMarker(310,285)}${printLegend()}</svg>`;return s}
-function svgForPlate(p){const pts=platePoints(p),map=fitSvg(pts,620,300,75),P=pts.map(map);return `<svg viewBox="0 0 620 330"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="none" stroke="#000" stroke-width="2"/><text x="310" y="25" text-anchor="middle" font-size="15">${fmt(p.w)} mm</text><text x="20" y="170" font-size="13">${fmt(p.d)} mm</text>${p.cut&&p.cut.type==='L'?`<text x="310" y="170" text-anchor="middle" font-size="14">L-Ausklinkung ${fmt(p.cut.w)} × ${fmt(p.cut.d)} mm · ${p.cut.corner}</text>`:''}</svg>`}
+function svgForPlate(p){const pts=platePoints(p),map=fitSvg(pts,620,300,82),P=pts.map(map);let s=`<svg viewBox="0 0 620 350"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="#f7f3e8" stroke="#111" stroke-width="2"/>`;const eps=.01,w=num(p.w),d=num(p.d),es=p.edges||blankEdges();for(let i=0;i<pts.length;i++){const j=(i+1)%pts.length,a=pts[i],b=pts[j],A=P[i],B=P[j];let e=null;if(Math.abs(a.y-d)<eps&&Math.abs(b.y-d)<eps)e='front';else if(Math.abs(a.y)<eps&&Math.abs(b.y)<eps)e='back';else if(Math.abs(a.x)<eps&&Math.abs(b.x)<eps)e='left';else if(Math.abs(a.x-w)<eps&&Math.abs(b.x-w)<eps)e='right';if(e){const val=es[e]||'Keine';s+=`<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="${edgeColor(val)}" stroke-width="${val==='Keine'?3:8}" stroke-linecap="round"/>`}}let frontSeg=[];for(let i=0;i<pts.length;i++){const j=(i+1)%pts.length;if(Math.abs(pts[i].y-d)<eps&&Math.abs(pts[j].y-d)<eps)frontSeg.push([P[i],P[j]])}let fx=310,fy=300;if(frontSeg.length){const seg=frontSeg.sort((a,b)=>Math.abs(b[1].x-b[0].x)-Math.abs(a[1].x-a[0].x))[0];fx=(seg[0].x+seg[1].x)/2;fy=Math.min(315,Math.max(seg[0].y,seg[1].y)+30)}s+=`<text x="310" y="24" text-anchor="middle" font-size="15">${fmt(p.w)} mm</text><text x="18" y="170" font-size="13">${fmt(p.d)} mm</text>${p.cut&&p.cut.type==='L'?`<text x="310" y="165" text-anchor="middle" font-size="14" fill="#b54848">L-Ausklinkung ${fmt(p.cut.w)} × ${fmt(p.cut.d)} mm · ${p.cut.corner}</text>`:''}<text x="${fx}" y="${fy}" text-anchor="middle" font-size="15" font-weight="800" fill="#b54848">VORNE ↓</text></svg>`;return s}
 
 function addFree(data={}){state.free=state.free||[];state.free.push({name:`Freikörper ${state.free.length+1}`,w:1000,d:500,thick:20,cut:{type:'none',corner:'front-right',w:0,d:0},edges:blankEdges(),...data});currentFree=state.free.length-1;renderFree();autoSave()}
 function deleteFree(){if(!state.free?.length)return;if(!confirm(`${state.free[currentFree].name} wirklich löschen?`))return;state.free.splice(currentFree,1);state.free.forEach((p,i)=>p.name=`Freikörper ${i+1}`);currentFree=Math.max(0,Math.min(currentFree,state.free.length-1));renderFree();autoSave()}
@@ -339,6 +339,121 @@ try{
    if(all[last]?.state){state=all[last].state;state.free=state.free||[];state.imports=state.imports||[];currentStair=currentRiser=currentPlate=currentFree=0;renderAll();}
  }
 }catch(e){}
+
+function dxfLineEntity(x1,y1,x2,y2,layer='CUT'){return `0
+LINE
+8
+${layer}
+10
+${x1}
+20
+${y1}
+30
+0
+11
+${x2}
+21
+${y2}
+31
+0
+`}
+function dxfTextEntity(x,y,text,h=35,layer='TEXT'){return `0
+TEXT
+8
+${layer}
+10
+${x}
+20
+${y}
+30
+0
+40
+${h}
+1
+${String(text).replace(/[\r\n]/g,' ')}
+`}
+function combinedEntity(points,ox,oy,label,extra=''){
+ let z='', xs=points.map(q=>num(q.x)), ys=points.map(q=>num(q.y));
+ for(let i=0;i<points.length;i++){let a=points[i],b=points[(i+1)%points.length];z+=dxfLineEntity(ox+num(a.x),oy-num(a.y),ox+num(b.x),oy-num(b.y),'CUT')}
+ z+=dxfTextEntity(ox,oy+70,label,42,'TEXT');
+ if(extra)z+=dxfTextEntity(ox,oy+25,extra,25,'TEXT');
+ return {dxf:z,w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)}
+}
+function buildCombinedDXF(){
+ let ents='', x=0, y=0, rowH=0, maxRow=6500, gapX=350, gapY=500;
+ function place(points,label,extra=''){
+   let xs=points.map(q=>num(q.x)),ys=points.map(q=>num(q.y)),w=Math.max(...xs)-Math.min(...xs),h=Math.max(...ys)-Math.min(...ys);
+   if(x>0 && x+w>maxRow){x=0;y-=rowH+gapY;rowH=0}
+   let e=combinedEntity(points,x,y,label,extra);ents+=e.dxf;x+=w+gapX;rowH=Math.max(rowH,h)
+ }
+ (state.stairs||[]).forEach((q,i)=>{let f=stairFinish(q);place([{x:0,y:0},{x:f.backW,y:0},{x:f.frontW,y:f.rightD},{x:0,y:f.leftD}],`TRITTSTUFE ${i+1}`,`Fertig: hinten ${fmt(f.backW)} vorne ${fmt(f.frontW)} L/R ${fmt(f.leftD)}/${fmt(f.rightD)} mm`)});
+ (state.risers||[]).forEach((q,i)=>place(riserPoints(q),`SETZSTUFE ${i+1}`,`Breite oben/unten ${fmt(q.topW)}/${fmt(q.bottomW)} mm`));
+ (state.plates||[]).forEach((q,i)=>place(platePoints(q),`PODEST ${q.name||('P'+String(i+1).padStart(2,'0'))}`,q.cut&&q.cut.type==='L'?`L-CUT ${fmt(q.cut.w)} x ${fmt(q.cut.d)} ${q.cut.corner}`:''));
+ (state.free||state.freebodies||[]).forEach((q,i)=>place(freePoints(q),`FREIKOERPER ${i+1}`,''));
+ return `0
+SECTION
+2
+HEADER
+9
+$ACADVER
+1
+AC1009
+9
+$INSUNITS
+70
+4
+0
+ENDSEC
+0
+SECTION
+2
+TABLES
+0
+TABLE
+2
+LAYER
+70
+2
+0
+LAYER
+2
+CUT
+70
+0
+62
+7
+6
+CONTINUOUS
+0
+LAYER
+2
+TEXT
+70
+0
+62
+2
+6
+CONTINUOUS
+0
+ENDTAB
+0
+ENDSEC
+0
+SECTION
+2
+ENTITIES
+${ents}0
+ENDSEC
+0
+EOF
+`}
+async function downloadCombinedDXF(){
+ const txt=buildCombinedDXF(), name=`${(state.project.projectNo||'MB-Aufmass').replace(/[^A-Za-z0-9_-]/g,'_')}_Gesamt.dxf`;
+ const file=new File([txt],name,{type:'application/dxf'});
+ try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return}}catch(e){}
+ const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)
+}
+
 </script>
 </body>
 </html>
