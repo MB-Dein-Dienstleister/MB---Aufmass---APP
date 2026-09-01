@@ -2,395 +2,198 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>MB Aufmaß – v0.5</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b3762">
+<title>MB Aufmaß – v0.6</title>
 <style>
-:root{
-  --navy:#0b3762;--navy2:#072948;--gold:#c9a454;--gold2:#ead9ab;
-  --paper:#f4f6f8;--card:#fff;--line:#d9dee5;--text:#152238;--muted:#6f7b8b;
-  --ok:#2f8a46;--danger:#b54848;--red:#c84d4d;--blue:#2878b5;--green:#3a8f55;
-}
-*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);color:var(--text)}
-button,input,select,textarea{font:inherit}.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
-.sidebar{background:linear-gradient(180deg,var(--navy),var(--navy2));color:white;display:flex;flex-direction:column}
-.brand{background:#fff;padding:14px 16px 12px;border-bottom:1px solid var(--line)} .brand img{display:block;max-width:185px;max-height:92px;margin:auto;object-fit:contain}
-.nav{padding:12px 10px;display:flex;flex-direction:column;gap:7px}.nav button{width:100%;border:0;border-radius:8px;padding:13px 12px;text-align:left;background:transparent;color:#fff;font-weight:750;font-size:14px;cursor:pointer}
-.nav button:hover{background:rgba(255,255,255,.08)}.nav button.active{background:#fff;color:var(--navy)}.nav button.gold{background:linear-gradient(90deg,#e1c370,#d0aa56);color:#0c2f54}
-.sidefooter{margin-top:auto;padding:14px 16px 18px;font-size:11px;line-height:1.6;color:#e2e8f0}.workspace{min-width:0}
-.topbar{background:#fff;border-bottom:1px solid var(--line);padding:18px 24px 14px}.toprow{display:flex;gap:20px;align-items:flex-start;justify-content:space-between}
-.titleblock h1{margin:0;font-size:29px;color:#0c3156}.sub{margin-top:4px;color:var(--gold);font-weight:800;letter-spacing:.03em}
-.quickactions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:9px 12px;font-weight:800;color:#173a5d;cursor:pointer}.btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}.btn.gold{background:linear-gradient(90deg,#dfbf68,#cfa753);border:0;color:#0b2f54}.btn.danger{color:var(--danger);border-color:#dfb4b4}
-.meta{margin-top:14px;border:1px solid var(--line);border-radius:9px;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden}.meta .cell{padding:10px 14px;border-right:1px solid var(--line)}.meta .cell:last-child{border-right:0}
-.meta label{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-bottom:4px}.meta input,.meta select{border:0;background:transparent;font-weight:800;color:#13243d;font-size:13px;width:100%}
-.content{padding:12px 18px 24px}.headingrow{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:8px 8px 0 0;padding:12px 16px}.headingrow h2{margin:0;font-size:18px}
-.steps{display:grid;grid-template-columns:repeat(6,1fr);background:#fff;border:1px solid var(--line);border-top:0;margin-bottom:12px}.step{border:0;background:#fff;padding:14px 8px;font-size:12px;font-weight:800;border-right:1px solid var(--line);color:#526073;cursor:pointer}.step:last-child{border-right:0}.step.active{background:linear-gradient(90deg,#ead8a5,#f1e4bd);color:#16324f}.step.done::after{content:" ✓";color:var(--ok)}
-.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:10px}.card h3{font-size:14px;margin:0 0 10px;color:#173a5d}.card h4{font-size:12px;margin:14px 0 6px;color:#173a5d;text-transform:uppercase}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.field label{display:block;font-size:11px;font-weight:750;color:#526073;margin-bottom:4px}.field input,.field select,.field textarea{width:100%;border:1px solid #cfd5dc;border-radius:6px;padding:9px;background:#fff}.field textarea{min-height:70px}
-.smallnote{background:#fbf2d9;border:1px solid #ead5a2;border-radius:6px;padding:9px 10px;font-size:11px;margin:8px 0}.oknote{background:#edf8ef;border:1px solid #b9ddbf;border-radius:6px;padding:9px 10px;font-size:11px}.dangerNote{background:#fff0f0;border:1px solid #efc0c0;border-radius:6px;padding:9px 10px;font-size:11px}
-.page{display:none}.page.active{display:block}.measure-layout{display:grid;grid-template-columns:390px minmax(420px,1fr) 300px;gap:10px}.diagram-tabs{display:flex;overflow:auto;border-bottom:1px solid var(--line);margin:-14px -14px 8px}.diagram-tabs button{border:0;background:#f6f7f9;padding:11px 15px;font-size:12px;white-space:nowrap}.diagram-tabs button.active{background:linear-gradient(90deg,#dcc17a,#ead9ab);font-weight:800}
-.diagramwrap{min-height:430px;display:grid;place-items:center;overflow:auto}.diagramwrap svg{max-width:100%;height:auto}.legend{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:10px;margin-top:8px}.legend span::before{content:"";display:inline-block;width:16px;height:3px;margin-right:6px;vertical-align:middle;background:var(--c)}
-.pillbar{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;font-weight:750;font-size:11px;cursor:pointer}.pill.active{background:var(--navy);color:#fff}.table{width:100%;border-collapse:collapse}.table th,.table td{border-bottom:1px solid #e7ebef;padding:8px 6px;font-size:11px;text-align:left}.table th{color:#526073}.table td:last-child,.table th:last-child{text-align:right}
-.finishbox{background:#f8f1df;border:1px solid #e2cc93;border-radius:8px;padding:10px}.override{border-left:4px solid var(--gold);padding-left:10px}.cutrow{display:grid;grid-template-columns:1.2fr repeat(4,1fr) auto;gap:6px;align-items:end;border-bottom:1px solid #e7ebef;padding:8px 0}.cutrow .field label{font-size:9px}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.summaryTiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.tile{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px}.tile b{display:block;font-size:24px;color:var(--navy)}.muted{color:var(--muted);font-size:11px}
-.modalback{position:fixed;inset:0;background:rgba(6,24,41,.55);display:none;align-items:center;justify-content:center;z-index:100}.modalback.show{display:flex}.modal{width:min(650px,94vw);max-height:90vh;overflow:auto;background:#fff;border-radius:12px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-@media(max-width:1100px){.app{grid-template-columns:82px 1fr}.brand img{max-width:58px;max-height:58px}.nav button{font-size:0;text-align:center}.sidefooter{display:none}.measure-layout{grid-template-columns:1fr}.summaryTiles{grid-template-columns:1fr 1fr}}
-@media(max-width:720px){.app{display:block}.sidebar{display:none}.topbar{padding:12px}.toprow{display:block}.titleblock h1{font-size:24px}.quickactions{margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr)}.quickactions .btn{font-size:11px;padding:8px 5px}.meta{grid-template-columns:1fr 1fr}.meta .cell:nth-child(2){border-right:0}.meta .cell:nth-child(-n+2){border-bottom:1px solid var(--line)}.content{padding:10px}.steps{grid-template-columns:repeat(3,1fr)}.step{min-height:56px;padding:8px 4px;font-size:11px}.grid2,.grid3,.grid4{grid-template-columns:1fr}.measure-layout{grid-template-columns:1fr}.diagramwrap{min-height:300px}.summaryTiles{grid-template-columns:1fr 1fr}.cutrow{grid-template-columns:1fr 1fr}.cutrow .btn{grid-column:span 2}.field input,.field select,.field textarea{font-size:16px}}
-@media print{.sidebar,.quickactions,.steps,.toolbar,.diagram-tabs,.no-print{display:none!important}.app{display:block}.topbar{border:0}.content{padding:0}.page{display:none!important}.page.summaryPrint{display:block!important}.card{break-inside:avoid}}
+:root{--navy:#0b3762;--navy2:#072948;--gold:#c9a454;--gold2:#ead8a3;--bg:#f3f5f7;--card:#fff;--line:#d7dde4;--text:#152238;--muted:#6c7787;--ok:#2f8a46;--danger:#b54848;--blue:#2876b7;--raw:#9aa3ae}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}.app{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}.side{background:linear-gradient(180deg,var(--navy),var(--navy2));color:white;padding:16px 12px;position:sticky;top:0;height:100vh;overflow:auto}.brand{background:white;border-radius:12px;padding:12px;margin-bottom:14px}.brand img{width:100%;max-height:82px;object-fit:contain}.brand-fallback{color:var(--navy);font-size:24px;font-weight:900;letter-spacing:.03em;text-align:center}.version{text-align:center;font-size:11px;color:#dbe5ef;margin-top:5px}.nav{display:grid;gap:7px}.nav button{border:0;border-radius:10px;background:transparent;color:white;padding:12px;text-align:left;font-weight:800;cursor:pointer}.nav button.active,.nav button:hover{background:white;color:var(--navy)}.workspace{min-width:0}.top{background:#fff;border-bottom:1px solid var(--line);padding:16px 20px;position:sticky;top:0;z-index:20}.toprow{display:flex;gap:12px;justify-content:space-between;align-items:center}.title h1{margin:0;color:var(--navy);font-size:25px}.title small{color:var(--gold);font-weight:800}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:white;color:var(--navy);padding:9px 12px;border-radius:9px;font-weight:800;cursor:pointer}.btn.primary{background:var(--navy);color:white;border-color:var(--navy)}.btn.gold{background:var(--gold);color:#0a2c4f;border-color:var(--gold)}.btn.danger{background:#fff1f1;color:var(--danger);border-color:#e9bcbc}.btn.small{padding:6px 9px;font-size:12px}.main{padding:18px;max-width:1540px;margin:auto}.page{display:none}.page.active{display:block}.grid{display:grid;gap:14px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;box-shadow:0 2px 10px rgba(15,45,75,.04)}.card h2,.card h3{margin:0 0 12px;color:var(--navy)}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.field label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin:0 0 5px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;background:white;color:var(--text)}.field textarea{min-height:82px}.note{font-size:12px;color:var(--muted);line-height:1.45}.ok{color:var(--ok);font-weight:800}.warn{color:#9a6508;font-weight:800}.dangertext{color:var(--danger);font-weight:800}.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.tabs button{border:1px solid var(--line);background:white;border-radius:8px;padding:7px 10px;color:var(--navy);font-weight:800;cursor:pointer}.tabs button.active{background:var(--gold);border-color:var(--gold)}.partsbar{display:flex;gap:7px;overflow:auto;padding:3px 0 10px}.chip{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;padding:7px 11px;font-weight:800;color:var(--navy);cursor:pointer}.chip.active{background:var(--navy);color:white}.measure-layout{display:grid;grid-template-columns:minmax(330px,390px) minmax(0,1fr) minmax(260px,310px);gap:14px}.svgbox{min-height:390px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#fff,#fafbfc);border:1px dashed #ccd4dd;border-radius:12px;overflow:hidden}.svgbox svg{width:100%;height:auto;max-height:520px}.edgegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.edgeitem{border:1px solid var(--line);border-radius:9px;padding:8px}.edgeitem b{font-size:12px;color:var(--navy)}.edgeitem select{width:100%;margin-top:5px;border:1px solid var(--line);border-radius:7px;padding:7px}.summarytable{width:100%;border-collapse:collapse;font-size:12px}.summarytable th,.summarytable td{padding:8px;border-bottom:1px solid var(--line);text-align:left}.summarytable th{color:var(--navy);background:#f5f7f9}.plategrid{display:grid;gap:5px;min-height:330px}.plate{border:2px solid var(--navy);background:#fbfbf8;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--navy);cursor:pointer;position:relative}.plate.selected{outline:4px solid var(--gold);z-index:2}.plate.cut:after{content:"Ausklinkung";position:absolute;right:3px;bottom:3px;font-size:9px;background:#fff0f0;color:var(--danger);padding:2px 4px;border-radius:3px}.banner{padding:10px 12px;border-radius:10px;background:#fff8e7;border:1px solid #ead7a4;color:#6a4e0d;font-size:12px}.printsheet{display:grid;gap:14px}.element-sheet{break-inside:avoid;background:white;border:1px solid #bbb;padding:10mm;min-height:125mm}.element-sheet h3{margin:0 0 5mm;color:#000}.element-sheet .meta{font-size:10pt;margin-bottom:3mm}.element-sheet svg{width:100%;height:75mm;border:1px solid #ddd}.hidden{display:none!important}@media(max-width:1400px){.measure-layout{grid-template-columns:minmax(320px,380px) minmax(0,1fr)}.measure-layout>.card:last-child{grid-column:1/-1}.fields{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:1050px){.app{grid-template-columns:82px minmax(0,1fr)}.side{padding:10px 7px}.brand{padding:6px}.brand img{max-height:45px}.nav button{font-size:0;text-align:center;padding:12px 4px}.nav button:before{font-size:18px}.nav button[data-icon]:before{content:attr(data-icon)}.version{display:none}.measure-layout,.grid2,.grid3{grid-template-columns:1fr}.fields{grid-template-columns:repeat(2,minmax(0,1fr))}.measure-layout>.card:last-child{grid-column:auto}.toprow{align-items:flex-start;flex-direction:column}.top{position:static}}@media(max-width:620px){.app{display:block}.side{height:auto;position:static;display:flex;gap:6px;overflow:auto}.brand,.version{display:none}.nav{display:flex}.nav button{min-width:58px}.main{padding:10px}.fields{grid-template-columns:1fr 1fr}.actions{width:100%}.actions .btn{flex:1}.svgbox{min-height:280px}}@media print{body{background:white}.side,.top,.noprint{display:none!important}.app{display:block}.main{padding:0;max-width:none}.page{display:none!important}#page-print{display:block!important}.element-sheet{border:0;page-break-after:always;min-height:260mm;padding:8mm}.element-sheet:last-child{page-break-after:auto}}
 </style>
 </head>
 <body>
 <div class="app">
-<aside class="sidebar">
-  <div class="brand"><img src="mb-logo.png" alt="MB Dein Dienstleister"></div>
+<aside class="side">
+  <div class="brand"><img src="mb-logo.png" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="brand-fallback" style="display:none">MB AUFMASS</div></div>
   <div class="nav">
-    <button class="gold" onclick="goStep(1)">⌂ &nbsp; ÜBERSICHT</button>
-    <button onclick="goStep(1)">♙ &nbsp; PROJEKT / KUNDE</button>
-    <button onclick="goStep(2)">▱ &nbsp; BAUTEIL / GEOMETRIE</button>
-    <button class="active" onclick="goStep(3)">⌁ &nbsp; TREPPEN-AUFMASS</button>
-    <button onclick="goStep(4)">▦ &nbsp; SETZSTUFEN</button>
-    <button onclick="goStep(5)">▣ &nbsp; PODESTE</button>
-    <button onclick="goStep(6)">⇩ &nbsp; ZUSAMMENFASSUNG</button>
+    <button data-icon="⌂" class="active" onclick="showPage('project',this)">ÜBERSICHT / PROJEKT</button>
+    <button data-icon="↔" onclick="showPage('stairs',this)">TREPPEN-AUFMASS</button>
+    <button data-icon="▤" onclick="showPage('risers',this)">SETZSTUFEN</button>
+    <button data-icon="▦" onclick="showPage('podest',this)">PODEST / PLATTEN</button>
+    <button data-icon="▣" onclick="showPage('summary',this)">FERTIGUNG / EXPORT</button>
   </div>
-  <div class="sidefooter">MB Aufmaß v0.5<br>© 2026 MB Dein Dienstleister</div>
+  <div class="version">MB Aufmaß v0.6<br>Fertigungs-Teststand</div>
 </aside>
-
-<section class="workspace">
-<div class="topbar">
+<div class="workspace">
+<header class="top">
   <div class="toprow">
-    <div class="titleblock"><h1>MB AUFMASS</h1><div class="sub">NATURSTEIN · TREPPEN · PLATTEN · <b>v0.5</b></div></div>
-    <div class="quickactions">
-      <button class="btn" onclick="saveProjectFile()">▣ Speichern</button>
-      <button class="btn" onclick="openProjectFile()">▱ Öffnen</button>
-      <button class="btn" onclick="exportDXF()">⇩ DXF</button>
-      <button class="btn" onclick="printSummary()">▤ Drucken</button>
-      <button class="btn" onclick="openSettings()">⚙ Einstellungen</button>
+    <div class="title"><h1>MB AUFMASS</h1><small>NATURSTEIN · TREPPEN · PLATTEN · v0.6</small></div>
+    <div class="actions">
+      <button class="btn" onclick="saveLocal()">Speichern</button>
+      <button class="btn" onclick="showProjects()">Öffnen</button>
+      <button class="btn" onclick="exportJson()">JSON Export</button>
+      <button class="btn gold" onclick="showPage('summary');renderSummary()">Fertigung</button>
     </div>
   </div>
-  <div class="meta">
-    <div class="cell"><label>Projektnummer</label><input id="orderNo" value="MB-2026-0001" oninput="saveState()"></div>
-    <div class="cell"><label>Aufmaßdatum</label><input id="measureDate" type="date" onchange="saveState()"></div>
-    <div class="cell"><label>Bearbeiter</label><input id="author" value="Maik Bielefeldt" oninput="saveState()"></div>
-    <div class="cell"><label>Status</label><select id="status" onchange="saveState()"><option>Aufmaß</option><option>In Bearbeitung</option><option>Fertig zur Fertigung</option></select></div>
+</header>
+<main class="main">
+<section id="page-project" class="page active">
+  <div class="grid grid2">
+    <div class="card">
+      <div class="section-title"><h2>Projekt / Kunde</h2><button class="btn small" onclick="loadKaratas()">Testauftrag Karatas laden</button></div>
+      <div class="fields">
+        <div class="field"><label>Projektnummer</label><input id="projectNo" value="MB-2026-0001" oninput="syncProject()"></div>
+        <div class="field"><label>Aufmaßdatum</label><input id="date" type="date" oninput="syncProject()"></div>
+        <div class="field"><label>Bearbeiter</label><input id="author" value="Maik Bielefeldt" oninput="syncProject()"></div>
+        <div class="field"><label>Status</label><select id="status" oninput="syncProject()"><option>Aufmaß</option><option>Fertigmaß</option><option>Freigegeben</option></select></div>
+        <div class="field"><label>Projektbezeichnung</label><input id="projectName" value="Außentreppe und Veranda" oninput="syncProject()"></div>
+        <div class="field"><label>Kunde</label><input id="customer" value="" oninput="syncProject()"></div>
+        <div class="field"><label>Adresse</label><input id="address" value="" oninput="syncProject()"></div>
+        <div class="field"><label>Material / Stärke</label><input id="material" value="Granit 20 mm" oninput="syncProject()"></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Notizen</label><textarea id="notes" oninput="syncProject()"></textarea></div>
+    </div>
+    <div class="card"><h2>Workflow</h2><p class="note">Rohmaß bleibt unverändert. Überstände und Bearbeitungen erzeugen daraus das Fertigungselement. Jede Trittstufe, Setzstufe und Podestplatte kann einzeln als DXF exportiert und im Fertigblatt gezeichnet werden.</p><div id="projectStats" class="banner"></div><p class="note"><b>Wichtig:</b> v0.6 speichert Projekte lokal auf diesem Gerät. Der JSON-Export ist nur noch eine zusätzliche Sicherungsdatei.</p></div>
   </div>
-</div>
-
-<div class="content">
-  <div class="headingrow"><h2 id="pageTitle">TREPPEN-AUFMASS</h2></div>
-  <div class="steps" id="steps">
-    <button class="step" data-step="1" onclick="goStep(1)">1. Basisdaten</button>
-    <button class="step" data-step="2" onclick="goStep(2)">2. Geometrie</button>
-    <button class="step" data-step="3" onclick="goStep(3)">3. Stufen <span id="stepCount">0</span></button>
-    <button class="step" data-step="4" onclick="goStep(4)">4. Setzstufen</button>
-    <button class="step" data-step="5" onclick="goStep(5)">5. Podeste</button>
-    <button class="step" data-step="6" onclick="goStep(6)">6. Zusammenfassung</button>
-  </div>
-
-  <section class="page" id="page1">
-    <div class="card">
-      <h3>1 · Basisdaten – Projekt / Kunde</h3>
-      <div class="grid2">
-        <div class="field"><label>Projektbezeichnung</label><input id="projectName" oninput="saveState()" placeholder="z. B. Außentreppe Familie Mustermann"></div>
-        <div class="field"><label>Kunde</label><input id="customer" oninput="saveState()"></div>
-        <div class="field"><label>Adresse / Objekt</label><input id="address" oninput="saveState()"></div>
-        <div class="field"><label>Kontakt</label><input id="contact" oninput="saveState()"></div>
-      </div>
-      <div class="field" style="margin-top:10px"><label>Projekt- / Baustellennotizen</label><textarea id="projectNotes" oninput="saveState()" placeholder="Besonderheiten, Materialwunsch, Steinmetz-Hinweise ..."></textarea></div>
-      <div class="smallnote">Bosch / MeasureOn dient für die Bestandsaufnahme vor Ort. MB Aufmaß hält die gemessenen Rohmaße unverändert fest und erzeugt daraus separat die Fertigungsangaben.</div>
-      <div class="toolbar"><button class="btn primary" onclick="markDone(1);goStep(2)">Weiter zu Geometrie →</button></div>
-    </div>
-  </section>
-
-  <section class="page" id="page2">
-    <div class="card">
-      <h3>2 · Geometrie / Treppen-Grunddaten</h3>
-      <div class="grid3">
-        <div class="field"><label>Treppenart</label><select id="stairType" onchange="saveState()"><option>Gerader Lauf</option><option>Gewendelt / verzogen</option><option>Podesttreppe</option><option>Außentreppe frei geformt</option></select></div>
-        <div class="field"><label>Geplante Anzahl Trittstufen</label><input id="plannedSteps" type="number" min="1" value="1" onchange="ensureSteps();saveState()"></div>
-        <div class="field"><label>Aufmaßrichtung</label><select id="direction" onchange="saveState()"><option>unten → oben</option><option>oben → unten</option></select></div>
-        <div class="field"><label>Gesamtbreite ca. (mm)</label><input id="overallWidth" type="number" oninput="saveState()"></div>
-        <div class="field"><label>Gesamthöhe ca. (mm)</label><input id="overallRise" type="number" oninput="saveState()"></div>
-        <div class="field"><label>Gesamtlauflänge ca. (mm)</label><input id="overallRun" type="number" oninput="saveState()"></div>
-      </div>
-      <div class="field" style="margin-top:10px"><label>Geometrie-Hinweise</label><textarea id="geometryNotes" oninput="saveState()" placeholder="z. B. Mauern nicht im Winkel, Pfeiler rechts, Gefälle vorhanden ..."></textarea></div>
-      <div class="toolbar"><button class="btn" onclick="goStep(1)">← Basisdaten</button><button class="btn primary" onclick="ensureSteps();markDone(2);goStep(3)">Stufen aufnehmen →</button></div>
-    </div>
-  </section>
-
-  <section class="page" id="page3">
-    <div class="measure-layout">
-      <div>
-        <div class="card">
-          <h3>3 · Rohaufmaß Tritt + Setzstufe</h3>
-          <div class="pillbar" id="stepSelector"></div>
-          <div class="grid2">
-            <div class="field"><label>Breite hinten (mm)</label><input id="rearW" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Breite vorne (mm)</label><input id="frontW" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Tiefe links (mm)</label><input id="leftD" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Tiefe rechts (mm)</label><input id="rightD" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Diagonale ↘ (mm)</label><input id="diag1" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Diagonale ↙ (mm)</label><input id="diag2" type="number" oninput="updateCurrent()"></div>
-          </div>
-          <h4>Setzstufe direkt mit erfassen</h4>
-          <div class="grid3">
-            <div class="field"><label>Höhe links (mm)</label><input id="riseL" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Höhe Mitte (mm)</label><input id="riseM" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Höhe rechts (mm)</label><input id="riseR" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Breite oben (mm)</label><input id="riserTopW" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Breite unten (mm)</label><input id="riserBottomW" type="number" oninput="updateCurrent()"></div>
-            <div class="field"><label>Setzstufe Diagonale (mm)</label><input id="riserDiag" type="number" oninput="updateCurrent()"></div>
-          </div>
-          <div class="field" style="margin-top:8px"><label>Notiz zur Stufe</label><input id="stepNote" oninput="updateCurrent()" placeholder="z. B. Pfeiler hinten rechts"></div>
-          <div class="toolbar">
-            <button class="btn" onclick="prevStep()">← Vorherige</button>
-            <button class="btn" onclick="copyCurrent()">Stufe kopieren</button>
-            <button class="btn gold" onclick="addStep()">+ Nächste Stufe</button>
-            <button class="btn" onclick="nextStep()">Nächste →</button>
-          </div>
-        </div>
-
-        <div class="card finishbox">
-          <h3>Fertigmaß-Bearbeitung · aktuelle Stufe</h3>
-          <div class="smallnote">Globalwerte gelten für alle Stufen. „Individuell“ überschreibt sie nur für die aktuelle Stufe.</div>
-          <label style="font-size:11px;font-weight:800"><input id="useOverride" type="checkbox" onchange="toggleOverride()"> Individuelle Werte für diese Stufe</label>
-          <div class="grid2 override" id="overrideFields" style="margin-top:8px;opacity:.45;pointer-events:none">
-            <div class="field"><label>Abdichtung (mm)</label><input id="oSeal" type="number" step="0.5" oninput="updateOverride()"></div>
-            <div class="field"><label>Drainage (mm)</label><input id="oDrain" type="number" step="0.5" oninput="updateOverride()"></div>
-            <div class="field"><label>Kleberbett (mm)</label><input id="oGlue" type="number" step="0.5" oninput="updateOverride()"></div>
-            <div class="field"><label>Trittplatte (mm)</label><input id="oTread" type="number" oninput="updateOverride()"></div>
-            <div class="field"><label>Überstand vorne (mm)</label><input id="oOverhang" type="number" oninput="updateOverride()"></div>
-            <div class="field"><label>Untertritt Setzstufe (mm)</label><input id="oUnder" type="number" oninput="updateOverride()"></div>
-            <div class="field"><label>Wassernase Abstand (mm)</label><input id="oDrip" type="number" oninput="updateOverride()"></div>
-            <div class="field"><label>Setzstufenstärke (mm)</label><input id="oRiser" type="number" oninput="updateOverride()"></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Bearbeitungen / Ausschnitte</h3>
-          <div id="cutsList"></div>
-          <button class="btn gold" onclick="openCutModal()">+ Bearbeitung hinzufügen</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="diagram-tabs">
-          <button class="active" onclick="setView('top',this)">Draufsicht</button>
-          <button onclick="setView('front',this)">Vorderansicht</button>
-          <button onclick="setView('side',this)">Seitenansicht links</button>
-          <button onclick="setView('3d',this)">3D-Ansicht</button>
-        </div>
-        <div class="diagramwrap" id="diagram"></div>
-        <div class="legend">
-          <span style="--c:#263238">Fertig-/Außenkontur</span><span style="--c:#c9a454">Sichtkante</span>
-          <span style="--c:#2878b5">Wassernase</span><span style="--c:#c84d4d">Ausschnitt / Bohrung</span>
-          <span style="--c:#3a8f55">Kontrollmaße</span><span style="--c:#9aa1aa">Rohmaß / Bestand</span>
-        </div>
-        <div id="geometryStatus" class="oknote" style="margin-top:10px"></div>
-      </div>
-
-      <div>
-        <div class="card">
-          <h3>Aktuelle Stufe</h3>
-          <table class="table"><tbody id="currentSummary"></tbody></table>
-        </div>
-        <div class="card">
-          <h3>Fertigungsparameter</h3>
-          <table class="table"><tbody id="finishSummary"></tbody></table>
-          <button class="btn" style="margin-top:8px;width:100%" onclick="openSettings()">Globale Werte ändern</button>
-        </div>
-        <div class="dangerNote">Hinweis: Die Zeichnung dient in v0.5 zur Aufmaß-/Fertigungsprüfung. DXF und Fertigkonturen mit komplexen Ausschnitten müssen vor Fertigung kontrolliert werden.</div>
-      </div>
-    </div>
-    <div class="toolbar"><button class="btn" onclick="goStep(2)">← Geometrie</button><button class="btn primary" onclick="markDone(3);goStep(4)">Setzstufen prüfen →</button></div>
-  </section>
-
-  <section class="page" id="page4">
-    <div class="card">
-      <h3>4 · Setzstufen – Kontroll- und Bearbeitungsübersicht</h3>
-      <div class="smallnote">Die Setzstufen werden beim normalen Stufen-Aufmaß bereits mit erfasst. Hier prüfst und korrigierst du sie gesammelt.</div>
-      <div style="overflow:auto"><table class="table"><thead><tr><th>Nr.</th><th>H links</th><th>H Mitte</th><th>H rechts</th><th>Breite oben</th><th>Breite unten</th><th></th></tr></thead><tbody id="riserTable"></tbody></table></div>
-      <div class="toolbar"><button class="btn" onclick="goStep(3)">← Stufen</button><button class="btn primary" onclick="markDone(4);goStep(5)">Podeste →</button></div>
-    </div>
-  </section>
-
-  <section class="page" id="page5">
-    <div class="card">
-      <h3>5 · Podeste</h3>
-      <div id="landingsList"></div>
-      <button class="btn gold" onclick="addLanding()">+ Podest hinzufügen</button>
-      <div class="toolbar"><button class="btn" onclick="goStep(4)">← Setzstufen</button><button class="btn primary" onclick="markDone(5);goStep(6)">Zusammenfassung →</button></div>
-    </div>
-  </section>
-
-  <section class="page summaryPrint" id="page6">
-    <div class="summaryTiles">
-      <div class="tile"><span class="muted">Trittstufen</span><b id="sumSteps">0</b></div>
-      <div class="tile"><span class="muted">Setzstufen erfasst</span><b id="sumRisers">0</b></div>
-      <div class="tile"><span class="muted">Bearbeitungen</span><b id="sumCuts">0</b></div>
-      <div class="tile"><span class="muted">Podeste</span><b id="sumLandings">0</b></div>
-    </div>
-    <div class="card" style="margin-top:10px">
-      <h3>6 · Zusammenfassung / Fertigblatt-Vorschau</h3>
-      <div id="projectSummary"></div>
-      <div style="overflow:auto;margin-top:10px"><table class="table"><thead><tr><th>Teil</th><th>Rohmaß hinten/vorne</th><th>Tiefe L/R</th><th>Setzstufe H L/M/R</th><th>Bearbeitungen</th></tr></thead><tbody id="partsSummary"></tbody></table></div>
-      <div class="toolbar no-print"><button class="btn" onclick="goStep(5)">← Podeste</button><button class="btn" onclick="exportJSON()">Projekt JSON</button><button class="btn gold" onclick="exportDXF()">DXF exportieren</button><button class="btn primary" onclick="printSummary()">PDF / Drucken</button></div>
-    </div>
-  </section>
-</div>
 </section>
-</div>
 
-<div class="modalback" id="settingsModal">
-  <div class="modal">
-    <h3>Globale Fertigungsparameter</h3>
-    <div class="grid2">
-      <div class="field"><label>Abdichtung (mm)</label><input id="gSeal" type="number" step="0.5"></div>
-      <div class="field"><label>Drainage (mm)</label><input id="gDrain" type="number" step="0.5"></div>
-      <div class="field"><label>Kleberbett (mm)</label><input id="gGlue" type="number" step="0.5"></div>
-      <div class="field"><label>Trittplattenstärke (mm)</label><input id="gTread" type="number"></div>
-      <div class="field"><label>Setzstufenstärke (mm)</label><input id="gRiser" type="number"></div>
-      <div class="field"><label>Überstand vorne (mm)</label><input id="gOverhang" type="number"></div>
-      <div class="field"><label>Untertritt Setzstufe (mm)</label><input id="gUnder" type="number"></div>
-      <div class="field"><label>Wassernase Abstand von Vorderkante (mm)</label><input id="gDrip" type="number"></div>
-    </div>
-    <div class="toolbar"><button class="btn" onclick="closeSettings()">Abbrechen</button><button class="btn primary" onclick="saveSettings()">Speichern</button></div>
+<section id="page-stairs" class="page">
+  <div class="section-title"><h2>Trittstufen</h2><div><button class="btn" onclick="addStair()">+ Stufe</button></div></div>
+  <div id="stairChips" class="partsbar"></div>
+  <div class="measure-layout">
+    <div class="card" id="stairForm"></div>
+    <div class="card"><div class="tabs"><button class="active" onclick="setStairView('top',this)">Draufsicht</button><button onclick="setStairView('front',this)">Vorderansicht</button><button onclick="setStairView('3d',this)">3D Körper</button></div><div id="stairSvg" class="svgbox"></div></div>
+    <div class="card"><h3>Kantenbearbeitung</h3><p class="note">Jede Kante separat auswählen. Polierte Sichtkanten werden gold markiert, Wassernase blau.</p><div id="stairEdges" class="edgegrid"></div><div style="margin-top:12px"><button class="btn gold" onclick="downloadCurrentStairDXF()">DXF dieser Stufe</button></div></div>
   </div>
-</div>
+</section>
 
-<div class="modalback" id="cutModal">
-  <div class="modal">
-    <h3>Bearbeitung hinzufügen</h3>
-    <div class="grid2">
-      <div class="field"><label>Bearbeitung</label><select id="cutType" onchange="cutHint()"><option>L-Ausklinkung</option><option>U-Ausschnitt</option><option>Rechteck-Ausschnitt</option><option>Halbkreis-Ausschnitt</option><option>Bohrloch</option><option>Langloch</option><option>Freie Ausklinkung</option></select></div>
-      <div class="field"><label>Bezug / Lage</label><select id="cutCorner"><option>vorne links</option><option>vorne rechts</option><option>hinten links</option><option>hinten rechts</option><option>freie Position X/Y</option></select></div>
-      <div class="field"><label>X / Abstand von links (mm)</label><input id="cutX" type="number" value="0"></div>
-      <div class="field"><label>Y / Abstand von vorne (mm)</label><input id="cutY" type="number" value="0"></div>
-      <div class="field"><label>Breite / Ø (mm)</label><input id="cutW" type="number" value="50"></div>
-      <div class="field"><label>Tiefe / Länge (mm)</label><input id="cutH" type="number" value="50"></div>
-    </div>
-    <div class="field" style="margin-top:8px"><label>Bemerkung</label><input id="cutNote" placeholder="z. B. Säule / Pfosten / Geländerbohrung"></div>
-    <div class="smallnote" id="cutHintText">Position und Abmessungen werden in der Fertigungszeichnung rot markiert.</div>
-    <div class="toolbar"><button class="btn" onclick="closeCutModal()">Abbrechen</button><button class="btn primary" onclick="addCut()">Hinzufügen</button></div>
+<section id="page-risers" class="page">
+  <div class="section-title"><h2>Setzstufen</h2><button class="btn" onclick="addRiser()">+ Setzstufe</button></div>
+  <div id="riserChips" class="partsbar"></div>
+  <div class="measure-layout">
+    <div class="card" id="riserForm"></div>
+    <div class="card"><h3>Geometrie / Vorderansicht</h3><div id="riserSvg" class="svgbox"></div></div>
+    <div class="card"><h3>Kantenbearbeitung</h3><div id="riserEdges" class="edgegrid"></div><div style="margin-top:12px"><button class="btn gold" onclick="downloadCurrentRiserDXF()">DXF dieser Setzstufe</button></div></div>
   </div>
+</section>
+
+<section id="page-podest" class="page">
+  <div class="grid grid2">
+    <div class="card"><h2>Podest / Veranda</h2><div class="fields">
+      <div class="field"><label>Rohbreite mm</label><input id="podRawW" type="number" oninput="podChanged()"></div>
+      <div class="field"><label>Rohtiefe mm</label><input id="podRawD" type="number" oninput="podChanged()"></div>
+      <div class="field"><label>Fertigbreite mm</label><input id="podFinW" type="number" oninput="podChanged()"></div>
+      <div class="field"><label>Fertigtiefe mm</label><input id="podFinD" type="number" oninput="podChanged()"></div>
+      <div class="field"><label>Spalten</label><input id="podCols" type="number" min="1" value="4" oninput="podChanged(false)"></div>
+      <div class="field"><label>Reihen</label><input id="podRows" type="number" min="1" value="4" oninput="podChanged(false)"></div>
+      <div class="field"><label>Fuge mm</label><input id="podJoint" type="number" value="5" step="0.5" oninput="podChanged(false)"></div>
+      <div class="field"><label>Plattenstärke mm</label><input id="podThick" type="number" value="20" oninput="podChanged(false)"></div>
+    </div><div style="margin-top:12px"><button class="btn primary" onclick="generatePlates()">Platten neu erzeugen</button></div><p id="podCalc" class="banner"></p></div>
+    <div class="card"><h2>Plattenraster</h2><div id="plateGrid" class="plategrid"></div></div>
+  </div>
+  <div style="height:14px"></div>
+  <div class="measure-layout">
+    <div class="card" id="plateForm"><p class="note">Eine Platte im Raster auswählen.</p></div>
+    <div class="card"><h3>Ausgewählte Platte – Geometrie</h3><div id="plateSvg" class="svgbox"></div></div>
+    <div class="card"><h3>Kantenbearbeitung</h3><div id="plateEdges" class="edgegrid"></div><div style="margin-top:12px"><button class="btn gold" onclick="downloadCurrentPlateDXF()">DXF dieser Platte</button></div></div>
+  </div>
+</section>
+
+<section id="page-summary" class="page">
+  <div class="section-title"><h2>Fertigung / Export</h2><div><button class="btn" onclick="buildPrintSheets()">Fertigblatt aktualisieren</button><button class="btn primary" onclick="printSheets()">PDF / Drucken</button></div></div>
+  <div class="grid grid2 noprint">
+    <div class="card"><h3>Elemente</h3><div id="summaryList"></div></div>
+    <div class="card"><h3>DXF Export</h3><p class="note">Jedes Fertigungselement kann einzeln als echte ASCII-DXF-Kontur exportiert werden. Das ist bewusst getrennt, damit der Steinmetz jede Platte als eigene Maßdatei bekommt.</p><button class="btn gold" onclick="downloadAllDXFSequential()">Alle DXF nacheinander</button><p class="note">Safari kann bei mehreren Downloads nachfragen. Alternativ im Element auf „DXF“ klicken.</p></div>
+  </div>
+  <div style="height:14px"></div>
+  <div class="card noprint"><h3>Fertigblatt-Vorschau</h3><p class="note">Die Druckversion enthält jetzt die Geometrie jedes einzelnen Elements.</p></div>
+</section>
+
+<section id="page-print" class="page"><div id="printSheets" class="printsheet"></div></section>
+</main>
 </div>
 
-<input id="fileOpen" type="file" accept=".json,application/json" hidden onchange="loadProjectFile(event)">
+<div id="projectModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px"><div class="card" style="max-width:620px;width:100%;max-height:80vh;overflow:auto"><div class="section-title"><h2>Gespeicherte Projekte</h2><button class="btn" onclick="closeProjects()">Schließen</button></div><div id="projectList"></div></div></div>
+<input id="jsonInput" class="hidden" type="file" accept="application/json,.json">
 <script>
-const KEY='mbAufmassV05';
-const defaultFinish={seal:2,drain:4,glue:8,tread:30,riser:20,overhang:30,under:5,drip:30};
-let state={
-  currentStep:1, done:[], project:{}, geometry:{},
-  finish:{...defaultFinish},
-  steps:[newStep(1)], selected:0, landings:[]
-};
-let currentView='top';
-
-function newStep(n){return {id:n,rearW:'',frontW:'',leftD:'',rightD:'',diag1:'',diag2:'',riseL:'',riseM:'',riseR:'',riserTopW:'',riserBottomW:'',riserDiag:'',note:'',cuts:[],override:null}}
-function el(id){return document.getElementById(id)}
-function n(v){return Number(v)||0}
-function esc(s){return String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
-function download(name,text,type='text/plain'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-function saveState(){
-  state.project={orderNo:el('orderNo').value,date:el('measureDate').value,author:el('author').value,status:el('status').value,projectName:el('projectName')?.value||'',customer:el('customer')?.value||'',address:el('address')?.value||'',contact:el('contact')?.value||'',notes:el('projectNotes')?.value||''};
-  state.geometry={type:el('stairType')?.value||'',planned:n(el('plannedSteps')?.value)||state.steps.length,direction:el('direction')?.value||'',overallWidth:el('overallWidth')?.value||'',overallRise:el('overallRise')?.value||'',overallRun:el('overallRun')?.value||'',notes:el('geometryNotes')?.value||''};
-  localStorage.setItem(KEY,JSON.stringify(state)); updateSummary();
-}
-function loadState(){
-  try{const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.steps){state=s;state.finish={...defaultFinish,...(s.finish||{})};}}catch(e){}
-  if(!state.steps?.length)state.steps=[newStep(1)];
-  const p=state.project||{}; ['orderNo','measureDate','author','status'].forEach(k=>{if(el(k)&&p[k]!=null)el(k).value=p[k]});
-  if(!el('measureDate').value) el('measureDate').value=new Date().toISOString().slice(0,10);
-  if(!el('orderNo').value)el('orderNo').value='MB-2026-0001';
-  if(!el('author').value)el('author').value='Maik Bielefeldt';
-  el('projectName').value=p.projectName||'';el('customer').value=p.customer||'';el('address').value=p.address||'';el('contact').value=p.contact||'';el('projectNotes').value=p.notes||'';
-  const g=state.geometry||{};el('stairType').value=g.type||'Gerader Lauf';el('plannedSteps').value=g.planned||state.steps.length;el('direction').value=g.direction||'unten → oben';el('overallWidth').value=g.overallWidth||'';el('overallRise').value=g.overallRise||'';el('overallRun').value=g.overallRun||'';el('geometryNotes').value=g.notes||'';
-}
-function goStep(i){state.currentStep=i;document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));el('page'+i).classList.add('active');document.querySelectorAll('.step').forEach(x=>{x.classList.toggle('active',+x.dataset.step===i);x.classList.toggle('done',state.done.includes(+x.dataset.step))});el('pageTitle').textContent=['','BASISDATEN','GEOMETRIE','TREPPEN-AUFMASS','SETZSTUFEN','PODESTE','ZUSAMMENFASSUNG'][i];if(i===3)renderCurrent();if(i===4)renderRisers();if(i===5)renderLandings();if(i===6)updateSummary();saveState()}
-function markDone(i){if(!state.done.includes(i))state.done.push(i);saveState()}
-function ensureSteps(){const qty=Math.max(1,n(el('plannedSteps').value));while(state.steps.length<qty)state.steps.push(newStep(state.steps.length+1));if(state.steps.length>qty&&!confirm(`Auf ${qty} Stufen kürzen? Bereits erfasste Stufen würden entfernt.`)){el('plannedSteps').value=state.steps.length;return}state.steps=state.steps.slice(0,qty);state.selected=Math.min(state.selected,state.steps.length-1);renderSelector();saveState()}
-function current(){return state.steps[state.selected]}
-function renderSelector(){el('stepCount').textContent=state.steps.length;el('stepSelector').innerHTML=state.steps.map((s,i)=>`<button class="pill ${i===state.selected?'active':''}" onclick="selectStep(${i})">Stufe ${i+1}</button>`).join('')}
-function selectStep(i){state.selected=i;renderCurrent();saveState()}
-const fields=['rearW','frontW','leftD','rightD','diag1','diag2','riseL','riseM','riseR','riserTopW','riserBottomW','riserDiag','stepNote'];
-function renderCurrent(){
-  renderSelector();const s=current();
-  fields.forEach(id=>el(id).value=(id==='stepNote'?s.note:s[id])??'');
-  el('useOverride').checked=!!s.override;renderOverride();renderCuts();renderDiagram();renderCurrentSummary();
-}
-function updateCurrent(){const s=current();fields.forEach(id=>{if(id==='stepNote')s.note=el(id).value;else s[id]=el(id).value});saveState();renderDiagram();renderCurrentSummary()}
-function addStep(){state.steps.push(newStep(state.steps.length+1));state.selected=state.steps.length-1;el('plannedSteps').value=state.steps.length;renderCurrent();saveState()}
-function copyCurrent(){const src=JSON.parse(JSON.stringify(current()));src.id=state.steps.length+1;state.steps.push(src);state.selected=state.steps.length-1;el('plannedSteps').value=state.steps.length;renderCurrent();saveState()}
-function prevStep(){if(state.selected>0)selectStep(state.selected-1)}
-function nextStep(){if(state.selected<state.steps.length-1)selectStep(state.selected+1);else addStep()}
-function effectiveFinish(s=current()){return {...state.finish,...(s.override||{})}}
-function toggleOverride(){const s=current();if(el('useOverride').checked){s.override={...state.finish}}else{s.override=null}renderOverride();saveState();renderCurrentSummary()}
-function renderOverride(){const s=current(),o=s.override||state.finish;const map={oSeal:'seal',oDrain:'drain',oGlue:'glue',oTread:'tread',oRiser:'riser',oOverhang:'overhang',oUnder:'under',oDrip:'drip'};Object.entries(map).forEach(([id,k])=>el(id).value=o[k]);el('overrideFields').style.opacity=s.override?'1':'.45';el('overrideFields').style.pointerEvents=s.override?'auto':'none'}
-function updateOverride(){const s=current();if(!s.override)return;const map={oSeal:'seal',oDrain:'drain',oGlue:'glue',oTread:'tread',oRiser:'riser',oOverhang:'overhang',oUnder:'under',oDrip:'drip'};Object.entries(map).forEach(([id,k])=>s.override[k]=n(el(id).value));saveState();renderCurrentSummary();renderDiagram()}
-function renderCurrentSummary(){const s=current(),f=effectiveFinish(s);const avgD=(n(s.leftD)+n(s.rightD))/2;const finalDepth=avgD?avgD+f.overhang:0;el('currentSummary').innerHTML=`<tr><td>Stufe</td><td>${state.selected+1}</td></tr><tr><td>Rohbreite H/V</td><td>${s.rearW||'–'} / ${s.frontW||'–'} mm</td></tr><tr><td>Roh-Tiefe L/R</td><td>${s.leftD||'–'} / ${s.rightD||'–'} mm</td></tr><tr><td>Fertigtiefe ca.</td><td>${finalDepth?finalDepth.toFixed(1):'–'} mm*</td></tr><tr><td>Bearbeitungen</td><td>${s.cuts.length}</td></tr>`;el('finishSummary').innerHTML=`<tr><td>Abdichtung</td><td>${f.seal} mm</td></tr><tr><td>Drainage</td><td>${f.drain} mm</td></tr><tr><td>Kleber</td><td>${f.glue} mm</td></tr><tr><td>Platte</td><td>${f.tread} mm</td></tr><tr><td>Überstand</td><td>${f.overhang} mm</td></tr><tr><td>Wassernase</td><td>${f.drip} mm</td></tr>`}
-function setView(v,b){currentView=v;document.querySelectorAll('.diagram-tabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderDiagram()}
-function renderDiagram(){
-  const s=current(),f=effectiveFinish(s),W=Math.max(n(s.rearW),n(s.frontW),600),D=Math.max(n(s.leftD),n(s.rightD),300),scale=Math.min(520/W,300/D),ox=70,oy=65;
-  let svg=`<svg viewBox="0 0 680 430" width="680" height="430" xmlns="http://www.w3.org/2000/svg"><style>.t{font:12px system-ui;fill:#23364b}.m{font:11px system-ui;fill:#3a8f55}.raw{fill:#f7f8f9;stroke:#9aa1aa;stroke-width:2;stroke-dasharray:7 5}.fin{fill:rgba(201,164,84,.10);stroke:#263238;stroke-width:3}.gold{stroke:#c9a454;stroke-width:5}.blue{stroke:#2878b5;stroke-width:3}.red{stroke:#c84d4d;fill:rgba(200,77,77,.16);stroke-width:3}.green{stroke:#3a8f55;stroke-width:1.5;stroke-dasharray:5 4}</style>`;
-  if(currentView==='top'){
-    const rw=n(s.rearW)||W,fw=n(s.frontW)||W,ld=n(s.leftD)||D,rd=n(s.rightD)||D;
-    const x1=ox+(W-rw)*scale/2,x2=ox+(W-fw)*scale/2,y1=oy,y2=oy+Math.max(ld,rd)*scale;
-    svg+=`<polygon class="raw" points="${x1},${y1} ${x1+rw*scale},${y1} ${x2+fw*scale},${y2} ${x2},${y2}"/>`;
-    const over=f.overhang*scale;svg+=`<polygon class="fin" points="${x1},${y1} ${x1+rw*scale},${y1} ${x2+fw*scale},${y2+over} ${x2},${y2+over}"/>`;
-    svg+=`<line class="gold" x1="${x2}" y1="${y2+over}" x2="${x2+fw*scale}" y2="${y2+over}"/><line class="blue" x1="${x2+10}" y1="${y2+over-f.drip*scale}" x2="${x2+fw*scale-10}" y2="${y2+over-f.drip*scale}"/>`;
-    svg+=`<line class="green" x1="${x1}" y1="${y1}" x2="${x2+fw*scale}" y2="${y2}"/><line class="green" x1="${x1+rw*scale}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
-    (s.cuts||[]).forEach(c=>svg+=cutSvg(c,x2,y1,scale,fw,Math.max(ld,rd)));
-    svg+=`<text class="t" x="70" y="35">Stufe ${state.selected+1} · Rohmaß grau gestrichelt · Fertigung schwarz/gold</text><text class="m" x="70" y="405">Diagonalen: ${s.diag1||'–'} / ${s.diag2||'–'} mm</text>`;
-  } else if(currentView==='front'){
-    const w=(n(s.frontW)||W)*scale,h=Math.max(n(s.riseL),n(s.riseM),n(s.riseR),170)*.9;svg+=`<rect class="raw" x="80" y="${260-h}" width="${w}" height="${h}"/><line class="gold" x1="80" y1="${260-h}" x2="${80+w}" y2="${260-h}"/><text class="t" x="80" y="310">Setzstufe: H L/M/R = ${s.riseL||'–'} / ${s.riseM||'–'} / ${s.riseR||'–'} mm</text>`;
-  } else if(currentView==='side'){
-    const d=(n(s.leftD)||D)*.9,h=Math.max(n(s.riseL),170);svg+=`<path class="fin" d="M100 260 L100 ${260-h} L${100+d} ${260-h} L${100+d+f.overhang} ${260-h}"/><line class="blue" x1="${100+d}" y1="${260-h+f.drip}" x2="${100+d+f.overhang}" y2="${260-h+f.drip}"/><text class="t" x="100" y="310">Aufbau: Abd. ${f.seal} + Drain. ${f.drain} + Kleber ${f.glue} + Platte ${f.tread} mm</text>`;
-  } else {
-    const w=Math.min(400,(n(s.frontW)||W)*.45),d=Math.min(180,(n(s.leftD)||D)*.45),x=120,y=120;svg+=`<polygon class="fin" points="${x},${y+d/2} ${x+w},${y+d/2} ${x+w+d*.45},${y} ${x+d*.45},${y}"/><polygon fill="rgba(11,55,98,.08)" stroke="#263238" points="${x},${y+d/2} ${x+w},${y+d/2} ${x+w},${y+d/2+30} ${x},${y+d/2+30}"/><line class="gold" x1="${x}" y1="${y+d/2}" x2="${x+w}" y2="${y+d/2}"/><text class="t" x="120" y="330">Schematische 3D-Kontrolle · Stufe ${state.selected+1}</text>`;
-  }
-  svg+='</svg>';el('diagram').innerHTML=svg;
-  const enough=n(s.rearW)&&n(s.frontW)&&n(s.leftD)&&n(s.rightD);el('geometryStatus').textContent=enough?'Grundmaße vorhanden. Diagonalen und Sonderbearbeitungen vor Fertigung gegenprüfen.':'Noch nicht alle vier Grundmaße eingegeben.';
-}
-function cutSvg(c,baseX,baseY,sc,fw,depth){
-  const x=baseX+n(c.x)*sc,y=baseY+n(c.y)*sc,w=n(c.w)*sc,h=n(c.h)*sc;
-  if(c.type==='Bohrloch')return `<circle class="red" cx="${x}" cy="${y}" r="${Math.max(3,w/2)}"/>`;
-  if(c.type==='Halbkreis-Ausschnitt')return `<path class="red" d="M${x-w/2} ${y} A${w/2} ${w/2} 0 0 0 ${x+w/2} ${y}"/>`;
-  if(c.type==='Langloch')return `<rect class="red" x="${x}" y="${y}" width="${Math.max(w,10)}" height="${Math.max(h,6)}" rx="${Math.min(w,h)/2}"/>`;
-  return `<rect class="red" x="${x}" y="${y}" width="${Math.max(w,5)}" height="${Math.max(h,5)}"/>`;
-}
-function openCutModal(){el('cutModal').classList.add('show')}
-function closeCutModal(){el('cutModal').classList.remove('show')}
-function cutHint(){el('cutHintText').textContent='Bezugspunkt immer eindeutig angeben. Bei Bohrungen: Ø sowie Mittelpunkt X/Y; bei Ausschnitten: Breite/Tiefe und Lage.'}
-function addCut(){current().cuts.push({type:el('cutType').value,corner:el('cutCorner').value,x:n(el('cutX').value),y:n(el('cutY').value),w:n(el('cutW').value),h:n(el('cutH').value),note:el('cutNote').value});closeCutModal();renderCuts();renderDiagram();saveState()}
-function deleteCut(i){current().cuts.splice(i,1);renderCuts();renderDiagram();saveState()}
-function renderCuts(){const list=current().cuts||[];el('cutsList').innerHTML=list.length?list.map((c,i)=>`<div class="cutrow"><div><b>${esc(c.type)}</b><div class="muted">${esc(c.corner)} ${esc(c.note)}</div></div><div class="muted">X ${c.x}</div><div class="muted">Y ${c.y}</div><div class="muted">${c.w} × ${c.h}</div><div></div><button class="btn danger" onclick="deleteCut(${i})">Löschen</button></div>`).join(''):'<div class="muted" style="margin-bottom:8px">Noch keine Bearbeitung hinterlegt.</div>'}
-function renderRisers(){el('riserTable').innerHTML=state.steps.map((s,i)=>`<tr><td>Setzstufe ${i+1}</td><td>${s.riseL||'–'}</td><td>${s.riseM||'–'}</td><td>${s.riseR||'–'}</td><td>${s.riserTopW||'–'}</td><td>${s.riserBottomW||'–'}</td><td><button class="btn" onclick="state.selected=${i};goStep(3)">Bearbeiten</button></td></tr>`).join('')}
-function addLanding(){state.landings.push({name:`Podest ${state.landings.length+1}`,width:'',depthL:'',depthR:'',diag1:'',diag2:'',note:''});renderLandings();saveState()}
-function updateLanding(i,k,v){state.landings[i][k]=v;saveState()}
-function delLanding(i){state.landings.splice(i,1);renderLandings();saveState()}
-function renderLandings(){el('landingsList').innerHTML=state.landings.length?state.landings.map((p,i)=>`<div class="card" style="background:#f9fafb"><div class="grid3"><div class="field"><label>Bezeichnung</label><input value="${esc(p.name)}" oninput="updateLanding(${i},'name',this.value)"></div><div class="field"><label>Breite (mm)</label><input type="number" value="${esc(p.width)}" oninput="updateLanding(${i},'width',this.value)"></div><div class="field"><label>Tiefe links (mm)</label><input type="number" value="${esc(p.depthL)}" oninput="updateLanding(${i},'depthL',this.value)"></div><div class="field"><label>Tiefe rechts (mm)</label><input type="number" value="${esc(p.depthR)}" oninput="updateLanding(${i},'depthR',this.value)"></div><div class="field"><label>Diagonale 1 (mm)</label><input type="number" value="${esc(p.diag1)}" oninput="updateLanding(${i},'diag1',this.value)"></div><div class="field"><label>Diagonale 2 (mm)</label><input type="number" value="${esc(p.diag2)}" oninput="updateLanding(${i},'diag2',this.value)"></div></div><div class="field" style="margin-top:8px"><label>Notiz / Ausschnitte</label><input value="${esc(p.note)}" oninput="updateLanding(${i},'note',this.value)"></div><button class="btn danger" style="margin-top:8px" onclick="delLanding(${i})">Podest löschen</button></div>`).join(''):'<div class="muted" style="margin-bottom:10px">Keine Podeste vorhanden.</div>'}
-function updateSummary(){
-  if(!el('sumSteps'))return;el('sumSteps').textContent=state.steps.length;el('sumRisers').textContent=state.steps.filter(s=>n(s.riseL)||n(s.riseM)||n(s.riseR)).length;el('sumCuts').textContent=state.steps.reduce((a,s)=>a+(s.cuts?.length||0),0);el('sumLandings').textContent=state.landings.length;
-  el('projectSummary').innerHTML=`<b>${esc(state.project.projectName||state.project.orderNo||'Projekt')}</b><div class="muted">${esc(state.project.customer||'')} · ${esc(state.project.address||'')} · Aufmaß ${esc(state.project.date||'')}</div>`;
-  el('partsSummary').innerHTML=state.steps.map((s,i)=>`<tr><td>Trittstufe ${i+1}</td><td>${s.rearW||'–'} / ${s.frontW||'–'} mm</td><td>${s.leftD||'–'} / ${s.rightD||'–'} mm</td><td>${s.riseL||'–'} / ${s.riseM||'–'} / ${s.riseR||'–'} mm</td><td>${(s.cuts||[]).map(c=>esc(c.type)).join(', ')||'–'}</td></tr>`).join('');
-}
-function openSettings(){const f=state.finish;({gSeal:'seal',gDrain:'drain',gGlue:'glue',gTread:'tread',gRiser:'riser',gOverhang:'overhang',gUnder:'under',gDrip:'drip'});el('gSeal').value=f.seal;el('gDrain').value=f.drain;el('gGlue').value=f.glue;el('gTread').value=f.tread;el('gRiser').value=f.riser;el('gOverhang').value=f.overhang;el('gUnder').value=f.under;el('gDrip').value=f.drip;el('settingsModal').classList.add('show')}
-function closeSettings(){el('settingsModal').classList.remove('show')}
-function saveSettings(){state.finish={seal:n(el('gSeal').value),drain:n(el('gDrain').value),glue:n(el('gGlue').value),tread:n(el('gTread').value),riser:n(el('gRiser').value),overhang:n(el('gOverhang').value),under:n(el('gUnder').value),drip:n(el('gDrip').value)};closeSettings();saveState();if(state.currentStep===3)renderCurrent()}
-function saveProjectFile(){saveState();download((state.project.orderNo||'MB_Aufmass')+'.json',JSON.stringify(state,null,2),'application/json')}
-function exportJSON(){saveProjectFile()}
-function openProjectFile(){el('fileOpen').click()}
-function loadProjectFile(ev){const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.steps)throw 0;state=s;state.finish={...defaultFinish,...(state.finish||{})};localStorage.setItem(KEY,JSON.stringify(state));location.reload()}catch(e){alert('Projektdatei konnte nicht gelesen werden.')}};r.readAsText(f);ev.target.value=''}
-function dxfLine(x1,y1,x2,y2,layer='KONTUR'){return `0\nLINE\n8\n${layer}\n10\n${x1}\n20\n${y1}\n30\n0\n11\n${x2}\n21\n${y2}\n31\n0\n`}
-function exportDXF(){
-  let out='0\nSECTION\n2\nENTITIES\n',off=0;
-  state.steps.forEach((s,i)=>{const rw=n(s.rearW),fw=n(s.frontW),d=(n(s.leftD)+n(s.rightD))/2;if(!rw&&!fw)return;const W=Math.max(rw,fw),xR=(W-rw)/2,xF=(W-fw)/2,y0=off;out+=dxfLine(xR,y0,xR+rw,y0,'ROHMASS');out+=dxfLine(xR+rw,y0,xF+fw,y0+d,'KONTUR');out+=dxfLine(xF+fw,y0+d,xF,y0+d,'SICHTKANTE');out+=dxfLine(xF,y0+d,xR,y0,'KONTUR');(s.cuts||[]).forEach(c=>{if(c.type==='Bohrloch')out+=`0\nCIRCLE\n8\nBOHRUNG\n10\n${n(c.x)}\n20\n${y0+n(c.y)}\n30\n0\n40\n${n(c.w)/2}\n`;else{const x=n(c.x),y=y0+n(c.y),w=n(c.w),h=n(c.h);out+=dxfLine(x,y,x+w,y,'AUSSCHNITT')+dxfLine(x+w,y,x+w,y+h,'AUSSCHNITT')+dxfLine(x+w,y+h,x,y+h,'AUSSCHNITT')+dxfLine(x,y+h,x,y,'AUSSCHNITT')}});off+=d+250});
-  out+='0\nENDSEC\n0\nEOF\n';download((state.project.orderNo||'MB_Aufmass')+'_v05.dxf',out,'application/dxf');
-}
-function printSummary(){goStep(6);setTimeout(()=>window.print(),100)}
-window.addEventListener('beforeunload',saveState);
-loadState();goStep(state.currentStep||1);renderSelector();updateSummary();
+const EDGE_OPTIONS=['Keine','Poliert','Gefast','Poliert + gefast','Poliert + Wassernase','Wassernase','Gehrung'];
+const KEY='mb_aufmass_projects_v06';
+let state={project:{projectNo:'MB-2026-0001',date:new Date().toISOString().slice(0,10),author:'Maik Bielefeldt',status:'Aufmaß',projectName:'Außentreppe und Veranda',customer:'',address:'',material:'Granit 20 mm',notes:''},stairs:[],risers:[],podest:{rawW:3180,rawD:2970,finW:3180,finD:3000,cols:4,rows:4,joint:5,thick:20,plates:[]}};
+let currentStair=0,currentRiser=0,currentPlate=0,stairView='top';
+const $=id=>document.getElementById(id);
+function esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));}
+function num(v,d=0){const n=parseFloat(v);return Number.isFinite(n)?n:d}
+function fmt(v){return (Math.round(v*10)/10).toLocaleString('de-DE',{minimumFractionDigits:0,maximumFractionDigits:1})}
+function blankEdges(){return {front:'Keine',back:'Keine',left:'Keine',right:'Keine'}}
+function showPage(name,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+name).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(name==='stairs')renderStairs();if(name==='risers')renderRisers();if(name==='podest')renderPodest();if(name==='summary'){renderSummary();buildPrintSheets()}if(name==='project')renderStats();window.scrollTo({top:0,behavior:'smooth'})}
+function syncProject(){['projectNo','date','author','status','projectName','customer','address','material','notes'].forEach(k=>state.project[k]=$(k).value);renderStats();autoSave()}
+function fillProject(){Object.keys(state.project).forEach(k=>{if($(k))$(k).value=state.project[k]??''});}
+function renderStats(){$('projectStats').innerHTML=`<b>${state.stairs.length}</b> Trittstufen · <b>${state.risers.length}</b> Setzstufen · <b>${state.podest.plates.length}</b> Podestplatten · insgesamt <b>${state.stairs.length+state.risers.length+state.podest.plates.length}</b> Fertigungselemente`}
+function addStair(data={}){state.stairs.push({name:`Trittstufe ${state.stairs.length+1}`,backW:1600,frontW:1600,leftD:330,rightD:330,overL:0,overR:0,overF:0,thick:20,edges:blankEdges(),...data});currentStair=state.stairs.length-1;renumberStairs();renderStairs();autoSave()}
+function deleteStair(){if(!state.stairs.length)return;if(!confirm(`${state.stairs[currentStair].name} wirklich löschen?`))return;state.stairs.splice(currentStair,1);currentStair=Math.max(0,Math.min(currentStair,state.stairs.length-1));renumberStairs();renderStairs();autoSave()}
+function renumberStairs(){state.stairs.forEach((p,i)=>p.name=`Trittstufe ${i+1}`)}
+function stairFinish(p){return {backW:num(p.backW)+num(p.overL)+num(p.overR),frontW:num(p.frontW)+num(p.overL)+num(p.overR),leftD:num(p.leftD)+num(p.overF),rightD:num(p.rightD)+num(p.overF)}}
+function renderStairs(){const chips=$('stairChips');chips.innerHTML=state.stairs.map((p,i)=>`<button class="chip ${i===currentStair?'active':''}" onclick="currentStair=${i};renderStairs()">${esc(p.name)}</button>`).join('');if(!state.stairs.length){$('stairForm').innerHTML='<h3>Noch keine Trittstufe</h3><button class="btn primary" onclick="addStair()">Erste Stufe anlegen</button>';$('stairSvg').innerHTML='';$('stairEdges').innerHTML='';return}const p=state.stairs[currentStair],f=stairFinish(p);$('stairForm').innerHTML=`<div class="section-title"><h3>${p.name}</h3><button class="btn danger small" onclick="deleteStair()">Stufe löschen</button></div><div class="fields" style="grid-template-columns:1fr 1fr"><div class="field"><label>Rohbreite hinten mm</label><input type="number" value="${p.backW}" oninput="stairSet('backW',this.value)"></div><div class="field"><label>Rohbreite vorne mm</label><input type="number" value="${p.frontW}" oninput="stairSet('frontW',this.value)"></div><div class="field"><label>Rohtiefe links mm</label><input type="number" value="${p.leftD}" oninput="stairSet('leftD',this.value)"></div><div class="field"><label>Rohtiefe rechts mm</label><input type="number" value="${p.rightD}" oninput="stairSet('rightD',this.value)"></div><div class="field"><label>Überstand links mm</label><input type="number" value="${p.overL}" oninput="stairSet('overL',this.value)"></div><div class="field"><label>Überstand rechts mm</label><input type="number" value="${p.overR}" oninput="stairSet('overR',this.value)"></div><div class="field"><label>Überstand vorne mm</label><input type="number" value="${p.overF}" oninput="stairSet('overF',this.value)"></div><div class="field"><label>Plattenstärke mm</label><input type="number" value="${p.thick}" oninput="stairSet('thick',this.value)"></div></div><p class="banner"><b>Fertigmaß:</b> hinten ${fmt(f.backW)} mm · vorne ${fmt(f.frontW)} mm · Tiefe L/R ${fmt(f.leftD)} / ${fmt(f.rightD)} mm</p>`;renderEdges('stairEdges',p.edges,'stairEdgeSet');renderStairSvg()}
+function stairSet(k,v){state.stairs[currentStair][k]=num(v);renderStairSvg();const p=state.stairs[currentStair],f=stairFinish(p);const banner=$('stairForm').querySelector('.banner');if(banner)banner.innerHTML=`<b>Fertigmaß:</b> hinten ${fmt(f.backW)} mm · vorne ${fmt(f.frontW)} mm · Tiefe L/R ${fmt(f.leftD)} / ${fmt(f.rightD)} mm`;autoSave()}
+function stairEdgeSet(edge,v){state.stairs[currentStair].edges[edge]=v;renderStairSvg();autoSave()}
+function renderEdges(id,edges,fn){const names={front:'Vorne',back:'Hinten',left:'Links',right:'Rechts'};$(id).innerHTML=Object.keys(names).map(e=>`<div class="edgeitem"><b>${names[e]}</b><select onchange="${fn}('${e}',this.value)">${EDGE_OPTIONS.map(o=>`<option ${edges[e]===o?'selected':''}>${o}</option>`).join('')}</select></div>`).join('')}
+function setStairView(v,b){stairView=v;document.querySelectorAll('#page-stairs .tabs button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');renderStairSvg()}
+function edgeColor(val){if(String(val).includes('Wassernase'))return '#2876b7';if(val!=='Keine')return '#c9a454';return '#151515'}
+function stairPoints(p,finish=true){const q=finish?stairFinish(p):{backW:num(p.backW),frontW:num(p.frontW),leftD:num(p.leftD),rightD:num(p.rightD)};const maxW=Math.max(q.backW,q.frontW,1),xb=(maxW-q.backW)/2,xf=(maxW-q.frontW)/2;return [{x:xb,y:0},{x:xb+q.backW,y:0},{x:xf+q.frontW,y:q.rightD},{x:xf,y:q.leftD}]}
+function fitSvg(points,w=620,h=390,pad=65){let xs=points.map(p=>p.x),ys=points.map(p=>p.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),sx=(w-2*pad)/Math.max(1,maxX-minX),sy=(h-2*pad)/Math.max(1,maxY-minY),s=Math.min(sx,sy);return p=>({x:pad+(p.x-minX)*s,y:pad+(p.y-minY)*s})}
+function dimLine(x1,y1,x2,y2,label,ox=0,oy=0){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#667" stroke-width="1"/><text x="${(x1+x2)/2+ox}" y="${(y1+y2)/2+oy}" text-anchor="middle" font-size="13" fill="#334">${esc(label)}</text>`}
+function renderStairSvg(){if(!state.stairs.length)return;const p=state.stairs[currentStair];if(stairView==='front'){const f=stairFinish(p);$('stairSvg').innerHTML=`<svg viewBox="0 0 620 390"><rect x="90" y="145" width="440" height="${Math.max(18,num(p.thick)*2.2)}" fill="#e8e4d8" stroke="#111" stroke-width="2"/><line x1="90" y1="145" x2="530" y2="145" stroke="${edgeColor(p.edges.front)}" stroke-width="6"/><text x="310" y="120" text-anchor="middle" font-size="16">Breite vorne ${fmt(f.frontW)} mm</text><text x="310" y="235" text-anchor="middle" font-size="15">Plattenstärke ${fmt(p.thick)} mm</text></svg>`;return}
+if(stairView==='3d'){renderStair3D(p);return}const fin=stairPoints(p,true),raw=stairPoints(p,false),map=fitSvg(fin.concat(raw)),F=fin.map(map),R=raw.map(map);const f=stairFinish(p);let s=`<svg viewBox="0 0 620 390"><polyline points="${R.map(q=>`${q.x},${q.y}`).join(' ')} ${R[0].x},${R[0].y}" fill="none" stroke="#9aa3ae" stroke-width="2" stroke-dasharray="7 5"/>`;
+const es=p.edges;[[0,1,'back'],[1,2,'right'],[2,3,'front'],[3,0,'left']].forEach(([a,b,e])=>s+=`<line x1="${F[a].x}" y1="${F[a].y}" x2="${F[b].x}" y2="${F[b].y}" stroke="${edgeColor(es[e])}" stroke-width="${es[e]==='Keine'?3:6}"/>`);s+=dimLine(F[0].x,F[0].y-25,F[1].x,F[1].y-25,`${fmt(f.backW)} mm`,0,-5);s+=dimLine(F[3].x,F[3].y+28,F[2].x,F[2].y+28,`${fmt(f.frontW)} mm`,0,16);s+=`<text x="25" y="195" font-size="13" fill="#334">L ${fmt(f.leftD)} mm</text><text x="490" y="195" font-size="13" fill="#334">R ${fmt(f.rightD)} mm</text><text x="310" y="365" text-anchor="middle" font-size="12" fill="#777">grau gestrichelt = Rohkontur · farbig/schwarz = Fertigkontur</text></svg>`;$('stairSvg').innerHTML=s}
+function renderStair3D(p){const pts=stairPoints(p,true),map=fitSvg(pts,620,300,100),T=pts.map(map),dx=28,dy=32,th=Math.max(16,Math.min(48,num(p.thick)*1.5));const B=T.map(q=>({x:q.x+dx,y:q.y+dy+th}));let s=`<svg viewBox="0 0 620 390"><polygon points="${T.map(q=>`${q.x},${q.y}`).join(' ')}" fill="#eee9dc" stroke="#111" stroke-width="2"/>`;
+for(let i=0;i<4;i++){let j=(i+1)%4;s+=`<polygon points="${T[i].x},${T[i].y} ${T[j].x},${T[j].y} ${B[j].x},${B[j].y} ${B[i].x},${B[i].y}" fill="${i===2?'#d6d0c2':'#e1ddd2'}" stroke="#444" stroke-width="1.5"/>`}
+s+=`<polygon points="${B.map(q=>`${q.x},${q.y}`).join(' ')}" fill="none" stroke="#777" stroke-width="1"/>`;[[0,1,'back'],[1,2,'right'],[2,3,'front'],[3,0,'left']].forEach(([a,b,e])=>s+=`<line x1="${T[a].x}" y1="${T[a].y}" x2="${T[b].x}" y2="${T[b].y}" stroke="${edgeColor(p.edges[e])}" stroke-width="${p.edges[e]==='Keine'?3:6}"/>`);s+=`<text x="310" y="365" text-anchor="middle" font-size="14">echter Plattenkörper · Stärke ${fmt(p.thick)} mm</text></svg>`;$('stairSvg').innerHTML=s}
+function addRiser(data={}){state.risers.push({name:`Setzstufe ${state.risers.length+1}`,topW:1600,bottomW:1600,hL:145,hM:145,hR:145,thick:20,edges:blankEdges(),...data});currentRiser=state.risers.length-1;renumberRisers();renderRisers();autoSave()}
+function renumberRisers(){state.risers.forEach((p,i)=>p.name=`Setzstufe ${i+1}`)}
+function deleteRiser(){if(!state.risers.length)return;if(!confirm(`${state.risers[currentRiser].name} wirklich löschen?`))return;state.risers.splice(currentRiser,1);currentRiser=Math.max(0,Math.min(currentRiser,state.risers.length-1));renumberRisers();renderRisers();autoSave()}
+function renderRisers(){const chips=$('riserChips');chips.innerHTML=state.risers.map((p,i)=>`<button class="chip ${i===currentRiser?'active':''}" onclick="currentRiser=${i};renderRisers()">${p.name}</button>`).join('');if(!state.risers.length){$('riserForm').innerHTML='<h3>Noch keine Setzstufe</h3><button class="btn primary" onclick="addRiser()">Erste Setzstufe anlegen</button>';$('riserSvg').innerHTML='';$('riserEdges').innerHTML='';return}const p=state.risers[currentRiser];$('riserForm').innerHTML=`<div class="section-title"><h3>${p.name}</h3><button class="btn danger small" onclick="deleteRiser()">Setzstufe löschen</button></div><div class="fields" style="grid-template-columns:1fr 1fr"><div class="field"><label>Breite oben mm</label><input type="number" value="${p.topW}" oninput="riserSet('topW',this.value)"></div><div class="field"><label>Breite unten mm</label><input type="number" value="${p.bottomW}" oninput="riserSet('bottomW',this.value)"></div><div class="field"><label>Höhe links mm</label><input type="number" value="${p.hL}" oninput="riserSet('hL',this.value)"></div><div class="field"><label>Höhe Mitte mm</label><input type="number" value="${p.hM}" oninput="riserSet('hM',this.value)"></div><div class="field"><label>Höhe rechts mm</label><input type="number" value="${p.hR}" oninput="riserSet('hR',this.value)"></div><div class="field"><label>Stärke mm</label><input type="number" value="${p.thick}" oninput="riserSet('thick',this.value)"></div></div>`;renderEdges('riserEdges',p.edges,'riserEdgeSet');renderRiserSvg()}
+function riserSet(k,v){state.risers[currentRiser][k]=num(v);renderRiserSvg();autoSave()}function riserEdgeSet(e,v){state.risers[currentRiser].edges[e]=v;renderRiserSvg();autoSave()}
+function riserPoints(p){const mw=Math.max(num(p.topW),num(p.bottomW),1),xt=(mw-num(p.topW))/2,xb=(mw-num(p.bottomW))/2;return [{x:xt,y:0},{x:xt+num(p.topW),y:0},{x:xb+num(p.bottomW),y:num(p.hR)},{x:xb,y:num(p.hL)}]}
+function renderRiserSvg(){if(!state.risers.length)return;const p=state.risers[currentRiser],pts=riserPoints(p),map=fitSvg(pts),P=pts.map(map);let s=`<svg viewBox="0 0 620 390"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="#f1eee4" stroke="#111" stroke-width="2"/>`;[[0,1,'back'],[1,2,'right'],[2,3,'front'],[3,0,'left']].forEach(([a,b,e])=>s+=`<line x1="${P[a].x}" y1="${P[a].y}" x2="${P[b].x}" y2="${P[b].y}" stroke="${edgeColor(p.edges[e])}" stroke-width="${p.edges[e]==='Keine'?3:6}"/>`);s+=`<text x="310" y="40" text-anchor="middle" font-size="14">oben ${fmt(p.topW)} mm</text><text x="310" y="355" text-anchor="middle" font-size="14">unten ${fmt(p.bottomW)} mm</text><text x="25" y="200" font-size="13">L ${fmt(p.hL)}</text><text x="500" y="200" font-size="13">R ${fmt(p.hR)}</text><text x="310" y="200" text-anchor="middle" font-size="13">M ${fmt(p.hM)}</text></svg>`;$('riserSvg').innerHTML=s}
+function podChanged(update=true){state.podest.rawW=num($('podRawW').value);state.podest.rawD=num($('podRawD').value);state.podest.finW=num($('podFinW').value);state.podest.finD=num($('podFinD').value);state.podest.cols=Math.max(1,parseInt($('podCols').value)||1);state.podest.rows=Math.max(1,parseInt($('podRows').value)||1);state.podest.joint=num($('podJoint').value);state.podest.thick=num($('podThick').value,20);renderPodCalc();if(update)renderPlateGrid();autoSave()}
+function plateDims(){const p=state.podest,w=(p.finW-(p.cols-1)*p.joint)/p.cols,d=(p.finD-(p.rows-1)*p.joint)/p.rows;return {w,d}}
+function renderPodCalc(){const {w,d}=plateDims();$('podCalc').innerHTML=`<b>Regelmaß:</b> ${fmt(w)} × ${fmt(d)} mm · ${state.podest.cols*state.podest.rows} Platten · ${state.podest.cols-1} Längsfugen / ${state.podest.rows-1} Querfugen`}
+function generatePlates(){const p=state.podest,{w,d}=plateDims(),old=p.plates||[];p.plates=[];for(let r=0;r<p.rows;r++)for(let c=0;c<p.cols;c++){const idx=r*p.cols+c,prev=old[idx]||{};p.plates.push({name:`P${String(idx+1).padStart(2,'0')}`,row:r+1,col:c+1,w,d,thick:p.thick,cut:{type:'none',corner:'front-right',w:0,d:0},edges:blankEdges(),...prev,w,d,row:r+1,col:c+1})}currentPlate=Math.min(currentPlate,p.plates.length-1);renderPodest();autoSave()}
+function renderPodest(){const p=state.podest;$('podRawW').value=p.rawW;$('podRawD').value=p.rawD;$('podFinW').value=p.finW;$('podFinD').value=p.finD;$('podCols').value=p.cols;$('podRows').value=p.rows;$('podJoint').value=p.joint;$('podThick').value=p.thick;renderPodCalc();renderPlateGrid();renderPlateEditor()}
+function renderPlateGrid(){const p=state.podest,g=$('plateGrid');g.style.gridTemplateColumns=`repeat(${p.cols},minmax(55px,1fr))`;g.style.gridTemplateRows=`repeat(${p.rows},minmax(55px,1fr))`;g.innerHTML=(p.plates||[]).map((x,i)=>`<div class="plate ${i===currentPlate?'selected':''} ${x.cut&&x.cut.type!=='none'?'cut':''}" onclick="currentPlate=${i};renderPodest()">${x.name}<br><small>${fmt(x.w)}×${fmt(x.d)}</small></div>`).join('')||'<div class="note">Noch keine Platten erzeugt.</div>'}
+function renderPlateEditor(){const p=state.podest.plates[currentPlate];if(!p){$('plateForm').innerHTML='<p class="note">Platten erzeugen und anschließend auswählen.</p>';$('plateSvg').innerHTML='';$('plateEdges').innerHTML='';return}$('plateForm').innerHTML=`<div class="section-title"><h3>${p.name} · Reihe ${p.row} / Spalte ${p.col}</h3></div><div class="fields" style="grid-template-columns:1fr 1fr"><div class="field"><label>Breite mm</label><input type="number" value="${p.w}" oninput="plateSet('w',this.value)"></div><div class="field"><label>Tiefe mm</label><input type="number" value="${p.d}" oninput="plateSet('d',this.value)"></div><div class="field"><label>Ausschnitt</label><select onchange="plateCutSet('type',this.value)"><option value="none" ${p.cut.type==='none'?'selected':''}>Keiner</option><option value="L" ${p.cut.type==='L'?'selected':''}>L-Ausklinkung</option></select></div><div class="field"><label>Ecke</label><select onchange="plateCutSet('corner',this.value)"><option value="front-right" ${p.cut.corner==='front-right'?'selected':''}>Vorne rechts</option><option value="front-left" ${p.cut.corner==='front-left'?'selected':''}>Vorne links</option><option value="back-right" ${p.cut.corner==='back-right'?'selected':''}>Hinten rechts</option><option value="back-left" ${p.cut.corner==='back-left'?'selected':''}>Hinten links</option></select></div><div class="field"><label>Ausklinkung Breite mm</label><input type="number" value="${p.cut.w}" oninput="plateCutSet('w',this.value)"></div><div class="field"><label>Ausklinkung Tiefe mm</label><input type="number" value="${p.cut.d}" oninput="plateCutSet('d',this.value)"></div></div><p class="note">Die Ausklinkung wird Bestandteil der Geometrie und des DXF – nicht nur als Textnotiz.</p>`;renderEdges('plateEdges',p.edges,'plateEdgeSet');renderPlateSvg()}
+function plateSet(k,v){state.podest.plates[currentPlate][k]=num(v);renderPlateGrid();renderPlateSvg();autoSave()}function plateCutSet(k,v){state.podest.plates[currentPlate].cut[k]=(k==='w'||k==='d')?num(v):v;renderPlateGrid();renderPlateSvg();autoSave()}function plateEdgeSet(e,v){state.podest.plates[currentPlate].edges[e]=v;renderPlateSvg();autoSave()}
+function platePoints(p){const w=num(p.w),d=num(p.d),c=p.cut||{type:'none'};if(c.type!=='L'||!num(c.w)||!num(c.d))return [{x:0,y:0},{x:w,y:0},{x:w,y:d},{x:0,y:d}];const cw=Math.min(num(c.w),w*.9),cd=Math.min(num(c.d),d*.9);switch(c.corner){case'front-left':return[{x:0,y:0},{x:w,y:0},{x:w,y:d},{x:cw,y:d},{x:cw,y:d-cd},{x:0,y:d-cd}];case'back-left':return[{x:cw,y:0},{x:w,y:0},{x:w,y:d},{x:0,y:d},{x:0,y:cd},{x:cw,y:cd}];case'back-right':return[{x:0,y:0},{x:w-cw,y:0},{x:w-cw,y:cd},{x:w,y:cd},{x:w,y:d},{x:0,y:d}];default:return[{x:0,y:0},{x:w,y:0},{x:w,y:d-cd},{x:w-cw,y:d-cd},{x:w-cw,y:d},{x:0,y:d}]}}
+function renderPlateSvg(){const p=state.podest.plates[currentPlate];if(!p)return;const pts=platePoints(p),map=fitSvg(pts),P=pts.map(map);let s=`<svg viewBox="0 0 620 390"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="#f2eee2" stroke="#111" stroke-width="3"/>`;
+if(p.cut&&p.cut.type==='L')s+=`<text x="310" y="190" text-anchor="middle" font-size="15" fill="#b54848">L-Ausklinkung ${fmt(p.cut.w)} × ${fmt(p.cut.d)} mm</text>`;s+=`<text x="310" y="40" text-anchor="middle" font-size="14">${p.name} · ${fmt(p.w)} × ${fmt(p.d)} mm</text><text x="310" y="355" text-anchor="middle" font-size="12">Stärke ${fmt(p.thick)} mm</text></svg>`;$('plateSvg').innerHTML=s}
+function svgForStair(p){const pts=stairPoints(p,true),map=fitSvg(pts,620,300,75),P=pts.map(map),f=stairFinish(p);let s=`<svg viewBox="0 0 620 330"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="none" stroke="#000" stroke-width="2"/>`;s+=`<text x="310" y="25" text-anchor="middle" font-size="15">hinten ${fmt(f.backW)} mm</text><text x="310" y="315" text-anchor="middle" font-size="15">vorne ${fmt(f.frontW)} mm</text><text x="20" y="170" font-size="13">L ${fmt(f.leftD)}</text><text x="520" y="170" font-size="13">R ${fmt(f.rightD)}</text></svg>`;return s}
+function svgForRiser(p){const pts=riserPoints(p),map=fitSvg(pts,620,300,75),P=pts.map(map);return `<svg viewBox="0 0 620 330"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="none" stroke="#000" stroke-width="2"/><text x="310" y="25" text-anchor="middle" font-size="15">oben ${fmt(p.topW)} mm</text><text x="310" y="315" text-anchor="middle" font-size="15">unten ${fmt(p.bottomW)} mm</text><text x="20" y="170" font-size="13">L ${fmt(p.hL)}</text><text x="520" y="170" font-size="13">R ${fmt(p.hR)}</text></svg>`}
+function svgForPlate(p){const pts=platePoints(p),map=fitSvg(pts,620,300,75),P=pts.map(map);return `<svg viewBox="0 0 620 330"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="none" stroke="#000" stroke-width="2"/><text x="310" y="25" text-anchor="middle" font-size="15">${fmt(p.w)} mm</text><text x="20" y="170" font-size="13">${fmt(p.d)} mm</text>${p.cut&&p.cut.type==='L'?`<text x="310" y="170" text-anchor="middle" font-size="14">L-Ausklinkung ${fmt(p.cut.w)} × ${fmt(p.cut.d)} mm · ${p.cut.corner}</text>`:''}</svg>`}
+function renderSummary(){const rows=[];state.stairs.forEach((p,i)=>{const f=stairFinish(p);rows.push(`<tr><td>${p.name}</td><td>${fmt(f.frontW)} × L${fmt(f.leftD)}/R${fmt(f.rightD)}</td><td><button class="btn small" onclick="downloadStairDXF(${i})">DXF</button></td></tr>`)});state.risers.forEach((p,i)=>rows.push(`<tr><td>${p.name}</td><td>${fmt(p.topW)}/${fmt(p.bottomW)} × H L${fmt(p.hL)}/R${fmt(p.hR)}</td><td><button class="btn small" onclick="downloadRiserDXF(${i})">DXF</button></td></tr>`));state.podest.plates.forEach((p,i)=>rows.push(`<tr><td>Podest ${p.name}</td><td>${fmt(p.w)} × ${fmt(p.d)}${p.cut.type==='L'?` · L ${fmt(p.cut.w)}×${fmt(p.cut.d)}`:''}</td><td><button class="btn small" onclick="downloadPlateDXF(${i})">DXF</button></td></tr>`));$('summaryList').innerHTML=`<table class="summarytable"><thead><tr><th>Element</th><th>Fertigmaß</th><th>Datei</th></tr></thead><tbody>${rows.join('')}</tbody></table>`}
+function edgeText(e){return Object.entries(e||{}).filter(x=>x[1]!=='Keine').map(([k,v])=>`${k}: ${v}`).join(' · ')||'keine besondere Kantenbearbeitung'}
+function buildPrintSheets(){const a=[];state.stairs.forEach(p=>{const f=stairFinish(p);a.push(`<div class="element-sheet"><h3>${esc(state.project.projectNo)} · ${p.name}</h3><div class="meta">${esc(state.project.projectName)} · ${esc(state.project.customer)}<br><b>Fertigmaß:</b> hinten ${fmt(f.backW)} mm · vorne ${fmt(f.frontW)} mm · Tiefe L/R ${fmt(f.leftD)} / ${fmt(f.rightD)} mm · Stärke ${fmt(p.thick)} mm<br><b>Kanten:</b> ${esc(edgeText(p.edges))}</div>${svgForStair(p)}</div>`)});state.risers.forEach(p=>a.push(`<div class="element-sheet"><h3>${esc(state.project.projectNo)} · ${p.name}</h3><div class="meta">${esc(state.project.projectName)} · ${esc(state.project.customer)}<br><b>Maße:</b> oben ${fmt(p.topW)} mm · unten ${fmt(p.bottomW)} mm · H L/M/R ${fmt(p.hL)} / ${fmt(p.hM)} / ${fmt(p.hR)} mm<br><b>Kanten:</b> ${esc(edgeText(p.edges))}</div>${svgForRiser(p)}</div>`));state.podest.plates.forEach(p=>a.push(`<div class="element-sheet"><h3>${esc(state.project.projectNo)} · Podest ${p.name}</h3><div class="meta">${esc(state.project.projectName)} · ${esc(state.project.customer)}<br><b>Maße:</b> ${fmt(p.w)} × ${fmt(p.d)} mm · Stärke ${fmt(p.thick)} mm${p.cut.type==='L'?` · <b>L-Ausklinkung:</b> ${fmt(p.cut.w)} × ${fmt(p.cut.d)} mm (${esc(p.cut.corner)})`:''}<br><b>Kanten:</b> ${esc(edgeText(p.edges))}</div>${svgForPlate(p)}</div>`));$('printSheets').innerHTML=a.join('')||'<p>Keine Elemente vorhanden.</p>'}
+function printSheets(){buildPrintSheets();const old=document.querySelector('.page.active');document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-print').classList.add('active');setTimeout(()=>{window.print();$('page-print').classList.remove('active');if(old)old.classList.add('active')},100)}
+function linesDXF(points,layer='CUT'){let e='';for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length];e+=`0\nLINE\n8\n${layer}\n10\n${a.x}\n20\n${-a.y}\n30\n0\n11\n${b.x}\n21\n${-b.y}\n31\n0\n`}return e}
+function textDXF(x,y,h,text,layer='TEXT'){return `0\nTEXT\n8\n${layer}\n10\n${x}\n20\n${y}\n30\n0\n40\n${h}\n1\n${text}\n`}
+function wrapDXF(entities){return `0\nSECTION\n2\nHEADER\n0\nENDSEC\n0\nSECTION\n2\nENTITIES\n${entities}0\nENDSEC\n0\nEOF\n`}
+function stairDXF(p){const f=stairFinish(p),pts=stairPoints(p,true);let e=linesDXF(pts);e+=textDXF(0,70,18,`BW ${f.backW} FW ${f.frontW} LD ${f.leftD} RD ${f.rightD}`);e+=textDXF(0,100,15,edgeText(p.edges));return wrapDXF(e)}
+function riserDXF(p){let e=linesDXF(riserPoints(p));e+=textDXF(0,70,15,`TOP ${p.topW} BOTTOM ${p.bottomW} HL ${p.hL} HM ${p.hM} HR ${p.hR}`);e+=textDXF(0,100,15,edgeText(p.edges));return wrapDXF(e)}
+function plateDXF(p){let e=linesDXF(platePoints(p));e+=textDXF(0,70,15,`${p.name} W ${p.w} D ${p.d}`);if(p.cut.type==='L')e+=textDXF(0,100,15,`L-CUT ${p.cut.w} x ${p.cut.d} ${p.cut.corner}`);e+=textDXF(0,130,15,edgeText(p.edges));return wrapDXF(e)}
+function dl(name,content,type='application/dxf'){const blob=new Blob([content],{type}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+function cleanName(s){return String(s).replace(/[^a-zA-Z0-9_-]+/g,'_')}
+function downloadStairDXF(i){const p=state.stairs[i];dl(`${cleanName(state.project.projectNo)}_${cleanName(p.name)}.dxf`,stairDXF(p))}function downloadCurrentStairDXF(){if(state.stairs.length)downloadStairDXF(currentStair)}
+function downloadRiserDXF(i){const p=state.risers[i];dl(`${cleanName(state.project.projectNo)}_${cleanName(p.name)}.dxf`,riserDXF(p))}function downloadCurrentRiserDXF(){if(state.risers.length)downloadRiserDXF(currentRiser)}
+function downloadPlateDXF(i){const p=state.podest.plates[i];dl(`${cleanName(state.project.projectNo)}_Podest_${p.name}.dxf`,plateDXF(p))}function downloadCurrentPlateDXF(){if(state.podest.plates.length)downloadPlateDXF(currentPlate)}
+async function downloadAllDXFSequential(){const jobs=[];state.stairs.forEach((p,i)=>jobs.push(()=>downloadStairDXF(i)));state.risers.forEach((p,i)=>jobs.push(()=>downloadRiserDXF(i)));state.podest.plates.forEach((p,i)=>jobs.push(()=>downloadPlateDXF(i)));for(const j of jobs){j();await new Promise(r=>setTimeout(r,350))}}
+function autoSave(){clearTimeout(autoSave.t);autoSave.t=setTimeout(()=>saveLocal(true),450)}
+function saveLocal(silent=false){syncProjectNoLoop();const all=JSON.parse(localStorage.getItem(KEY)||'{}');all[state.project.projectNo]={savedAt:new Date().toISOString(),state};localStorage.setItem(KEY,JSON.stringify(all));if(!silent)alert('Projekt lokal auf diesem Gerät gespeichert.');}
+function syncProjectNoLoop(){['projectNo','date','author','status','projectName','customer','address','material','notes'].forEach(k=>{if($(k))state.project[k]=$(k).value})}
+function showProjects(){const all=JSON.parse(localStorage.getItem(KEY)||'{}'),keys=Object.keys(all);$('projectList').innerHTML=keys.length?keys.map(k=>`<div class="card" style="margin-bottom:8px"><b>${esc(k)}</b><div class="note">${esc(all[k].state.project.projectName)} · gespeichert ${new Date(all[k].savedAt).toLocaleString('de-DE')}</div><div style="margin-top:6px"><button class="btn small primary" onclick="loadSaved('${esc(k)}')">Öffnen</button> <button class="btn small danger" onclick="deleteSaved('${esc(k)}')">Löschen</button></div></div>`).join(''):'<p class="note">Noch keine lokal gespeicherten Projekte.</p>';$('projectModal').classList.remove('hidden')}
+function closeProjects(){$('projectModal').classList.add('hidden')}function loadSaved(k){const all=JSON.parse(localStorage.getItem(KEY)||'{}');if(!all[k])return;state=all[k].state;currentStair=currentRiser=currentPlate=0;fillProject();renderAll();closeProjects()}function deleteSaved(k){if(!confirm(`${k} aus lokaler Projektliste löschen?`))return;const all=JSON.parse(localStorage.getItem(KEY)||'{}');delete all[k];localStorage.setItem(KEY,JSON.stringify(all));showProjects()}
+function exportJson(){syncProjectNoLoop();dl(`${cleanName(state.project.projectNo)}.json`,JSON.stringify(state,null,2),'application/json')}
+function renderAll(){fillProject();renderStats();renderStairs();renderRisers();renderPodest();renderSummary();buildPrintSheets()}
+function loadKaratas(){if(!confirm('Testdaten für Außentreppe/Veranda laden? Aktuelle Eingaben in diesem Arbeitsstand werden ersetzt.'))return;state.project={...state.project,projectNo:'MB-2026-0001',date:'2026-09-01',projectName:'Außentreppe und Veranda Herr Karatas',customer:'Herr Karatas',address:'Jenbacher Weg 30, 12209 Berlin',material:'Granit 20 mm'};const depths=[[325,330],[325,340],[325,325],[315,318],[325,323],[333,335]];state.stairs=depths.map((d,i)=>({name:`Trittstufe ${i+1}`,backW:1600,frontW:1600,leftD:d[0],rightD:d[1],overL:30,overR:30,overF:50,thick:20,edges:{front:'Poliert + Wassernase',back:'Keine',left:'Poliert',right:'Poliert'}}));const hs=[[140,140],[145,145],[143,145],[140,145],[143,150],[147,140],[145,145]];state.risers=hs.map((h,i)=>({name:`Setzstufe ${i+1}`,topW:1600,bottomW:1600,hL:h[0],hM:(h[0]+h[1])/2,hR:h[1],thick:20,edges:blankEdges()}));state.podest={rawW:3180,rawD:2970,finW:3180,finD:3000,cols:4,rows:4,joint:5,thick:20,plates:[]};currentStair=currentRiser=currentPlate=0;fillProject();generatePlates();const last=state.podest.plates[3];if(last){last.cut={type:'L',corner:'front-right',w:170,d:450};last.edges.front='Poliert + Wassernase';last.edges.right='Poliert'}state.podest.plates.slice(0,4).forEach(x=>x.edges.front='Poliert + Wassernase');renderAll();autoSave();showPage('stairs')}
+// init
+$('date').value=state.project.date;fillProject();generatePlates();if(!state.stairs.length)addStair();if(!state.risers.length)addRiser();renderAll();
 </script>
 </body>
 </html>
