@@ -215,7 +215,7 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
       <button>✎ &nbsp; ZEICHNUNG</button>
       <button>⇩ &nbsp; EXPORT</button>
     </div>
-    <div class="sidefooter">MB Aufmaß v0.2<br>© 2026 MB Dein Dienstleister</div>
+    <div class="sidefooter">MB Aufmaß v0.3<br>© 2026 MB Dein Dienstleister</div>
   </aside>
 
   <section class="workspace">
@@ -279,7 +279,8 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
             <div class="checkline"><input id="done" type="checkbox"> <label for="done">Maße dieser Stufe abgeschlossen</label></div>
             <div class="actionrow">
               <button class="btn gold" onclick="saveCurrentPart()">Stufe speichern</button>
-              <button class="btn" onclick="newPart()">+ neue Stufe</button>
+              <button class="btn" onclick="newPart()">+ Nächste Stufe</button>
+              <button class="btn" onclick="duplicateCurrent()">⧉ Stufe kopieren</button>
             </div>
           </div>
         </div>
@@ -333,7 +334,7 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
               <li>Überstände projektbezogen anpassen</li>
               <li>Kontrollmaße über Diagonalen erfassen</li>
             </ul>
-            <button class="btn primary" style="width:100%" onclick="newPart()">Weiter zu nächster Stufe →</button>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" onclick="goPrevious()">← Vorherige</button><button class="btn primary" onclick="goNext()">Nächste Stufe →</button></div>
           </div>
         </div>
       </div>
@@ -352,9 +353,21 @@ function txt(id){ return document.getElementById(id).value; }
 function setv(id,v){ document.getElementById(id).value = v ?? ''; }
 
 function newPart(){
+  if(currentIndex>=0) saveCurrentPartSilent();
   const p={name:`Stufe ${parts.length+1}`,backW:0,frontW:0,leftD:0,rightD:0,diag1:0,diag2:0,overhang:30,undertread:5,thickness:30,surface:'geflammt',edge:'Wassernase 3 mm',done:false};
   parts.push(p); currentIndex=parts.length-1; persist(); renderAll();
+  document.getElementById('backW').focus();
 }
+function duplicateCurrent(){
+  if(currentIndex<0) return;
+  saveCurrentPartSilent();
+  const copy=JSON.parse(JSON.stringify(parts[currentIndex]));
+  copy.name=`Stufe ${parts.length+1}`; copy.done=false;
+  parts.push(copy); currentIndex=parts.length-1; persist(); renderAll();
+}
+function renumberParts(){ parts.forEach((p,i)=>p.name=`Stufe ${i+1}`); }
+function goPrevious(){ if(currentIndex>0){ saveCurrentPartSilent(); currentIndex--; renderAll(); } }
+function goNext(){ if(currentIndex<parts.length-1){ saveCurrentPartSilent(); currentIndex++; renderAll(); } else newPart(); }
 function saveCurrentPart(){
   if(currentIndex<0) newPart();
   const p=parts[currentIndex];
@@ -368,6 +381,7 @@ function saveCurrentPart(){
 function deleteCurrent(){
   if(currentIndex<0) return;
   parts.splice(currentIndex,1);
+  renumberParts();
   currentIndex=parts.length ? Math.min(currentIndex,parts.length-1) : -1;
   persist(); renderAll();
 }
@@ -380,7 +394,7 @@ function renderSelector(){
     const o=document.createElement('option'); o.value=i; o.textContent=`${p.name}${p.done?' ✓':''}`; sel.appendChild(o);
   });
   if(currentIndex>=0) sel.value=currentIndex;
-  sel.onchange=()=>{ currentIndex=+sel.value; loadCurrent(); renderDiagram(); };
+  sel.onchange=()=>{ saveCurrentPartSilent(); currentIndex=+sel.value; loadCurrent(); renderSummary(); renderDiagram(); };
 }
 function loadCurrent(){
   if(currentIndex<0){ ['backW','frontW','leftD','rightD','diag1','diag2'].forEach(id=>setv(id,'')); return; }
