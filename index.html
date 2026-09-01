@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>MB Aufmaß – Treppenmodul</title>
 <style>
 :root{
@@ -104,7 +107,7 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
     gap:7px;
     font-size:11px;
   }
-  .quickactions span{
+  .quickactions span,.quickactions button{
     border:1px solid var(--line);
     border-radius:7px;
     background:#fff;
@@ -200,6 +203,7 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
   .main-grid{grid-template-columns:1fr}
   .card{border:0}
 }
+.modalback{position:fixed;inset:0;background:rgba(6,24,41,.55);display:none;align-items:center;justify-content:center;z-index:100}.modalback.show{display:flex}.modal{width:min(560px,92vw);background:#fff;border-radius:12px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 </style>
 </head>
 <body>
@@ -207,13 +211,13 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
   <aside class="sidebar">
     <div class="brand"><img src="mb-logo.png" alt="MB Dein Dienstleister"></div>
     <div class="nav">
-      <button class="gold">⌂ &nbsp; ÜBERSICHT</button>
-      <button>♙ &nbsp; PROJEKT / KUNDE</button>
-      <button>▱ &nbsp; BAUTEIL AUSWÄHLEN</button>
-      <button class="active">⌁ &nbsp; TREPPEN-AUFMASS</button>
-      <button>▦ &nbsp; TEILE / ELEMENTE</button>
-      <button>✎ &nbsp; ZEICHNUNG</button>
-      <button>⇩ &nbsp; EXPORT</button>
+      <button class="gold" onclick="showSection('overview')">⌂ &nbsp; ÜBERSICHT</button>
+      <button onclick="showSection('project')">♙ &nbsp; PROJEKT / KUNDE</button>
+      <button onclick="showSection('component')">▱ &nbsp; BAUTEIL AUSWÄHLEN</button>
+      <button class="active" onclick="showSection('stair')">⌁ &nbsp; TREPPEN-AUFMASS</button>
+      <button onclick="showSection('parts')">▦ &nbsp; TEILE / ELEMENTE</button>
+      <button onclick="showSection('drawing')">✎ &nbsp; ZEICHNUNG</button>
+      <button onclick="showSection('export')">⇩ &nbsp; EXPORT</button>
     </div>
     <div class="sidefooter">MB Aufmaß v0.3<br>© 2026 MB Dein Dienstleister</div>
   </aside>
@@ -223,14 +227,14 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
       <div class="toprow">
         <div class="titleblock">
           <h1>MB AUFMASS</h1>
-          <div class="sub">NATURSTEIN · TREPPEN · PLATTEN</div>
+          <div class="sub">NATURSTEIN · TREPPEN · PLATTEN · <b>v0.4.1</b></div>
         </div>
         <div class="quickactions">
-          <span>▣ Speichern</span>
-          <span>▱ Öffnen</span>
-          <span>⇩ Export</span>
-          <span>▤ Drucken</span>
-          <span>⚙ Einstellungen</span>
+          <button type="button" class="btn" onclick="saveProjectFile()">▣ Speichern</button>
+          <button type="button" class="btn" onclick="openProjectFile()">▱ Öffnen</button>
+          <button type="button" class="btn" onclick="showSection('export')">⇩ Export</button>
+          <button type="button" class="btn" onclick="window.print()">▤ Drucken</button>
+          <button type="button" class="btn" onclick="openSettings()">⚙ Einstellungen</button>
         </div>
       </div>
       <div class="meta">
@@ -243,7 +247,7 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
 
     <div class="content">
       <div class="headingrow">
-        <button class="backbtn">← Zurück</button>
+        <button class="backbtn" onclick="history.back()">← Zurück</button>
         <h2>TREPPEN-AUFMASS</h2>
       </div>
       <div class="steps">
@@ -288,12 +292,12 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
         <div class="centercol">
           <div class="card">
             <div class="diagram-tabs">
-              <button class="active">Draufsicht</button>
-              <button>Vorderansicht</button>
-              <button>Seitenansicht links</button>
-              <button>3D Ansicht</button>
+              <button class="active" onclick="setView('top',this)">Draufsicht</button>
+              <button onclick="setView('front',this)">Vorderansicht</button>
+              <button onclick="setView('side',this)">Seitenansicht links</button>
+              <button onclick="setView('threeD',this)">3D Ansicht</button>
             </div>
-            <div class="diagramwrap" id="diagram"></div>
+            <div class="diagramwrap"><div id="diagram"></div><div id="altDiagram" style="display:none;width:100%"></div></div>
             <div class="statusbox" id="statusbox">Noch keine vollständigen Maße eingegeben.</div>
             <div class="actionrow">
               <button class="btn" onclick="validateGeometry()">✓ Maße prüfen</button>
@@ -344,6 +348,10 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Sego
   </section>
 </div>
 
+
+<div id="toolPanel" style="display:none;position:fixed;inset:80px 5vw 5vh 260px;background:#fff;border:1px solid #d9dee5;border-radius:10px;z-index:50;padding:18px;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.2)"></div>
+<input id="projectFileInput" type="file" accept=".json" style="display:none" onchange="importProjectFile(event)">
+<div id="settingsModal" class="modalback"><div class="modal"><h3>Einstellungen</h3><p>Standardwerte für neue Stufen</p><div class="row"><label>Überstand [mm]</label><input id="settingOverhang" type="number" value="30"></div><div class="row"><label>Untertritt [mm]</label><input id="settingUndertread" type="number" value="5"></div><div class="row"><label>Trittstärke [mm]</label><input id="settingThickness" type="number" value="30"></div><div class="actionrow"><button class="btn" onclick="closeSettings()">Schließen</button><button class="btn primary" onclick="saveSettings()">Speichern</button></div></div></div>
 <script>
 let parts = JSON.parse(localStorage.getItem('mbTreppenParts') || '[]');
 let currentIndex = parts.length ? 0 : -1;
@@ -478,6 +486,43 @@ if(!document.getElementById('measureDate').value){
 if(!parts.length) newPart();
 else {currentIndex=0; renderAll();}
 function renderAll(){ renderSelector(); loadCurrent(); renderSummary(); renderDiagram(); }
+
+function currentPart(){return currentIndex>=0?parts[currentIndex]:null;}
+function setView(view,btn){
+  document.querySelectorAll('.diagram-tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  const main=document.getElementById('diagram'), alt=document.getElementById('altDiagram');
+  if(view==='top'){main.style.display='block';alt.style.display='none';renderDiagram();return;}
+  main.style.display='none';alt.style.display='block'; const p=currentPart(); if(!p){alt.innerHTML='Keine Stufe gewählt.';return;}
+  const w=p.frontW||p.backW||1500,d=p.leftD||p.rightD||330,h=p.thickness||30,o=p.overhang||30;
+  if(view==='front') alt.innerHTML=`<svg viewBox="0 0 620 230" width="100%"><rect x="60" y="90" width="500" height="${Math.max(18,h)}" fill="#eee" stroke="#222" stroke-width="2"/><text x="310" y="62" text-anchor="middle" font-size="18" font-weight="700">${w} mm</text><text x="575" y="110" font-size="14">${h} mm</text><text x="310" y="175" text-anchor="middle" font-size="16">Vorderansicht ${p.name}</text></svg>`;
+  if(view==='side') alt.innerHTML=`<svg viewBox="0 0 620 260" width="100%"><rect x="110" y="90" width="340" height="${Math.max(20,h)}" fill="#eee" stroke="#222" stroke-width="2"/><text x="280" y="65" text-anchor="middle" font-size="18" font-weight="700">${d} mm</text><text x="280" y="190" text-anchor="middle" font-size="16">Seitenansicht links · Überstand ${o} mm</text></svg>`;
+  if(view==='threeD') alt.innerHTML=`<svg viewBox="0 0 620 340" width="100%"><polygon points="150,120 430,90 510,140 230,175" fill="#e8e8e4" stroke="#222" stroke-width="2"/><polygon points="230,175 510,140 510,175 230,212" fill="#d5d5d0" stroke="#222" stroke-width="2"/><polygon points="150,120 230,175 230,212 150,157" fill="#c9c9c4" stroke="#222" stroke-width="2"/><text x="330" y="270" text-anchor="middle" font-size="17" font-weight="700">3D-Skizze ${p.name}</text><text x="330" y="295" text-anchor="middle" font-size="13">schematisch</text></svg>`;
+}
+function showSection(name){
+ const panel=document.getElementById('toolPanel');
+ if(name==='stair'){panel.style.display='none';return;}
+ panel.style.display='block';
+ let c='<button class="btn" onclick="document.getElementById(\'toolPanel\').style.display=\'none\'">← Zurück zum Aufmaß</button>';
+ if(name==='overview') c+='<h2>Übersicht</h2><p>Aktuelles Treppenprojekt mit '+parts.length+' Trittstufe(n).</p><button class="btn primary" onclick="document.getElementById(\'toolPanel\').style.display=\'none\'">Treppen-Aufmaß öffnen</button>';
+ if(name==='project') c+='<h2>Projekt / Kunde</h2><div class="row"><label>Projekt / Bauvorhaben</label><input id="projectName2"></div><div class="row"><label>Kunde</label><input id="customer2"></div><div class="row"><label>Baustellenadresse</label><input id="address2"></div><div class="row"><label>Telefon / E-Mail</label><input id="contactData2"></div><button class="btn primary" onclick="saveProjectMeta()">Projekt speichern</button>';
+ if(name==='component') c+='<h2>Bauteil auswählen</h2><button class="btn gold" onclick="document.getElementById(\'toolPanel\').style.display=\'none\'">🪜 Treppe</button><p>Arbeitsplatte, Fensterbank und Freiform folgen später.</p>';
+ if(name==='parts') c+='<h2>Teile / Elemente</h2>'+ (parts.length?'<table style="width:100%">'+parts.map((p,i)=>`<tr><td>${p.name}</td><td>${p.backW||'—'} / ${p.frontW||'—'} mm</td><td><button class="btn" onclick="currentIndex=${i};document.getElementById('toolPanel').style.display='none';renderAll()">Öffnen</button></td></tr>`).join('')+'</table>':'<p>Noch keine Teile.</p>');
+ if(name==='drawing') c+='<h2>Zeichnung</h2><p>Gesamtübersicht aller Stufen folgt. Die Einzelzeichnung ist bereits im Treppen-Aufmaß aktiv.</p>';
+ if(name==='export') c+='<h2>Export</h2><button class="btn primary" onclick="window.print()">PDF / Drucken</button> <button class="btn" onclick="exportProjectJson()">Projektdatei</button> <button class="btn" onclick="exportSimpleDXF()">DXF</button><p class="smallnote">DXF ist aktuell eine einfache Kontur je Trittstufe.</p>';
+ panel.innerHTML=c;
+ if(name==='project') loadProjectMeta();
+}
+function saveProjectMeta(){const m={projectName:document.getElementById('projectName2').value,customer:document.getElementById('customer2').value,address:document.getElementById('address2').value,contactData:document.getElementById('contactData2').value};localStorage.setItem('mbProjectMeta',JSON.stringify(m));alert('Projekt gespeichert.');}
+function loadProjectMeta(){const m=JSON.parse(localStorage.getItem('mbProjectMeta')||'{}');for(const k of ['projectName','customer','address','contactData']){const el=document.getElementById(k+'2');if(el)el.value=m[k]||'';}}
+function exportProjectJson(){saveCurrentPartSilent();const payload={version:'0.4',meta:JSON.parse(localStorage.getItem('mbProjectMeta')||'{}'),parts};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MB-Aufmass.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);}
+function saveProjectFile(){exportProjectJson();}
+function openProjectFile(){document.getElementById('projectFileInput').click();}
+function importProjectFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);parts=Array.isArray(data.parts)?data.parts:[];localStorage.setItem('mbTreppenParts',JSON.stringify(parts));localStorage.setItem('mbProjectMeta',JSON.stringify(data.meta||{}));currentIndex=parts.length?0:-1;renderAll();alert('Projekt geladen.');}catch(err){alert('Datei konnte nicht gelesen werden.');}};r.readAsText(f);}
+function exportSimpleDXF(){if(!parts.length){alert('Keine Stufen vorhanden.');return;}let y=0,ent='';const line=(x1,y1,x2,y2)=>`0\nLINE\n8\nCUT\n10\n${x1}\n20\n${y1}\n30\n0\n11\n${x2}\n21\n${y2}\n31\n0\n`;parts.forEach(p=>{const fw=p.frontW||p.backW,bw=p.backW||p.frontW,ld=p.leftD||p.rightD,rd=p.rightD||p.leftD;if(!(fw&&bw&&ld&&rd))return;const maxW=Math.max(fw,bw),xt=(maxW-bw)/2,xb=(maxW-fw)/2,h=Math.max(ld,rd),A=[xt,y+h],B=[xt+bw,y+h],C=[xb+fw,y+h-rd],D=[xb,y+h-ld];ent+=line(...A,...B)+line(...B,...C)+line(...C,...D)+line(...D,...A);y-=h+250;});const dxf=`0\nSECTION\n2\nENTITIES\n${ent}0\nENDSEC\n0\nEOF\n`;const blob=new Blob([dxf],{type:'application/dxf'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MB-Aufmass.dxf';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);}
+function openSettings(){document.getElementById('settingsModal').classList.add('show');}
+function closeSettings(){document.getElementById('settingsModal').classList.remove('show');}
+function saveSettings(){const s={overhang:+document.getElementById('settingOverhang').value||30,undertread:+document.getElementById('settingUndertread').value||5,thickness:+document.getElementById('settingThickness').value||30};localStorage.setItem('mbSettings',JSON.stringify(s));closeSettings();alert('Einstellungen gespeichert.');}
+
 </script>
 </body>
 </html>
