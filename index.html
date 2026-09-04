@@ -235,10 +235,15 @@ function v1RectOuterDims(p,map,labelW,labelD,cx=310,cy=195,offset=34){
 }
 function v1StairMeasureRays(P,p,cx=310,cy=195){const f=stairFinish(p);return v1MeasureRay(P[0],P[1],`hinten ${fmt(f.backW)} mm`,cx,cy,30)+v1MeasureRay(P[1],P[2],`rechts ${fmt(f.rightD)} mm`,cx,cy,34)+v1MeasureRay(P[2],P[3],`vorne ${fmt(f.frontW)} mm`,cx,cy,32)+v1MeasureRay(P[3],P[0],`links ${fmt(f.leftD)} mm`,cx,cy,34)}
 function v1RiserMeasureRays(P,p,ff,cx=310,cy=195){
- const top=v1MeasureRay(P[0],P[1],`oben ${fmt(p.topW)} mm`,cx,cy,30),bottom=v1MeasureRay(P[2],P[3],`unten ${fmt(p.bottomW)} mm`,cx,cy,30);
+ // Setzstufen sind sehr flach. Deshalb die vier Maßstrahlen bewusst auf feste Außenseiten zwingen,
+ // damit z. B. das untere Breitenmaß niemals oberhalb/in der Platte landet.
+ const top=v1MeasureRay(P[0],P[1],`oben ${fmt(p.topW)} mm`,cx,10000,30);
+ const bottom=v1MeasureRay(P[2],P[3],`unten ${fmt(p.bottomW)} mm`,cx,-10000,30);
  const minX=Math.min(...P.map(q=>q.x)),maxX=Math.max(...P.map(q=>q.x)),topY=(P[0].y+P[1].y)/2;
  const lA={x:minX,y:topY},lB={x:minX,y:P[3].y},rA={x:maxX,y:topY},rB={x:maxX,y:P[2].y};
- return top+bottom+v1MeasureRay(lB,lA,`L ${fmt(ff.l)} mm`,cx,cy,30)+v1MeasureRay(rA,rB,`R ${fmt(ff.r)} mm`,cx,cy,30);
+ const left=v1MeasureRay(lB,lA,`L ${fmt(ff.l)} mm`,10000,cy,30);
+ const right=v1MeasureRay(rA,rB,`R ${fmt(ff.r)} mm`,-10000,cy,30);
+ return top+bottom+left+right;
 }
 function frontMarker(x,y,label='VORNE'){return `<g><text x="${x}" y="${y}" text-anchor="middle" font-size="13" font-weight="800" fill="#b54848">${label} ↓</text></g>`}
 function renderStairSvg(){if(!state.stairs.length)return;const p=state.stairs[currentStair];if(stairView==='front'){const f=stairFinish(p);$('stairSvg').innerHTML=`<svg viewBox="0 0 620 390"><rect x="90" y="145" width="440" height="${Math.max(18,num(p.thick)*2.2)}" fill="#e8e4d8" stroke="#111" stroke-width="2"/><line x1="90" y1="145" x2="530" y2="145" stroke="${edgeColor(p.edges.front)}" stroke-width="6"/><text x="310" y="120" text-anchor="middle" font-size="16">Breite vorne ${fmt(f.frontW)} mm</text><text x="310" y="235" text-anchor="middle" font-size="15">Plattenstärke ${fmt(p.thick)} mm</text>${frontMarker(310,285)}</svg>`;return}
