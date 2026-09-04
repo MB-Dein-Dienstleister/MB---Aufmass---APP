@@ -78,7 +78,7 @@
 <section id="page-project" class="page active">
   <div class="grid grid2">
     <div class="card">
-      <div class="section-title"><h2>Projekt / Kunde</h2><button class="btn small" onclick="loadKaratas()">Testauftrag Karatas laden</button></div>
+      <div class="section-title"><h2>Projekt / Kunde</h2></div>
       <div class="fields">
         <div class="field"><label>Projektnummer</label><input id="projectNo" value="MB-2026-0001" oninput="syncProject()"></div>
         <div class="field"><label>Aufmaßdatum</label><input id="date" type="date" oninput="syncProject()"></div>
@@ -455,7 +455,6 @@ function showProjects(){const all=JSON.parse(localStorage.getItem(KEY)||'{}'),ke
 function closeProjects(){$('projectModal').classList.add('hidden')}function loadSaved(k){const all=JSON.parse(localStorage.getItem(KEY)||'{}');if(!all[k])return;state=all[k].state;currentStair=currentRiser=currentPlate=currentFree=0;fillProject();renderAll();closeProjects()}function deleteSaved(k){if(!confirm(`${k} aus lokaler Projektliste löschen?`))return;const all=JSON.parse(localStorage.getItem(KEY)||'{}');delete all[k];localStorage.setItem(KEY,JSON.stringify(all));showProjects()}
 function exportJson(){syncProjectNoLoop();dl(`${cleanName(state.project.projectNo)}.json`,JSON.stringify(state,null,2),'application/json')}
 function renderAll(){v1init();fillProject();if($('v1Standards'))$('v1Standards').innerHTML=v1Panel()+v1Section();renderStats();renderStairs();renderRisers();renderPodest();renderFree();renderImport();renderSummary();buildPrintSheets()}
-function loadKaratas(){if(!confirm('Testdaten für Außentreppe/Veranda laden? Aktuelle Eingaben in diesem Arbeitsstand werden ersetzt.'))return;state.project={...state.project,projectNo:'MB-2026-0001',date:'2026-09-01',projectName:'Außentreppe und Veranda Herr Karatas',customer:'Herr Karatas',address:'Jenbacher Weg 30, 12209 Berlin',material:'Granit 20 mm'};const depths=[[325,330],[325,340],[325,325],[315,318],[325,323],[333,335]];state.stairs=depths.map((d,i)=>({name:`Trittstufe ${i+1}`,backW:1600,frontW:1600,leftD:d[0],rightD:d[1],overL:30,overR:30,overF:50,thick:20,edges:{front:'Poliert + Wassernase',back:'Keine',left:'Poliert',right:'Poliert'}}));const hs=[[140,140],[145,145],[143,145],[140,145],[143,150],[147,140],[145,145]];state.risers=hs.map((h,i)=>({name:`Setzstufe ${i+1}`,topW:1600,bottomW:1600,hL:h[0],hM:(h[0]+h[1])/2,hR:h[1],thick:20,edges:blankEdges()}));state.podest={rawW:3180,rawD:2970,finW:3180,finD:3000,cols:4,rows:4,joint:5,thick:20,plates:[]};currentStair=currentRiser=currentPlate=0;fillProject();generatePlates();const last=state.podest.plates[3];if(last){last.cut={type:'L',corner:'front-right',w:170,d:450};last.edges.front='Poliert + Wassernase';last.edges.right='Poliert'}state.podest.plates.slice(0,4).forEach(x=>x.edges.front='Poliert + Wassernase');renderAll();autoSave();showPage('stairs')}
 
 const V1SURF=['geflammt','satiniert','poliert','geschliffen','gebürstet','sandgestrahlt','roh','sonstige'];
 const V1EDGES=['Keine','Gefast','Poliert','Poliert + gefast','Poliert + Wassernase','Wassernase','Gehrung'];
