@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MB Aufmaß – Mauerabdeckung / Platte</title>
+<style>
+:root{
+  --navy:#0d1b2a;--navy2:#13263a;--gold:#c5a25d;--cream:#f3efe5;--paper:#fffdf8;
+  --ink:#18202a;--muted:#6d7681;--line:#d9d2c3;--blue:#2876b7;--danger:#a43d37;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#ece9e2;color:var(--ink)}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:18px 22px;border-bottom:3px solid var(--gold)}
+.top{max-width:1500px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px}.mark{width:50px;height:50px;border:2px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold);font-weight:900;font-size:20px}
+.brand h1{margin:0;font-size:21px;letter-spacing:.08em}.brand small{display:block;color:#d8dde4;margin-top:3px;letter-spacing:.06em}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+button,.btn{font:inherit;border:1px solid #b8b3a9;background:#fff;color:var(--ink);padding:10px 13px;border-radius:9px;font-weight:700;cursor:pointer}
+button:hover{filter:brightness(.98)}button:focus,input:focus,select:focus,textarea:focus{outline:3px solid rgba(197,162,93,.3);outline-offset:1px}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#17202a}.btn.dark{background:var(--navy2);border-color:var(--navy2);color:#fff}.btn.danger{color:var(--danger)}
+main{max-width:1500px;margin:0 auto;padding:18px}
+.grid{display:grid;grid-template-columns:minmax(360px,510px) minmax(0,1fr);gap:16px;align-items:start}
+.card{background:var(--paper);border:1px solid #d7d1c4;border-radius:14px;padding:15px}
+.sticky{position:sticky;top:12px}
+h2,h3{margin:0 0 12px}h2{font-size:18px}h3{font-size:15px;color:var(--navy2)}
+.section{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field label{display:block;font-size:11px;font-weight:900;letter-spacing:.045em;text-transform:uppercase;color:#59616b;margin-bottom:5px}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:10px;border:1px solid #c9c4b9;border-radius:8px;background:#fff}
+input[readonly]{background:#f1efe9;color:#555}
+.note{font-size:12px;color:var(--muted);line-height:1.45}.banner{background:#f1ecdf;border-left:4px solid var(--gold);padding:10px 12px;border-radius:8px;font-size:13px}
+.svgbox{background:#fff;border:1px solid #cec7bb;border-radius:12px;min-height:560px;overflow:auto}
+.svgbox svg{width:100%;height:auto;display:block;min-width:680px}
+.cut{border:1px solid #ddd4c4;background:#fbfaf6;border-radius:10px;padding:11px;margin-top:9px}
+.cuthead{display:flex;justify-content:space-between;align-items:center;gap:8px}.cuthead b{color:var(--navy2)}
+.nudge{display:grid;grid-template-columns:44px 44px 44px;grid-template-rows:42px 42px 42px;gap:5px;justify-content:center;margin:10px 0}
+.nudge button{padding:0;font-size:21px;background:var(--navy2);color:#fff;border-color:var(--navy2)}
+.nudge .up{grid-column:2}.nudge .left{grid-column:1;grid-row:2}.nudge .center{grid-column:2;grid-row:2;background:#f3efe5;color:#333;border-color:#cfc4ae;font-size:11px}.nudge .right{grid-column:3;grid-row:2}.nudge .down{grid-column:2;grid-row:3}
+.edge-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+details.edge{border:1px solid #d8d0c0;border-radius:9px;background:#fff}
+details.edge summary{padding:10px 12px;cursor:pointer;font-weight:800;color:var(--navy2)}
+.edge-body{padding:0 12px 12px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.checks label{font-size:13px;display:flex;gap:7px;align-items:flex-start}.checks input{width:auto;margin-top:2px}
+.toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#59616b}.sw{display:inline-block;width:18px;height:4px;vertical-align:middle;margin-right:5px}
+.warn{color:#8c4d12;background:#fff3da;border:1px solid #efd098;border-radius:8px;padding:8px 10px;font-size:12px}
+.ok{color:#276033;background:#eaf6ec;border:1px solid #b7ddbe;border-radius:8px;padding:8px 10px;font-size:12px}
+.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{padding:7px;border-bottom:1px solid #e1ddd4;text-align:left}.table th{color:#5d6670;text-transform:uppercase;font-size:10px}
+@media(max-width:950px){.grid{grid-template-columns:1fr}.sticky{position:static}.svgbox{min-height:430px}}
+@media(max-width:560px){main{padding:10px}.fields,.edge-grid{grid-template-columns:1fr}.checks{grid-template-columns:1fr}.svgbox svg{min-width:620px}}
+@media print{
+ body{background:#fff}header,.leftcol .actions-local,.no-print{display:none!important}
+ main{padding:0}.grid{display:block}.leftcol{display:none}.card{border:0;padding:0}.sticky{position:static}.svgbox{border:0;min-height:auto}
+ .svgbox svg{min-width:0;width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="top">
+  <div class="brand"><div class="mark">MB</div><div><h1>MB AUFMASS</h1><small>NATURSTEIN · MAUERABDECKUNGEN · FERTIGUNGSZEICHNUNG</small></div></div>
+  <div class="actions"><button class="btn dark" id="resetBtn">Neu</button><button class="btn primary" id="printBtn">Fertigungsblatt / PDF</button><button class="btn" id="dxfBtn">DXF</button><button class="btn" id="jsonBtn">JSON sichern</button></div>
+</div>
+</header>
+
+<main>
+<div class="grid">
+<section class="leftcol">
+  <div class="card">
+    <h2>Mauerabdeckung / Platte</h2>
+    <div class="fields">
+      <div class="field"><label>Projekt / Bauteil</label><input id="name" value="Mauerabdeckung 1"></div>
+      <div class="field"><label>Bezugskante A</label><input id="reference" value="Vorder-/Sichtkante"></div>
+      <div class="field"><label>Material / Steinsorte</label><input id="material" value="Granit"></div>
+      <div class="field"><label>Stärke mm</label><input id="thick" type="number" value="30" min="1"></div>
+      <div class="field"><label>Oberfläche</label><select id="surface"></select></div>
+      <div class="field"><label>Farbton / Sorte</label><input id="stone" placeholder="z. B. Padang Dark"></div>
+    </div>
+
+    <div class="section">
+      <h3>Außenkontur · Seiten A–D</h3>
+      <div class="fields">
+        <div class="field"><label>Seite A mm</label><input id="sideA" type="number" value="1200"></div>
+        <div class="field"><label>Seite B mm</label><input id="sideB" type="number" value="400"></div>
+        <div class="field"><label>Seite C mm</label><input id="sideC" type="number" value="1200"></div>
+        <div class="field"><label>Seite D mm</label><input id="sideD" type="number" value="400"></div>
+        <div class="field"><label>Referenzwinkel A °</label><input id="angleA" type="number" value="90" step="0.1"></div>
+        <div class="field"><label>Kontrollwinkel B °</label><input id="angleBMeasured" type="number" value="90" step="0.1"></div>
+        <div class="field"><label>Kontrollwinkel C °</label><input id="angleCMeasured" type="number" value="90" step="0.1"></div>
+        <div class="field"><label>Kontrollwinkel D °</label><input id="angleDMeasured" type="number" value="90" step="0.1"></div>
+      </div>
+      <p class="note">Die Geometrie wird eindeutig aus A, B, C, D und dem Referenzwinkel A aufgebaut. B/C/D dienen als Kontrollwinkel und werden mit der berechneten Geometrie verglichen.</p>
+      <div id="geometryCheck"></div>
+    </div>
+
+    <div class="section">
+      <div class="cuthead"><h3>Ausschnitte</h3><button class="btn primary" id="addCut">+ Ausschnitt</button></div>
+      <div id="cuts"></div>
+    </div>
+
+    <div class="section">
+      <h3>Kantenbearbeitung · Mehrfachauswahl möglich</h3>
+      <div class="edge-grid" id="edges"></div>
+      <p class="note">Oberfläche und Kantenbearbeitung sind getrennte Fertigungsangaben. Bearbeitungen werden zusätzlich im Fertigungsblock ausgeschrieben.</p>
+    </div>
+
+    <div class="section">
+      <h3>Bemerkung für Fertigung</h3>
+      <textarea id="notes" rows="3" placeholder="z. B. Sichtseite beachten, Einbauorientierung, Toleranz ..."></textarea>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card sticky">
+    <div class="toolbar">
+      <div><h2 style="margin:0">Fertigungsansicht</h2><div class="note">Alle Maße in mm · nicht maßstäblich ausdrucken, Maße sind verbindlich.</div></div>
+      <div class="legend"><span><i class="sw" style="background:#c5a25d"></i>bearbeitete Kante</span><span><i class="sw" style="background:#2876b7"></i>Wassernase</span></div>
+    </div>
+    <div id="drawing" class="svgbox"></div>
+    <div class="section">
+      <h3>Fertigungsangaben</h3>
+      <div id="fabTable"></div>
+    </div>
+  </div>
+</section>
+</div>
+</main>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const surfaces=['unbehandelt / roh','geschliffen','poliert','satiniert','geflammt','gebürstet','sandgestrahlt','gestockt','geflammt + gebürstet','individuell'];
+const edgeOpts=['gesägt / roh','geschliffen','poliert','gefast','rund','halbrund','Viertelstab','Wassernase / Tropfkante','Nut','Hinterschneidung','individuell'];
+$('surface').innerHTML=surfaces.map(x=>`<option>${x}</option>`).join('');
+$('surface').value='satiniert';
+
+let cuts=[];
+const edgeState={A:[],B:[],C:[],D:[]};
+let seq=1;
+
+function num(id,def=0){const v=parseFloat($(id)?.value);return Number.isFinite(v)?v:def}
+function f(n,d=1){return Number.isFinite(n)?(Math.round(n*10**d)/10**d).toLocaleString('de-DE',{maximumFractionDigits:d}):'–'}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function dist(a,b){return Math.hypot(b.x-a.x,b.y-a.y)}
+function angle(pPrev,p,pNext){
+  const u={x:pPrev.x-p.x,y:pPrev.y-p.y},v={x:pNext.x-p.x,y:pNext.y-p.y};
+  const du=Math.hypot(u.x,u.y),dv=Math.hypot(v.x,v.y); if(!du||!dv)return 0;
+  const c=Math.max(-1,Math.min(1,(u.x*v.x+u.y*v.y)/(du*dv)));
+  return Math.acos(c)*180/Math.PI;
+}
+function circleIntersections(c0,r0,c1,r1){
+ const dx=c1.x-c0.x,dy=c1.y-c0.y,d=Math.hypot(dx,dy);
+ if(d===0||d>r0+r1||d<Math.abs(r0-r1))return null;
+ const a=(r0*r0-r1*r1+d*d)/(2*d),h2=r0*r0-a*a;if(h2<-.01)return null;
+ const h=Math.sqrt(Math.max(0,h2)),xm=c0.x+a*dx/d,ym=c0.y+a*dy/d;
+ return [{x:xm+h*(-dy)/d,y:ym+h*dx/d},{x:xm-h*(-dy)/d,y:ym-h*dx/d}];
+}
+function geometry(){
+ const A=Math.max(1,num('sideA')),B=Math.max(1,num('sideB')),C=Math.max(1,num('sideC')),D=Math.max(1,num('sideD'));
+ const ai=Math.max(5,Math.min(175,num('angleA',90)))*Math.PI/180;
+ const p1={x:0,y:0},p2={x:A,y:0},p4={x:D*Math.cos(ai),y:D*Math.sin(ai)};
+ const ints=circleIntersections(p2,B,p4,C);
+ if(!ints)return {ok:false,msg:'Diese Seitenlängen + Winkel A ergeben keine geschlossene Platte.'};
+ const p3=ints.sort((u,v)=>v.y-u.y)[0];
+ const pts=[p1,p2,p3,p4];
+ const ang=[angle(p4,p1,p2),angle(p1,p2,p3),angle(p2,p3,p4),angle(p3,p4,p1)];
+ return {ok:true,pts,ang,sides:[dist(p1,p2),dist(p2,p3),dist(p3,p4),dist(p4,p1)]};
+}
+function buildEdges(){
+ $('edges').innerHTML=['A','B','C','D'].map(k=>`<details class="edge"><summary>Seite ${k}</summary><div class="edge-body"><div class="checks">${edgeOpts.map(o=>`<label><input type="checkbox" data-edge="${k}" value="${o}"> ${o}</label>`).join('')}</div><div class="field" style="margin-top:8px"><label>Detail / Maß</label><input id="edgeDetail${k}" placeholder="z. B. Fase 3 mm · Wassernase 15 mm von Kante"></div></div></details>`).join('');
+ $('edges').querySelectorAll('input[type=checkbox]').forEach(x=>x.addEventListener('change',e=>{
+   const k=e.target.dataset.edge,o=e.target.value;
+   if(e.target.checked&&!edgeState[k].includes(o))edgeState[k].push(o);
+   if(!e.target.checked)edgeState[k]=edgeState[k].filter(v=>v!==o);
+   render();
+ }));
+ ['A','B','C','D'].forEach(k=>$('edgeDetail'+k).addEventListener('input',render));
+}
+function addCut(type='circle'){
+ const g=geometry(); const pts=g.ok?g.pts:[{x:0,y:0},{x:1200,y:0},{x:1200,y:400},{x:0,y:400}];
+ const cx=(pts[0].x+pts[2].x)/2, cy=(pts[0].y+pts[2].y)/2;
+ cuts.push({id:seq++,type,name:`Ausschnitt ${seq-1}`,x:cx,y:cy,circ:628.3,diam:200,clearance:0,w:200,d:150,points:[{x:0,y:0},{x:120,y:0},{x:120,y:80},{x:50,y:130},{x:0,y:80}],edge:'geschliffen'});
+ renderCuts();render();
+}
+function renderCuts(){
+ $('cuts').innerHTML=cuts.length?cuts.map((c,i)=>`<div class="cut" data-i="${i}">
+ <div class="cuthead"><b>${esc(c.name)}</b><button class="btn danger cutDelete">Löschen</button></div>
+ <div class="fields" style="margin-top:8px">
+  <div class="field"><label>Typ</label><select class="ctype"><option value="circle" ${c.type==='circle'?'selected':''}>Rund / Kreis</option><option value="L" ${c.type==='L'?'selected':''}>L-Ausklinkung</option><option value="rect" ${c.type==='rect'?'selected':''}>Rechteck</option><option value="free" ${c.type==='free'?'selected':''}>Freiform</option></select></div>
+  <div class="field"><label>Kante Ausschnitt</label><select class="cedge">${edgeOpts.map(x=>`<option ${c.edge===x?'selected':''}>${x}</option>`).join('')}</select></div>
+ </div>
+ ${c.type==='circle'?`<div class="fields" style="margin-top:8px"><div class="field"><label>Säulenumfang mm</label><input class="ccirc" type="number" step=".1" value="${c.circ}"></div><div class="field"><label>Ø berechnet mm</label><input class="cdiam" readonly value="${f(c.circ/Math.PI,1)}"></div><div class="field"><label>Spiel / Zugabe Ø mm</label><input class="cclear" type="number" step=".5" value="${c.clearance}"></div><div class="field"><label>Fertig-Ø mm</label><input readonly value="${f(c.circ/Math.PI+c.clearance,1)}"></div></div>`:
+ c.type==='free'?`<div class="note" style="margin-top:8px">Freiform wird über Punkte P1…Pn relativ zum Ausschnitt-Ursprung definiert.</div><div style="overflow:auto"><table class="table"><thead><tr><th>Punkt</th><th>X</th><th>Y</th></tr></thead><tbody>${c.points.map((p,j)=>`<tr><td>P${j+1}</td><td><input class="px" data-p="${j}" type="number" value="${p.x}"></td><td><input class="py" data-p="${j}" type="number" value="${p.y}"></td></tr>`).join('')}</tbody></table></div><button class="btn addPoint" style="margin-top:7px">+ Punkt</button>`:
+ `<div class="fields" style="margin-top:8px"><div class="field"><label>Breite mm</label><input class="cw" type="number" value="${c.w}"></div><div class="field"><label>Tiefe mm</label><input class="cd" type="number" value="${c.d}"></div></div>`}
+ <div class="banner" style="margin-top:9px"><b>Position:</b> X ${f(c.x)} mm · Y ${f(c.y)} mm vom Bezugspunkt A. Position nur mit Pfeiltasten ändern.</div>
+ <div class="nudge"><button class="up" data-dx="0" data-dy="-1">↑</button><button class="left" data-dx="-1" data-dy="0">←</button><button class="center" disabled>1 mm</button><button class="right" data-dx="1" data-dy="0">→</button><button class="down" data-dx="0" data-dy="1">↓</button></div>
+ </div>`).join(''):'<p class="note">Noch kein Ausschnitt.</p>';
+
+ $('cuts').querySelectorAll('.cut').forEach(el=>{
+  const i=+el.dataset.i,c=cuts[i];
+  el.querySelector('.cutDelete').addEventListener('click',()=>{cuts.splice(i,1);renderCuts();render()});
+  el.querySelector('.ctype').addEventListener('change',e=>{c.type=e.target.value;renderCuts();render()});
+  el.querySelector('.cedge').addEventListener('change',e=>{c.edge=e.target.value;render()});
+  el.querySelectorAll('.nudge button[data-dx]').forEach(b=>b.addEventListener('click',()=>{
+    c.x+=+b.dataset.dx;c.y+=+b.dataset.dy;renderCuts();render();
+  }));
+  const circ=el.querySelector('.ccirc'); if(circ)circ.addEventListener('input',e=>{c.circ=Math.max(0,parseFloat(e.target.value)||0);renderCuts();render()});
+  const clear=el.querySelector('.cclear'); if(clear)clear.addEventListener('input',e=>{c.clearance=parseFloat(e.target.value)||0;renderCuts();render()});
+  const cw=el.querySelector('.cw'); if(cw)cw.addEventListener('input',e=>{c.w=Math.max(0,parseFloat(e.target.value)||0);render()});
+  const cd=el.querySelector('.cd'); if(cd)cd.addEventListener('input',e=>{c.d=Math.max(0,parseFloat(e.target.value)||0);render()});
+  el.querySelectorAll('.px').forEach(inp=>inp.addEventListener('input',e=>{c.points[+e.target.dataset.p].x=parseFloat(e.target.value)||0;render()}));
+  el.querySelectorAll('.py').forEach(inp=>inp.addEventListener('input',e=>{c.points[+e.target.dataset.p].y=parseFloat(e.target.value)||0;render()}));
+  const ap=el.querySelector('.addPoint'); if(ap)ap.addEventListener('click',()=>{const q=c.points[c.points.length-1]||{x:0,y:0};c.points.push({x:q.x+50,y:q.y});renderCuts();render()});
+ });
+}
+
+function measureLine(a,b,label,off=24){
+ const dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L;
+ const p={x:a.x+nx*off,y:a.y+ny*off},q={x:b.x+nx*off,y:b.y+ny*off},m={x:(p.x+q.x)/2,y:(p.y+q.y)/2};
+ return `<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" class="dim" marker-start="url(#arr)" marker-end="url(#arr)"/><line x1="${a.x}" y1="${a.y}" x2="${p.x}" y2="${p.y}" class="ext"/><line x1="${b.x}" y1="${b.y}" x2="${q.x}" y2="${q.y}" class="ext"/><text x="${m.x}" y="${m.y-4}" text-anchor="middle" class="dt">${esc(label)}</text>`;
+}
+function edgeStroke(k){
+ const a=edgeState[k]||[]; if(a.some(x=>x.includes('Wassernase')))return '#2876b7';
+ return a.length?'#c5a25d':'#151515';
+}
+function render(){
+ const g=geometry();
+ if(!g.ok){$('geometryCheck').innerHTML=`<div class="warn">${esc(g.msg)}</div>`;$('drawing').innerHTML='';return}
+ const measured=[num('angleA'),num('angleBMeasured'),num('angleCMeasured'),num('angleDMeasured')];
+ const diff=g.ang.map((a,i)=>Math.abs(a-measured[i]));
+ $('geometryCheck').innerHTML=diff.slice(1).every(x=>x<=1)?`<div class="ok">Geometrie plausibel · berechnet: A ${f(g.ang[0])}° · B ${f(g.ang[1])}° · C ${f(g.ang[2])}° · D ${f(g.ang[3])}°</div>`:`<div class="warn">Kontrollwinkel prüfen · berechnet: A ${f(g.ang[0])}° · B ${f(g.ang[1])}° · C ${f(g.ang[2])}° · D ${f(g.ang[3])}°</div>`;
+
+ const pts=g.pts; const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y),minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys);
+ const W=maxx-minx||1,H=maxy-miny||1,scale=Math.min(520/W,340/H),ox=110-minx*scale,oy=120-miny*scale;
+ const M=p=>({x:ox+p.x*scale,y:oy+p.y*scale}),P=pts.map(M);
+ let s=`<svg viewBox="0 0 760 600" aria-label="Fertigungszeichnung"><defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#263441"/></marker></defs><style>.plate{fill:#f3efe5;stroke:#111;stroke-width:2}.edgeLine{fill:none;stroke-width:6;stroke-linecap:round}.dim{stroke:#263441;stroke-width:1.2}.ext{stroke:#929aa0;stroke-width:.8;stroke-dasharray:3 3}.dt{font:700 12px system-ui;fill:#263441;paint-order:stroke;stroke:#fff;stroke-width:4}.lab{font:800 14px system-ui;fill:#0d1b2a}.small{font:600 11px system-ui;fill:#58636e}.cutline{fill:#fff;stroke:#9a3632;stroke-width:2}.angle{font:700 11px system-ui;fill:#7e5f25}</style>`;
+ s+=`<polygon class="plate" points="${P.map(p=>`${p.x},${p.y}`).join(' ')}"/>`;
+ const keys=['A','B','C','D']; for(let i=0;i<4;i++){let j=(i+1)%4;s+=`<line class="edgeLine" x1="${P[i].x}" y1="${P[i].y}" x2="${P[j].x}" y2="${P[j].y}" stroke="${edgeStroke(keys[i])}"/>`;s+=measureLine(P[i],P[j],`${keys[i]} · ${f(g.sides[i])} mm`,i===0?-34:34)}
+ P.forEach((p,i)=>{s+=`<text class="angle" x="${p.x+8}" y="${p.y-8}">${keys[i]} ${f(g.ang[i])}°</text>`});
+ s+=`<text x="380" y="40" text-anchor="middle" class="lab">${esc($('name').value)}</text><text x="380" y="58" text-anchor="middle" class="small">Bezug A: ${esc($('reference').value)} · ${esc($('material').value)} · ${f(num('thick'))} mm · Oberfläche: ${esc($('surface').value)}</text>`;
+
+ cuts.forEach((c,i)=>{
+   const x=ox+c.x*scale,y=oy+c.y*scale;
+   if(c.type==='circle'){
+     const dia=c.circ/Math.PI+c.clearance,r=Math.max(2,dia*scale/2);
+     s+=`<circle class="cutline" cx="${x}" cy="${y}" r="${r}"/><line class="dim" x1="${x-r}" y1="${y}" x2="${x+r}" y2="${y}" marker-start="url(#arr)" marker-end="url(#arr)"/><text class="dt" x="${x}" y="${y-7}" text-anchor="middle">Ø ${f(dia)} mm</text>`;
+   }else if(c.type==='rect'||c.type==='L'){
+     const w=c.w*scale,d=c.d*scale;
+     if(c.type==='rect')s+=`<rect class="cutline" x="${x-w/2}" y="${y-d/2}" width="${w}" height="${d}"/>`;
+     else s+=`<path class="cutline" d="M${x-w/2},${y-d/2} h${w} v${d/2} h${-w/2} v${d/2} h${-w/2} z"/>`;
+     s+=`<text class="dt" x="${x}" y="${y-d/2-7}" text-anchor="middle">${c.type==='L'?'L ':' '}${f(c.w)} × ${f(c.d)} mm</text>`;
+   }else{
+     const q=c.points.map(p=>({x:x+p.x*scale,y:y+p.y*scale}));
+     s+=`<polygon class="cutline" points="${q.map(p=>`${p.x},${p.y}`).join(' ')}"/>`;
+     q.forEach((p,j)=>s+=`<text class="dt" x="${p.x+5}" y="${p.y-5}">P${j+1}</text>`);
+   }
+   s+=`<line class="ext" x1="${P[0].x}" y1="${P[0].y}" x2="${x}" y2="${y}"/><text class="dt" x="${x+7}" y="${y+18}">X ${f(c.x)} · Y ${f(c.y)}</text>`;
+ });
+ s+=`<text x="78" y="548" class="small">Maße sind verbindlich · Zeichnung dient der eindeutigen Fertigungszuordnung · nicht aus Ausdruck abgreifen.</text></svg>`;
+ $('drawing').innerHTML=s;
+
+ let rows=`<table class="table"><tbody><tr><th>Material</th><td>${esc($('material').value)} ${esc($('stone').value)}</td><th>Stärke</th><td>${f(num('thick'))} mm</td></tr><tr><th>Oberfläche</th><td>${esc($('surface').value)}</td><th>Bezug A</th><td>${esc($('reference').value)}</td></tr>`;
+ keys.forEach(k=>{const v=edgeState[k].length?edgeState[k].join(' + '):'keine';const det=$('edgeDetail'+k).value;rows+=`<tr><th>Kante ${k}</th><td colspan="3">${esc(v)}${det?' · '+esc(det):''}</td></tr>`});
+ cuts.forEach((c,i)=>{rows+=`<tr><th>Ausschnitt ${i+1}</th><td colspan="3">${c.type==='circle'?`Rund · U ${f(c.circ)} mm · Fertig-Ø ${f(c.circ/Math.PI+c.clearance)} mm`:c.type==='free'?`Freiform · ${c.points.length} Punkte`:`${c.type==='L'?'L-Ausklinkung':'Rechteck'} · ${f(c.w)} × ${f(c.d)} mm`} · Position X ${f(c.x)} / Y ${f(c.y)} · Kante ${esc(c.edge)}</td></tr>`});
+ if($('notes').value)rows+=`<tr><th>Hinweis</th><td colspan="3">${esc($('notes').value)}</td></tr>`;
+ rows+='</tbody></table>';$('fabTable').innerHTML=rows;
+}
+function snapshot(){return {version:'MB-Mauerabdeckung-0.1',name:$('name').value,reference:$('reference').value,material:$('material').value,stone:$('stone').value,thick:num('thick'),surface:$('surface').value,sides:['A','B','C','D'].map(k=>num('side'+k)),angles:[num('angleA'),num('angleBMeasured'),num('angleCMeasured'),num('angleDMeasured')],cuts,edges:edgeState,edgeDetails:Object.fromEntries(['A','B','C','D'].map(k=>[k,$('edgeDetail'+k).value])),notes:$('notes').value}}
+function download(name,text,type='text/plain'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+function dxf(){
+ const g=geometry();if(!g.ok)return;let out='0\nSECTION\n2\nENTITIES\n';
+ const pts=g.pts;for(let i=0;i<4;i++){const a=pts[i],b=pts[(i+1)%4];out+=`0\nLINE\n8\nOUTER\n10\n${a.x}\n20\n${-a.y}\n30\n0\n11\n${b.x}\n21\n${-b.y}\n31\n0\n`}
+ cuts.forEach(c=>{if(c.type==='circle'){const r=(c.circ/Math.PI+c.clearance)/2;out+=`0\nCIRCLE\n8\nCUT\n10\n${c.x}\n20\n${-c.y}\n30\n0\n40\n${r}\n`}else if(c.type==='rect'||c.type==='L'){const w=c.w,d=c.d;const q=c.type==='rect'?[[-w/2,-d/2],[w/2,-d/2],[w/2,d/2],[-w/2,d/2]]:[[-w/2,-d/2],[w/2,-d/2],[w/2,0],[0,0],[0,d/2],[-w/2,d/2]];q.forEach((p,i)=>{const n=q[(i+1)%q.length];out+=`0\nLINE\n8\nCUT\n10\n${c.x+p[0]}\n20\n${-(c.y+p[1])}\n30\n0\n11\n${c.x+n[0]}\n21\n${-(c.y+n[1])}\n31\n0\n`})}else{c.points.forEach((p,i)=>{const n=c.points[(i+1)%c.points.length];out+=`0\nLINE\n8\nCUT\n10\n${c.x+p.x}\n20\n${-(c.y+p.y)}\n30\n0\n11\n${c.x+n.x}\n21\n${-(c.y+n.y)}\n31\n0\n`})}});
+ out+='0\nENDSEC\n0\nEOF\n';download(($('name').value||'Mauerabdeckung').replace(/\W+/g,'_')+'.dxf',out,'application/dxf')
+}
+['name','reference','material','thick','surface','stone','sideA','sideB','sideC','sideD','angleA','angleBMeasured','angleCMeasured','angleDMeasured','notes'].forEach(id=>$(id).addEventListener('input',render));
+$('addCut').addEventListener('click',()=>addCut());
+$('printBtn').addEventListener('click',()=>window.print());
+$('dxfBtn').addEventListener('click',dxf);
+$('jsonBtn').addEventListener('click',()=>download('MB_Mauerabdeckung.json',JSON.stringify(snapshot(),null,2),'application/json'));
+$('resetBtn').addEventListener('click',()=>{if(confirm('Neue Mauerabdeckung beginnen?'))location.reload()});
+buildEdges();addCut('circle');render();
+})();
+</script>
+</body>
+</html>
