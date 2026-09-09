@@ -1,0 +1,209 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MB Aufmaß – Mauerabdeckungen V2</title>
+<style>
+:root{--n:#0d1b2a;--g:#c7a35b;--p:#fffdf8;--bg:#ece9e2;--b:#1976d2;--gr:#1f9d55;--v:#8b5cf6;--r:#d64545;--o:#f28c28;--y:#e4b400;--br:#8b5a2b}
+*{box-sizing:border-box}body{margin:0;font:14px system-ui,-apple-system,sans-serif;background:var(--bg);color:#17202a}header{background:var(--n);color:#fff;border-bottom:3px solid var(--g);padding:15px}header b{font-size:21px;letter-spacing:.08em}header small{display:block;color:#dbcba8}
+main{max-width:1450px;margin:auto;padding:12px}.grid{display:grid;grid-template-columns:500px 1fr;gap:12px;align-items:start}.card{background:var(--p);border:1px solid #d8d1c4;border-radius:13px;padding:13px;margin-bottom:11px}.sticky{position:sticky;top:8px}h2{font-size:17px;margin:0 0 10px;color:var(--n)}h3{font-size:14px;margin:12px 0 7px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}.f3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}label{font-size:11px;font-weight:800;color:#5b6570;text-transform:uppercase}input,select,textarea{width:100%;padding:9px;margin-top:4px;border:1px solid #c9c3b8;border-radius:8px;font:16px system-ui}input[readonly]{background:#eee}button{padding:9px 11px;border:1px solid #bbb4a8;border-radius:9px;background:#fff;font-weight:800}.gold{background:var(--g);border-color:var(--g)}.navy{background:var(--n);color:#fff}.bad{color:#a23832}.toolbar,.tabs,.checks{display:flex;gap:6px;flex-wrap:wrap}.tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:7px}.tab{white-space:nowrap}.tab.on{background:var(--n);color:#fff}.section{border-top:1px solid #ddd7cc;margin-top:11px;padding-top:11px}.cut,.edge{border:1px solid #ddd6ca;border-radius:10px;padding:9px;margin-top:8px}.cut{border-left:4px solid var(--g)}.head{display:flex;justify-content:space-between;align-items:center;gap:8px}.checks label{display:flex;align-items:center;gap:4px;background:#f1efea;border-radius:999px;padding:5px 7px;text-transform:none}.checks input{width:auto;margin:0}.sw{width:16px;height:4px;display:inline-block}
+.arrows{display:grid;grid-template-columns:40px 40px 40px;grid-template-rows:38px 38px;gap:3px;margin-top:7px}.arrows button{padding:0;background:var(--n);color:#fff}.up{grid-column:2}.le{grid-column:1;grid-row:2}.dn{grid-column:2;grid-row:2}.ri{grid-column:3;grid-row:2}.note{font-size:12px;color:#68727d}.view{background:#fff;border:1px solid #cec7bb;border-radius:10px;overflow:auto}.view svg{width:100%;height:auto;display:block;min-width:700px}.v3 svg{min-width:0}table{width:100%;border-collapse:collapse;font-size:12px}td,th{padding:6px;border-bottom:1px solid #e3ded4;text-align:left}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.sticky{position:static}}@media(max-width:520px){.fields,.f3{grid-template-columns:1fr}}
+@media print{header,.left,.noPrint{display:none!important}.grid{display:block}.card{border:0}.sticky{position:static}.view{border:0}.view svg{min-width:0}}
+</style></head><body>
+<header><b>MB AUFMASS</b><small>MAUERABDECKUNGEN · MEHRTEILIGER AUFTRAG · STEINMETZ V3</small></header>
+<main><div class="grid"><div class="left">
+<div class="card"><h2>Auftrag</h2><div class="fields"><label>Projekt / Kunde<input id="project" value="Mauerabdeckungen"></label><label>Auftragsnummer<input id="jobNo"></label><label>Material<input id="material" value="Granit"></label><label>Steinsorte / Farbton<input id="stone"></label><label>Oberfläche<select id="surface"><option>roh</option><option>geschliffen</option><option>poliert</option><option selected>satiniert</option><option>geflammt</option><option>gebürstet</option><option>geflammt + gebürstet</option></select></label><label>Standardstärke mm<input id="defT" type="number" value="30"></label></div></div>
+<div class="card"><div class="head"><h2>Abdeckungen</h2><button class="gold" onclick="addPart()">+ Abdeckung</button></div><div id="tabs" class="tabs"></div><div class="toolbar"><button onclick="dup()">Duplizieren</button><button class="bad" onclick="delPart()">Löschen</button></div></div>
+<div class="card"><h2 id="ptitle"></h2><div class="fields"><label>Bauteilnummer<input id="no"></label><label>Bezeichnung<input id="name"></label><label>Stärke mm<input id="thick" type="number"></label><label>Bezugskante A<input id="ref"></label></div>
+<div class="section"><h3>Außenkontur</h3><div class="fields"><label>Seite A mm<input id="A" type="number"></label><label>Seite B mm<input id="B" type="number"></label><label>Seite C mm<input id="C" type="number"></label><label>Seite D mm<input id="D" type="number"></label><label>Referenzwinkel A °<input id="aA" type="number" step=".1"></label><label>Diagonale mm<input id="diag" type="number"></label></div><div class="f3" style="margin-top:8px"><label>Winkel B berechnet<input id="aB" readonly></label><label>Winkel C berechnet<input id="aC" readonly></label><label>Winkel D berechnet<input id="aD" readonly></label></div><div id="geo" class="note"></div></div>
+<div class="section"><div class="head"><h3>Ausschnitte</h3><div class="toolbar"><button onclick="addCut('circle')">+ Rund</button><button onclick="addCut('rect')">+ Rechteck</button><button onclick="addCut('L')">+ L</button></div></div><div id="cuts"></div></div>
+<div class="section"><h3>Kantenbearbeitung · Mehrfachauswahl</h3><div id="edges"></div></div>
+<div class="section"><label>Hinweise<textarea id="notes"></textarea></label></div></div>
+<div class="card noPrint"><div class="toolbar"><button class="navy" onclick="save()">Auftrag speichern</button><button onclick="load()">Laden</button><button onclick="jsonOut()">JSON</button><button onclick="dxf()">DXF aktive Abdeckung</button><button class="gold" onclick="print()">PDF / Drucken</button></div><div id="status" class="note"></div></div>
+</div>
+<div><div class="card sticky"><div class="head"><div><h2>Fertigungsansicht · <span id="vno"></span></h2><div class="note">Alle Maße mm · Maße verbindlich</div></div><b id="count"></b></div><div id="draw" class="view"></div><div id="legend" class="checks" style="margin-top:8px"></div>
+<div class="section"><h3>3D-Kontrollansicht</h3><div id="view3" class="view v3"></div></div>
+<div class="section"><h3>Achsen- / Montageangaben</h3><div class="fields"><label>Achsenabstand zum nächsten Bauteil mm<input id="axis" type="number"></label><label>Montageposition<input id="pos"></label></div></div>
+<div class="section"><h3>Fertigungsangaben</h3><div id="fab"></div></div></div></div>
+</div></main>
+<script>
+const $=x=>document.getElementById(x),COL={poliert:'#1f9d55',geschliffen:'#8b5cf6',gefast:'#1976d2',rund:'#d64545',halbrund:'#d64545',Viertelstab:'#f28c28',Wassernase:'#e4b400',Nut:'#8b5a2b'}, OPS=Object.keys(COL);let J={parts:[]},act=0;
+const N=v=>isFinite(+v)?+v:0,F=v=>isFinite(v)?(+v).toFixed(1):'–';
+function blank(i){return{no:'A'+String(i+1).padStart(2,'0'),name:'Abdeckung '+(i+1),thick:N($('defT').value)||30,ref:'Vorder-/Sichtkante',A:1200,B:400,C:1200,D:400,aA:90,diag:0,axis:0,pos:String(i+1),notes:'',edges:{A:[],B:[],C:[],D:[]},cuts:[]}}
+function P(){return J.parts[act]}function tabs(){$('tabs').innerHTML=J.parts.map((p,i)=>`<button class="tab ${i==act?'on':''}" onclick="sel(${i})">${p.no} · ${p.name}</button>`).join('');$('count').textContent=(act+1)+' / '+J.parts.length}
+function sel(i){store();act=i;tabs();fill()}function addPart(){store();J.parts.push(blank(J.parts.length));act=J.parts.length-1;tabs();fill()}function dup(){store();let q=JSON.parse(JSON.stringify(P()));q.no='A'+String(J.parts.length+1).padStart(2,'0');q.name+=' Kopie';J.parts.push(q);act=J.parts.length-1;tabs();fill()}function delPart(){if(J.parts.length<2)return;J.parts.splice(act,1);act=Math.min(act,J.parts.length-1);tabs();fill()}
+function store(){if(!J.parts.length)return;let p=P();['no','name','ref','notes','axis','pos'].forEach(k=>p[k]=$(k).value);['thick','A','B','C','D','aA','diag'].forEach(k=>p[k]=N($(k).value))}
+function fill(){let p=P();['no','name','ref','notes','axis','pos','thick','A','B','C','D','aA','diag'].forEach(k=>$(k).value=p[k]||'');$('ptitle').textContent=p.no+' · '+p.name;$('vno').textContent=p.no;edges();cuts();update()}
+function geom(p){let a=p.aA*Math.PI/180,p0={x:0,y:0},p1={x:p.A,y:0},p3={x:p.D*Math.cos(a),y:p.D*Math.sin(a)},dx=p3.x-p1.x,dy=p3.y-p1.y,d=Math.hypot(dx,dy);if(!d||d>p.B+p.C||d<Math.abs(p.B-p.C))return null;let q=(p.B*p.B-p.C*p.C+d*d)/(2*d),h2=p.B*p.B-q*q;if(h2<0)return null;let h=Math.sqrt(h2),xm=p1.x+q*dx/d,ym=p1.y+q*dy/d,cc=[{x:xm-h*dy/d,y:ym+h*dx/d},{x:xm+h*dy/d,y:ym-h*dx/d}],p2=cc.sort((u,v)=>v.y-u.y)[0],ps=[p0,p1,p2,p3],ang=(a,b,c)=>Math.acos(Math.max(-1,Math.min(1,((a.x-b.x)*(c.x-b.x)+(a.y-b.y)*(c.y-b.y))/(Math.hypot(a.x-b.x,a.y-b.y)*Math.hypot(c.x-b.x,c.y-b.y)))))*180/Math.PI;return{ps,as:[ang(p3,p0,p1),ang(p0,p1,p2),ang(p1,p2,p3),ang(p2,p3,p0)]}}
+function edges(){$('edges').innerHTML=['A','B','C','D'].map(e=>`<div class="edge"><b>Seite ${e}</b><div class="checks">${OPS.map(o=>`<label><input type="checkbox" ${P().edges[e].includes(o)?'checked':''} onchange="tog('${e}','${o}',this.checked)"><i class="sw" style="background:${COL[o]}"></i>${o}</label>`).join('')}</div></div>`).join('')}function tog(e,o,on){let a=P().edges[e];if(on&&!a.includes(o))a.push(o);if(!on)P().edges[e]=a.filter(x=>x!=o);update()}
+function addCut(t){P().cuts.push({id:Date.now()+Math.random(),type:t,name:'Ausschnitt '+(P().cuts.length+1),x:300,y:180,diam:200,circ:628.3,clear:5,w:150,h:100,step:5});cuts();update()}function C(id){return P().cuts.find(c=>String(c.id)==String(id))}function sc(id,k,v){let c=C(id);c[k]=k=='name'?v:N(v);if(k=='circ')c.diam=c.circ/Math.PI;if(k=='diam')c.circ=c.diam*Math.PI;cuts();update()}function mv(id,x,y){let c=C(id);c.x+=x*c.step;c.y+=y*c.step;cuts();update()}function dc(id){P().cuts=P().cuts.filter(c=>String(c.id)!=String(id));cuts();update()}
+function cuts(){$('cuts').innerHTML=P().cuts.map(c=>`<div class="cut"><div class="head"><b>${c.name} · ${c.type}</b><button class="bad" onclick="dc('${c.id}')">Löschen</button></div><div class="fields"><label>Name<input value="${c.name}" onchange="sc('${c.id}','name',this.value)"></label><label>Pfeilschritt<select onchange="sc('${c.id}','step',this.value)">${[1,5,10].map(x=>`<option ${x==c.step?'selected':''}>${x}</option>`).join('')}</select></label></div>${c.type=='circle'?`<div class="f3"><label>Umfang<input type="number" value="${F(c.circ)}" onchange="sc('${c.id}','circ',this.value)"></label><label>Ø Ist<input type="number" value="${F(c.diam)}" onchange="sc('${c.id}','diam',this.value)"></label><label>Spiel Ø<input type="number" value="${c.clear}" onchange="sc('${c.id}','clear',this.value)"></label></div>`:`<div class="fields"><label>Breite<input type="number" value="${c.w}" onchange="sc('${c.id}','w',this.value)"></label><label>Tiefe<input type="number" value="${c.h}" onchange="sc('${c.id}','h',this.value)"></label></div>`}<div class="fields"><label>Position X / M von D<input type="number" value="${c.x}" onchange="sc('${c.id}','x',this.value)"></label><label>Position Y / M von A<input type="number" value="${c.y}" onchange="sc('${c.id}','y',this.value)"></label></div><div class="arrows"><button class="up" onclick="mv('${c.id}',0,-1)">↑</button><button class="le" onclick="mv('${c.id}',-1,0)">←</button><button class="dn" onclick="mv('${c.id}',0,1)">↓</button><button class="ri" onclick="mv('${c.id}',1,0)">→</button></div><div class="note">Pfeile: nur Position · ${c.step} mm/Tipp</div></div>`).join('')}
+function box(c){if(c.type=='circle'){let r=(c.diam+c.clear)/2;return{l:c.x-r,r:c.x+r,t:c.y-r,b:c.y+r}}return{l:c.x,r:c.x+c.w,t:c.y,b:c.y+c.h}}
+function update(){store();let p=P(),g=geom(p);tabs();$('ptitle').textContent=p.no+' · '+p.name;$('vno').textContent=p.no;if(!g){$('geo').textContent='Geometrie nicht schließbar – Maße prüfen.';return}$('aB').value=F(g.as[1]);$('aC').value=F(g.as[2]);$('aD').value=F(g.as[3]);$('geo').textContent='Berechnet: A '+F(g.as[0])+'° · B '+F(g.as[1])+'° · C '+F(g.as[2])+'° · D '+F(g.as[3])+'°';draw(g);view3(g);fab(g)}
+
+function closestOnSeg(p,a,b){
+  let vx=b.x-a.x,vy=b.y-a.y,l2=vx*vx+vy*vy;
+  let t=l2?((p.x-a.x)*vx+(p.y-a.y)*vy)/l2:0;
+  t=Math.max(0,Math.min(1,t));
+  let q={x:a.x+t*vx,y:a.y+t*vy};
+  return{q,d:Math.hypot(p.x-q.x,p.y-q.y),t}
+}
+function circleSegIntersections(c,a,b){
+  let r=(c.diam+c.clear)/2,dx=b.x-a.x,dy=b.y-a.y,fx=a.x-c.x,fy=a.y-c.y;
+  let A=dx*dx+dy*dy,B=2*(fx*dx+fy*dy),C=fx*fx+fy*fy-r*r,disc=B*B-4*A*C;
+  if(disc<0||!A)return[];
+  let s=Math.sqrt(Math.max(0,disc)),ts=[(-B-s)/(2*A),(-B+s)/(2*A)]
+    .filter(t=>t>=-1e-9&&t<=1+1e-9).sort((x,y)=>x-y);
+  return ts.map(t=>({t,pt:{x:a.x+t*dx,y:a.y+t*dy}}));
+}
+function actualCutDimensions(c,g){
+  const E=[
+    {e:'A',a:g.ps[0],b:g.ps[1],opp:'C'},
+    {e:'B',a:g.ps[1],b:g.ps[2],opp:'D'},
+    {e:'C',a:g.ps[2],b:g.ps[3],opp:'A'},
+    {e:'D',a:g.ps[3],b:g.ps[0],opp:'B'}
+  ];
+  let opening=null,ints=[];
+  for(const ed of E){
+    const ii=circleSegIntersections(c,ed.a,ed.b);
+    if(ii.length===2){opening=ed;ints=ii;break}
+  }
+  if(!opening){
+    // closed cutout: true shortest edge clearances
+    let r=(c.diam+c.clear)/2,center={x:c.x,y:c.y};
+    return {opening:null, clearance:E.map(ed=>{
+      let z=closestOnSeg(center,ed.a,ed.b),L=z.d||1;
+      let ux=(z.q.x-center.x)/L,uy=(z.q.y-center.y)/L;
+      return {e:ed.e,from:{x:center.x+ux*r,y:center.y+uy*r},to:z.q,val:z.d-r}
+    })};
+  }
+  // Open cutout: dimension the REAL remaining stone along the opening edge
+  // from each corner to the actual circle/edge intersection.
+  let L=Math.hypot(opening.b.x-opening.a.x,opening.b.y-opening.a.y);
+  let side1={
+    e: opening.e+'1',
+    from: opening.a,
+    to: ints[0].pt,
+    val: ints[0].t*L
+  };
+  let side2={
+    e: opening.e+'2',
+    from: ints[1].pt,
+    to: opening.b,
+    val: (1-ints[1].t)*L
+  };
+  // In addition dimension from the deepest point of the circular recess
+  // toward the opposite outer edge along the opening-edge normal.
+  let ex=opening.b.x-opening.a.x,ey=opening.b.y-opening.a.y,elen=Math.hypot(ex,ey)||1;
+  let nx=-ey/elen,ny=ex/elen;
+  // choose normal pointing into polygon from opening edge
+  let centroid={x:g.ps.reduce((s,p)=>s+p.x,0)/4,y:g.ps.reduce((s,p)=>s+p.y,0)/4};
+  let mid={x:(opening.a.x+opening.b.x)/2,y:(opening.a.y+opening.b.y)/2};
+  if((centroid.x-mid.x)*nx+(centroid.y-mid.y)*ny<0){nx=-nx;ny=-ny}
+  let r=(c.diam+c.clear)/2;
+  let inner={x:c.x+nx*r,y:c.y+ny*r};
+  // ray from inner point to all other polygon edges, take nearest positive hit
+  function raySeg(p,dx,dy,a,b){
+    let sx=b.x-a.x,sy=b.y-a.y,den=dx*sy-dy*sx;
+    if(Math.abs(den)<1e-9)return null;
+    let ax=a.x-p.x,ay=a.y-p.y;
+    let t=(ax*sy-ay*sx)/den,u=(ax*dy-ay*dx)/den;
+    return t>=0&&u>=0&&u<=1?{t,pt:{x:p.x+t*dx,y:p.y+t*dy}}:null;
+  }
+  let hits=E.filter(ed=>ed.e!==opening.e).map(ed=>({ed,hit:raySeg(inner,nx,ny,ed.a,ed.b)}))
+    .filter(x=>x.hit).sort((a,b)=>a.hit.t-b.hit.t);
+  let depth=hits[0]?{e:hits[0].ed.e,from:inner,to:hits[0].hit.pt,val:hits[0].hit.t}:null;
+  return {opening, along:[side1,side2], depth};
+}
+function draw(g){
+  let p=P(),ps=g.ps,x0=Math.min(...ps.map(q=>q.x)),x1=Math.max(...ps.map(q=>q.x)),
+      y0=Math.min(...ps.map(q=>q.y)),y1=Math.max(...ps.map(q=>q.y)),
+      pad=175,SW=980,SH=730,s=Math.min((SW-2*pad)/(x1-x0),(SH-2*pad)/(y1-y0)),
+      X=x=>pad+(x-x0)*s,Y=y=>pad+(y-y0)*s;
+  let defs=`<defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#111"/>
+    </marker>
+  </defs>`;
+  let h=`<svg viewBox="0 0 ${SW} ${SH}">${defs}
+    <polygon points="${ps.map(q=>X(q.x)+','+Y(q.y)).join(' ')}" fill="#eee8dc" stroke="#0d1b2a" stroke-width="3"/>`;
+
+  [['A',0,1],['B',1,2],['C',2,3],['D',3,0]].forEach(([ed,i,j])=>{
+    let a=ps[i],b=ps[j],mx=(X(a.x)+X(b.x))/2,my=(Y(a.y)+Y(b.y))/2;
+    h+=`<text x="${mx}" y="${my-12}" text-anchor="middle" font-size="15" font-weight="800">${ed} ${p[ed]} mm</text>`;
+    p.edges[ed].forEach((o,k)=>{
+      let dx=X(b.x)-X(a.x),dy=Y(b.y)-Y(a.y),L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L,z=(k+1)*5;
+      h+=`<line x1="${X(a.x)+nx*z}" y1="${Y(a.y)+ny*z}" x2="${X(b.x)+nx*z}" y2="${Y(b.y)+ny*z}" stroke="${COL[o]}" stroke-width="3"/>`;
+    });
+  });
+
+  function dimLine(m,label,offset=0){
+    let x1=X(m.from.x),y1=Y(m.from.y),x2=X(m.to.x),y2=Y(m.to.y),
+        dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L;
+    x1+=nx*offset;y1+=ny*offset;x2+=nx*offset;y2+=ny*offset;
+    let mx=(x1+x2)/2,my=(y1+y2)/2;
+    h+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#111" stroke-width="1.8" marker-start="url(#arr)" marker-end="url(#arr)"/>
+        <line x1="${X(m.from.x)}" y1="${Y(m.from.y)}" x2="${x1}" y2="${y1}" stroke="#777" stroke-width="1"/>
+        <line x1="${X(m.to.x)}" y1="${Y(m.to.y)}" x2="${x2}" y2="${y2}" stroke="#777" stroke-width="1"/>
+        <rect x="${mx-44}" y="${my-13}" width="88" height="18" fill="#fffdf8" opacity=".92"/>
+        <text x="${mx}" y="${my}" text-anchor="middle" font-size="12" font-weight="800">${label}: ${F(m.val)} mm</text>`;
+  }
+
+  p.cuts.forEach((c,ci)=>{
+    let b=box(c);
+    if(c.type=='circle'){
+      let r=(c.diam+c.clear)/2;
+      h+=`<circle cx="${X(c.x)}" cy="${Y(c.y)}" r="${r*s}" fill="#fff" stroke="#1976d2" stroke-width="2.5"/>
+          <text x="${X(c.x)}" y="${Y(c.y)+4}" text-anchor="middle" font-weight="700">Ø ${F(c.diam+c.clear)}</text>`;
+      let md=actualCutDimensions(c,g);
+      if(md.opening){
+        // the two dimensions are the actual stone lengths along the open plate edge
+        dimLine(md.along[0],md.along[0].e,-18);
+        dimLine(md.along[1],md.along[1].e,-18);
+        if(md.depth)dimLine(md.depth,md.depth.e,0);
+      }else{
+        md.clearance.forEach((m,k)=>dimLine(m,m.e,(k-1.5)*8));
+      }
+      h+=`<line x1="${X(c.x)-7}" y1="${Y(c.y)}" x2="${X(c.x)+7}" y2="${Y(c.y)}" stroke="#555"/>
+          <line x1="${X(c.x)}" y1="${Y(c.y)-7}" x2="${X(c.x)}" y2="${Y(c.y)+7}" stroke="#555"/>`;
+    }else{
+      h+=`<rect x="${X(b.l)}" y="${Y(b.t)}" width="${(b.r-b.l)*s}" height="${(b.b-b.t)*s}" fill="#fff" stroke="#1976d2" stroke-width="2"/>`;
+    }
+  });
+  g.as.forEach((a,i)=>h+=`<text x="${X(ps[i].x)+12}" y="${Y(ps[i].y)+22}" font-size="11">${F(a)}°</text>`);
+  $('draw').innerHTML=h+'</svg>';
+  $('legend').innerHTML=OPS.map(o=>`<label><i class="sw" style="background:${COL[o]}"></i>${o}</label>`).join('');
+}
+function profileMark(o,a,b,d){
+  let dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L;
+  if(o=='gefast'){
+    let z=Math.min(10,d*.30);
+    return `<line x1="${a[0]+nx*z}" y1="${a[1]+ny*z}" x2="${b[0]+nx*z}" y2="${b[1]+ny*z}" stroke="${COL[o]}" stroke-width="4"/>`;
+  }
+  if(o=='rund'||o=='halbrund'){
+    // full-length half-round / bullnose representation:
+    // a broad rounded band follows the entire selected side, not just a symbol.
+    let w=o=='rund'?Math.max(12,d*.82):Math.max(10,d*.62);
+    return `<line x1="${a[0]}" y1="${a[1]+d*.42}" x2="${b[0]}" y2="${b[1]+d*.42}"
+              stroke="#c9c0b0" stroke-width="${w}" stroke-linecap="round"/>
+            <line x1="${a[0]}" y1="${a[1]+d*.38}" x2="${b[0]}" y2="${b[1]+d*.38}"
+              stroke="${COL[o]}" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="${a[0]}" y1="${a[1]+d*.10}" x2="${b[0]}" y2="${b[1]+d*.10}"
+              stroke="#f7f2e8" stroke-width="${Math.max(2,w*.22)}" stroke-linecap="round" opacity=".9"/>`;
+  }
+  if(o=='Viertelstab'){
+    let z=Math.min(11,d*.35);
+    return `<line x1="${a[0]+nx*z}" y1="${a[1]+ny*z+d*.18}" x2="${b[0]+nx*z}" y2="${b[1]+ny*z+d*.18}"
+              stroke="${COL[o]}" stroke-width="${Math.max(6,d*.30)}" stroke-linecap="round"/>`;
+  }
+  if(o=='Wassernase'||o=='Nut'){
+    return `<line x1="${a[0]}" y1="${a[1]+d-5}" x2="${b[0]}" y2="${b[1]+d-5}" stroke="${COL[o]}" stroke-width="4" stroke-dasharray="7 5"/>`;
+  }
+  return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${COL[o]}" stroke-width="4"/>`;
+}
+function view3(g){let p=P(),ps=g.ps,x0=Math.min(...ps.map(q=>q.x)),x1=Math.max(...ps.map(q=>q.x)),y0=Math.min(...ps.map(q=>q.y)),y1=Math.max(...ps.map(q=>q.y)),sx=480/(x1-x0),sy=160/(y1-y0),Q=q=>[70+(q.x-x0)*sx+(q.y-y0)*.2,50+(q.y-y0)*sy],tt=ps.map(Q),d=Math.min(55,15+p.thick*.7),mask=`<defs><mask id="topMask"><rect width="700" height="330" fill="white"/>`;
+p.cuts.filter(c=>c.type=='circle').forEach(c=>{let q=Q({x:c.x,y:c.y}),r=(c.diam+c.clear)/2;mask+=`<ellipse cx="${q[0]}" cy="${q[1]}" rx="${r*sx}" ry="${Math.max(4,r*sy)}" fill="black"/>`});mask+=`</mask></defs>`;let h=`<svg viewBox="0 0 700 330">${mask}`;for(let i=0;i<4;i++){let a=tt[i],b=tt[(i+1)%4];h+=`<polygon points="${a[0]},${a[1]} ${b[0]},${b[1]} ${b[0]},${b[1]+d} ${a[0]},${a[1]+d}" fill="#d5cec0" stroke="#0d1b2a"/>`};h+=`<polygon points="${tt.map(q=>q.join(',')).join(' ')}" fill="#eee8dc" stroke="#0d1b2a" stroke-width="2" mask="url(#topMask)"/>`;
+p.cuts.filter(c=>c.type=='circle').forEach(c=>{let q=Q({x:c.x,y:c.y}),r=(c.diam+c.clear)/2;h+=`<ellipse cx="${q[0]}" cy="${q[1]}" rx="${r*sx}" ry="${Math.max(4,r*sy)}" fill="none" stroke="#1976d2" stroke-width="2.5"/>`});[['A',0,1],['B',1,2],['C',2,3],['D',3,0]].forEach(([e,i,j])=>p.edges[e].forEach(o=>h+=profileMark(o,tt[i],tt[j],d)));$('view3').innerHTML=h+`<text x="70" y="305">${p.no} · Stärke ${p.thick} mm · Profil gilt über die komplette gewählte Seite</text></svg>`}
+function fab(g){let p=P(),r=['A','B','C','D'].map((e,i)=>`<tr><td>${e}</td><td>${p[e]} mm</td><td>${F(g.as[i])}°</td><td>${p.edges[e].join(' + ')||'—'}</td></tr>`).join('');p.cuts.forEach(c=>{let info='';if(c.type=='circle'){let md=actualCutDimensions(c,g);info=md.opening?(md.along.map(m=>`${m.e} ${F(m.val)}`).join(' · ')+(md.depth?` · ${md.depth.e} ${F(md.depth.val)}`:'')):md.clearance.map(m=>`${m.e} ${F(m.val)}`).join(' · ');}else{let b=box(c),xs=g.ps.map(q=>q.x),ys=g.ps.map(q=>q.y);info=`A ${F(b.t-Math.min(...ys))} · B ${F(Math.max(...xs)-b.r)} · C ${F(Math.max(...ys)-b.b)} · D ${F(b.l-Math.min(...xs))}`};r+=`<tr><td>${c.name}</td><td>${c.type=='circle'?'Ø '+F(c.diam+c.clear):c.w+'×'+c.h}</td><td colspan="2">${info}</td></tr>`});$('fab').innerHTML=`<table><tr><th>Seite/Ausschnitt</th><th>Maß</th><th>Winkel</th><th>Bearbeitung / Lage</th></tr>${r}</table><p><b>Achsenabstand zum nächsten:</b> ${p.axis||'—'} mm · <b>Montage:</b> ${p.pos||'—'}</p><p class="note">Negative Kantenabstände kennzeichnen einen offenen Ausschnitt / eine Überschneidung mit der betreffenden Außenkante.</p>`}
+function meta(){return{project:$('project').value,jobNo:$('jobNo').value,material:$('material').value,stone:$('stone').value,surface:$('surface').value,defT:$('defT').value}}function save(){store();J.meta=meta();localStorage.setItem('mb_mauer_v2',JSON.stringify(J));$('status').textContent='Auftrag mit '+J.parts.length+' Abdeckungen gespeichert.'}function load(){let z=localStorage.getItem('mb_mauer_v2');if(!z)return;J=JSON.parse(z);Object.entries(J.meta||{}).forEach(([k,v])=>{if($(k))$(k).value=v});act=0;tabs();fill()}function dl(n,t,ty='text/plain'){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:ty}));a.download=n;a.click()}function jsonOut(){save();dl('MB_Mauerabdeckungen.json',JSON.stringify(J,null,2),'application/json')}function dxf(){store();let p=P(),g=geom(p),o=['0','SECTION','2','ENTITIES'],ln=(a,b)=>o.push('0','LINE','8','KONTUR','10',a.x,'20',-a.y,'11',b.x,'21',-b.y);g.ps.forEach((q,i)=>ln(q,g.ps[(i+1)%4]));p.cuts.filter(c=>c.type=='circle').forEach(c=>o.push('0','CIRCLE','8','AUSSCHNITT','10',c.x,'20',-c.y,'40',(c.diam+c.clear)/2));o.push('0','ENDSEC','0','EOF');dl(p.no+'_Mauerabdeckung.dxf',o.join('\n'),'application/dxf')}
+['project','jobNo','material','stone','surface','defT','no','name','thick','ref','A','B','C','D','aA','diag','axis','pos','notes'].forEach(id=>$(id).addEventListener('input',()=>J.parts.length&&update()));for(let i=0;i<6;i++)J.parts.push(blank(i));tabs();fill();
+</script></body></html>
