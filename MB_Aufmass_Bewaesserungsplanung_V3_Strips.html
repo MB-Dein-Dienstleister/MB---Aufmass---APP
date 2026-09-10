@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MB Aufmaß – Bewässerungsplanung V3</title>
+<style>
+:root{--n:#0d1b2a;--g:#c7a35b;--bg:#ece9e2;--p:#fffdf8;--line:#d6d0c5;--green:#2f8f4e;--blue:#1976d2;--red:#cc3b3b;--orange:#e58b23;--purple:#7b61c9}
+*{box-sizing:border-box}body{margin:0;font:14px system-ui,-apple-system,sans-serif;background:var(--bg);color:#16202a}
+header{background:var(--n);color:#fff;padding:14px 16px;border-bottom:3px solid var(--g);position:sticky;top:0;z-index:20}
+header b{font-size:21px;letter-spacing:.08em}header small{display:block;color:#d9c89f}
+main{max-width:1500px;margin:auto;padding:12px}.grid{display:grid;grid-template-columns:430px 1fr;gap:12px;align-items:start}
+.card{background:var(--p);border:1px solid var(--line);border-radius:13px;padding:12px;margin-bottom:10px}
+h2{font-size:17px;margin:0 0 10px;color:var(--n)}h3{font-size:14px;margin:12px 0 7px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}.f3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+label{font-size:11px;font-weight:800;color:#5c6670;text-transform:uppercase}
+input,select,textarea{width:100%;padding:9px;margin-top:4px;border:1px solid #c8c1b6;border-radius:8px;font:16px system-ui;background:#fff}
+button{padding:9px 11px;border:1px solid #bbb3a8;border-radius:9px;background:#fff;font-weight:800}
+button.on{background:var(--n);color:#fff}.gold{background:var(--g);border-color:var(--g)}.navy{background:var(--n);color:#fff}
+.toolbar,.chips{display:flex;gap:6px;flex-wrap:wrap}.note{font-size:12px;color:#69727c}.warn{color:#a3312b;font-weight:700}.ok{color:#23753c;font-weight:700}
+.canvasWrap{background:#fff;border:1px solid #cac3b8;border-radius:12px;overflow:hidden;position:relative;min-height:650px}
+canvas{display:block;width:100%;height:auto;touch-action:none;background:#fafafa}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;margin-top:8px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+hr{border:0;border-top:1px solid #e0dbd2;margin:11px 0}.sticky{position:sticky;top:74px}
+table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:6px;border-bottom:1px solid #e3ded5;text-align:left}
+.badge{display:inline-block;padding:4px 7px;border-radius:999px;background:#eee9df;font-size:11px;font-weight:800}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.sticky{position:static}.canvasWrap{min-height:420px}}
+@media(max-width:520px){.fields,.f3{grid-template-columns:1fr}}
+@media print{header,.left,.noPrint{display:none!important}.grid{display:block}.sticky{position:static}.card{border:0}.canvasWrap{border:0}}
+</style>
+</head>
+<body>
+<header><b>MB AUFMASS</b><small>BEWÄSSERUNGSPLANUNG · HUNTER + RAIN BIRD · STRIP-DÜSEN · HYDRAULIK V3</small></header>
+<main>
+<div class="grid">
+<div class="left">
+<div class="card">
+<h2>Projekt</h2>
+<div class="fields">
+<label>Kunde / Projekt<input id="project" placeholder="z. B. Garten Kleinmachnow"></label>
+<label>Adresse<input id="address"></label>
+</div>
+</div>
+
+<div class="card">
+<h2>1 · Wasserquelle</h2>
+<div class="fields">
+<label>Quelle
+<select id="source">
+<option value="tap">Wasserhahn / Trinkwasser</option>
+<option value="well">Brunnen / Pumpe</option>
+</select></label>
+<label>Anschluss<input id="connection" placeholder="z. B. 3/4&quot;"></label>
+<label>Statischer Druck bar<input id="pStatic" type="number" step=".1"></label>
+<label>Betriebsdruck bar<input id="pWork" type="number" step=".1"></label>
+<label>Eimer Volumen Liter<input id="bucketL" type="number" value="10"></label>
+<label>Zeit Sekunden<input id="bucketS" type="number"></label>
+<label>Verfügbare Menge l/min<input id="flow" type="number" step=".1"></label>
+<label>Reserve %<input id="reserve" type="number" value="15"></label>
+</div>
+<div id="wellFields" style="display:none;margin-top:8px">
+<div class="fields">
+<label>Pumpe / Modell<input id="pumpModel"></label>
+<label>Max. Fördermenge l/min<input id="pumpFlow" type="number"></label>
+<label>Max. Förderhöhe m<input id="pumpHead" type="number"></label>
+<label>Wasser / Sediment
+<select id="sediment"><option value="none">sauber</option><option value="low">leicht</option><option value="med">mittel</option><option value="high">stark / sandig</option></select>
+</label>
+</div>
+</div>
+<div class="toolbar" style="margin-top:9px"><button onclick="calcBucket()">Eimertest berechnen</button></div>
+<div id="waterMsg" class="note"></div>
+</div>
+
+<div class="card">
+<h2>2 · Grundstück erfassen</h2>
+<div class="toolbar">
+<label style="padding:0;text-transform:none"><input id="bgFile" type="file" accept="image/*" style="display:none"><button type="button" onclick="document.getElementById('bgFile').click()">Luftbild / Foto laden</button></label>
+<button onclick="clearBackground()">Bild entfernen</button>
+</div>
+<h3>Maßstab kalibrieren</h3>
+<div class="note">„Kalibrieren“ wählen, zwei Punkte auf einer bekannten Strecke antippen und danach die reale Länge eingeben.</div>
+<div class="fields" style="margin-top:7px">
+<label>Referenzlänge m<input id="refM" type="number" step=".01" placeholder="z. B. 10.00"></label>
+<label>Maßstab<input id="scaleOut" readonly></label>
+</div>
+<div class="toolbar" style="margin-top:8px">
+<button id="calBtn" onclick="setMode('cal')">Kalibrieren</button>
+<button onclick="finishCalibration()">Übernehmen</button>
+</div>
+
+<h3>Flächen zeichnen</h3>
+<div class="chips">
+<button onclick="setMode('lawn')" id="m-lawn">Rasen</button>
+<button onclick="setMode('bed')" id="m-bed">Beet / Hecke</button>
+<button onclick="setMode('drip')" id="m-drip">Tropfzone</button>
+<button onclick="setMode('terrace')" id="m-terrace">Terrasse / Weg</button>
+<button onclick="setMode('building')" id="m-building">Gebäude</button>
+<button onclick="setMode('exclusion')" id="m-exclusion">Sperrzone</button>
+<button onclick="setMode('water')" id="m-water">Wasserquelle setzen</button>
+<button onclick="setMode('valve')" id="m-valve">Ventilbox setzen</button>
+</div>
+<div class="toolbar" style="margin-top:8px">
+<button onclick="finishPolygon()">Fläche schließen</button>
+<button onclick="undoPoint()">Punkt zurück</button>
+<button onclick="deleteLastZone()">Letzte Fläche löschen</button>
+</div>
+<div class="note">Punkte antippen. Bei Rasen/Beet/Sperrzone anschließend „Fläche schließen“.</div>
+</div>
+
+<div class="card">
+<h2>3 · Planung · Hunter / Rain Bird</h2>
+<div class="fields">
+<label>Hersteller
+<select id="brand">
+<option value="auto">Automatisch Hunter / Rain Bird</option>
+<option value="Hunter">Nur Hunter</option>
+<option value="Rain Bird">Nur Rain Bird</option>
+</select></label>
+<label>Regner-System
+<select id="sprType">
+<option value="auto">Automatisch nach Fläche</option>
+<option value="rotary">Rotationsdüse</option>
+<option value="rotor">Getrieberegner</option>
+</select></label>
+<label>Max. gewünschte Reichweite m<input id="radius" type="number" value="5" step=".1"></label>
+<label>Planungsdruck bar<input id="headPressure" type="number" value="2.8" step=".1"></label>
+</div>
+<div class="note" style="margin-top:7px">
+V3 erkennt zusätzlich schmale, lange Rasenstreifen und bevorzugt dafür Hunter MP Strip bzw. Rain Bird R-VAN Strip. Die Abdeckung wird rechteckig statt kreisförmig dargestellt. 
+Verbrauchswerte sind Planungswerte und werden pro Regner automatisch gesetzt.
+</div>
+<div class="toolbar" style="margin-top:9px">
+<button class="gold" onclick="autoPlan()">Bewässerung berechnen</button>
+<button onclick="clearPlan()">Planung löschen</button>
+</div>
+<div id="planMsg" class="note"></div>
+</div>
+
+<div class="card noPrint">
+<div class="toolbar">
+<button class="navy" onclick="save()">Projekt speichern</button>
+<button onclick="load()">Laden</button>
+<button onclick="exportJSON()">JSON</button>
+<button class="gold" onclick="print()">PDF / Drucken</button>
+</div>
+</div>
+</div>
+
+<div>
+<div class="card sticky">
+<div class="toolbar" style="justify-content:space-between;align-items:center">
+<div><h2>Planansicht</h2><div class="note">Tippen = Punkt setzen · Ziehen/Verschieben kommt in V2</div></div>
+<span id="modeBadge" class="badge">Modus: Rasen</span>
+</div>
+<div class="canvasWrap"><canvas id="cv" width="1100" height="760"></canvas></div>
+<div class="legend">
+<span><i class="dot" style="background:#72b66a"></i> Rasen</span>
+<span><i class="dot" style="background:#b589d6"></i> Beet/Tropf</span>
+<span><i class="dot" style="background:#c8c1b7"></i> Terrasse/Gebäude</span>
+<span><i class="dot" style="background:#d85a5a"></i> Sperrzone</span>
+<span><i class="dot" style="background:#1976d2"></i> Regner</span>
+</div>
+<hr>
+<h3>Hydraulik / Kreise</h3><div id="circuits"></div>
+<hr>
+<h3>Materialvorschlag</h3><div id="materials"></div>
+</div>
+</div>
+</div>
+</main>
+
+<script>
+const $=id=>document.getElementById(id), cv=$('cv'),ctx=cv.getContext('2d');
+let S={bg:null,bgImg:null,scalePxPerM:0,calPts:[],zones:[],draft:[],mode:'lawn',waterPt:null,valvePt:null,sprinklers:[],circuits:[]};
+const ZCOL={lawn:'rgba(82,165,75,.28)',bed:'rgba(132,88,180,.25)',drip:'rgba(132,88,180,.25)',terrace:'rgba(150,145,135,.30)',building:'rgba(120,120,120,.32)',exclusion:'rgba(205,60,60,.22)'};
+
+$('source').addEventListener('change',()=>{$('wellFields').style.display=$('source').value==='well'?'block':'none';assessWater()});
+['flow','pWork','sediment','source'].forEach(id=>$(id).addEventListener('input',assessWater));
+
+function setMode(m){
+ S.mode=m; S.draft=[]; 
+ document.querySelectorAll('[id^=m-],#calBtn').forEach(b=>b.classList.remove('on'));
+ let b=$(m==='cal'?'calBtn':'m-'+m); if(b)b.classList.add('on');
+ $('modeBadge').textContent='Modus: '+({cal:'Kalibrieren',lawn:'Rasen',bed:'Beet',drip:'Tropfzone',terrace:'Terrasse',building:'Gebäude',exclusion:'Sperrzone',water:'Wasserquelle',valve:'Ventilbox'}[m]||m);
+ draw();
+}
+setMode('lawn');
+
+function pos(ev){
+ const r=cv.getBoundingClientRect(),touch=ev.touches?ev.touches[0]:ev;
+ return{x:(touch.clientX-r.left)*cv.width/r.width,y:(touch.clientY-r.top)*cv.height/r.height};
+}
+cv.addEventListener('pointerdown',ev=>{
+ const p=pos(ev);
+ if(S.mode==='cal'){ if(S.calPts.length>=2)S.calPts=[]; S.calPts.push(p); }
+ else if(S.mode==='water'){S.waterPt=p;}
+ else if(S.mode==='valve'){S.valvePt=p;}
+ else S.draft.push(p);
+ draw();
+});
+
+$('bgFile').addEventListener('change',e=>{
+ let f=e.target.files[0]; if(!f)return;
+ let rd=new FileReader();rd.onload=()=>{let im=new Image();im.onload=()=>{S.bg=rd.result;S.bgImg=im;draw()};im.src=rd.result};rd.readAsDataURL(f);
+});
+function clearBackground(){S.bg=null;S.bgImg=null;draw()}
+function finishCalibration(){
+ if(S.calPts.length!==2||!+$('refM').value)return alert('Bitte zwei Referenzpunkte setzen und die reale Länge eingeben.');
+ let d=Math.hypot(S.calPts[1].x-S.calPts[0].x,S.calPts[1].y-S.calPts[0].y);
+ S.scalePxPerM=d/+$('refM').value;$('scaleOut').value=S.scalePxPerM.toFixed(1)+' px/m';draw();
+}
+function finishPolygon(){
+ if(S.draft.length<3)return;
+ S.zones.push({type:S.mode,pts:[...S.draft]});S.draft=[];draw();
+}
+function undoPoint(){S.draft.pop();draw()}
+function deleteLastZone(){S.zones.pop();draw()}
+function polyArea(pts){
+ let a=0;for(let i=0,j=pts.length-1;i<pts.length;j=i++)a+=(pts[j].x*pts[i].y-pts[i].x*pts[j].y);
+ return Math.abs(a/2)/(S.scalePxPerM*S.scalePxPerM||1);
+}
+function centroid(pts){return{x:pts.reduce((s,p)=>s+p.x,0)/pts.length,y:pts.reduce((s,p)=>s+p.y,0)/pts.length}}
+function bbox(pts){return{minx:Math.min(...pts.map(p=>p.x)),maxx:Math.max(...pts.map(p=>p.x)),miny:Math.min(...pts.map(p=>p.y)),maxy:Math.max(...pts.map(p=>p.y))}}
+function pointInPoly(p,vs){let c=false;for(let i=0,j=vs.length-1;i<vs.length;j=i++){let a=vs[i],b=vs[j];if(((a.y>p.y)!=(b.y>p.y))&&(p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x))c=!c}return c}
+function inBlocked(p){return S.zones.some(z=>['terrace','building','exclusion'].includes(z.type)&&pointInPoly(p,z.pts))}
+
+function calcBucket(){
+ let l=+$('bucketL').value,s=+$('bucketS').value;if(!l||!s)return;
+ $('flow').value=(l/s*60).toFixed(1);assessWater();
+}
+function assessWater(){
+ let src=$('source').value,flow=+$('flow').value,p=+$('pWork').value,sed=$('sediment')?.value||'none';
+ let a=[];
+ if(flow)a.push(`Verfügbar: ${flow.toFixed(1)} l/min.`);
+ if(p)a.push(`Betriebsdruck: ${p.toFixed(1)} bar.`);
+ if(src==='well'&&sed!=='none')a.push('Vorfilter einplanen.');
+ if(src==='well'&&sed==='none')a.push('Filter je nach Sand-/Sedimentbelastung prüfen.');
+ if(src==='tap')a.push('Bei Tropfrohr oder empfindlichen Düsen Filter/Druckminderer separat prüfen.');
+ $('waterMsg').textContent=a.join(' ');
+}
+
+function clearPlan(){S.sprinklers=[];S.circuits=[];renderResults();draw()}
+
+/* Produktbibliothek – Planungsbereiche nach Herstellerunterlagen.
+   Exakte Düse/Flow wird später über vollständige Kennlinienbibliothek erweitert. */
+const PRODUCTS=[
+ {brand:'Hunter',family:'MP Rotator',model:'MP800SR',kind:'rotary',minR:1.8,maxR:3.5,minP:2.1,recP:2.8,baseFlow90:0.75,arcMin:90,arcMax:360},
+ {brand:'Hunter',family:'MP Rotator',model:'MP1000',kind:'rotary',minR:2.5,maxR:4.6,minP:2.1,recP:2.8,baseFlow90:0.85,arcMin:90,arcMax:360},
+ {brand:'Hunter',family:'MP Rotator',model:'MP2000',kind:'rotary',minR:4.0,maxR:6.4,minP:2.1,recP:2.8,baseFlow90:1.25,arcMin:90,arcMax:360},
+ {brand:'Hunter',family:'MP Rotator',model:'MP3000',kind:'rotary',minR:6.7,maxR:9.1,minP:2.1,recP:2.8,baseFlow90:2.10,arcMin:90,arcMax:360},
+ {brand:'Hunter',family:'MP Rotator',model:'MP3500',kind:'rotary',minR:9.4,maxR:10.7,minP:2.1,recP:2.8,baseFlow90:2.70,arcMin:90,arcMax:210},
+ {brand:'Hunter',family:'MP Rotator Strip',model:'MP-LCS-515',kind:'strip-corner-left',minW:1.2,maxW:1.8,minL:4.2,maxL:4.9,minP:2.1,recP:2.8,flow:0.72},
+ {brand:'Hunter',family:'MP Rotator Strip',model:'MP-RCS-515',kind:'strip-corner-right',minW:1.2,maxW:1.8,minL:4.2,maxL:4.9,minP:2.1,recP:2.8,flow:0.72},
+ {brand:'Hunter',family:'MP Rotator Strip',model:'MP-SS-530',kind:'strip-side',minW:1.2,maxW:1.8,minL:8.4,maxL:9.9,minP:2.1,recP:2.8,flow:1.44},
+ {brand:'Hunter',family:'PGP Ultra',model:'PGP Ultra',kind:'rotor',minR:5.2,maxR:14.0,minP:1.7,recP:3.1,baseFlow90:2.8,arcMin:50,arcMax:360},
+ {brand:'Hunter',family:'I-20',model:'I-20',kind:'rotor',minR:5.2,maxR:14.3,minP:1.7,recP:3.1,baseFlow90:3.0,arcMin:50,arcMax:360},
+
+ {brand:'Rain Bird',family:'R-VAN',model:'R-VAN14',kind:'rotary',minR:2.4,maxR:4.6,minP:2.1,recP:3.1,baseFlow90:1.30,arcMin:45,arcMax:360},
+ {brand:'Rain Bird',family:'R-VAN',model:'R-VAN18',kind:'rotary',minR:4.0,maxR:5.5,minP:2.1,recP:3.1,baseFlow90:1.65,arcMin:45,arcMax:360},
+ {brand:'Rain Bird',family:'R-VAN',model:'R-VAN24',kind:'rotary',minR:5.2,maxR:7.3,minP:2.1,recP:3.1,baseFlow90:2.10,arcMin:45,arcMax:360},
+ {brand:'Rain Bird',family:'R-VAN Strip',model:'R-VAN-LCS',kind:'strip-corner-left',minW:1.2,maxW:1.8,minL:4.3,maxL:4.9,minP:2.1,recP:3.1,flow:0.87},
+ {brand:'Rain Bird',family:'R-VAN Strip',model:'R-VAN-RCS',kind:'strip-corner-right',minW:1.2,maxW:1.8,minL:4.3,maxL:4.9,minP:2.1,recP:3.1,flow:0.87},
+ {brand:'Rain Bird',family:'R-VAN Strip',model:'R-VAN-SST',kind:'strip-side',minW:1.2,maxW:1.8,minL:8.5,maxL:9.7,minP:2.1,recP:3.1,flow:1.75},
+ {brand:'Rain Bird',family:'3500 Series',model:'3500',kind:'rotor',minR:4.6,maxR:10.7,minP:1.7,recP:2.8,baseFlow90:2.4,arcMin:40,arcMax:360},
+ {brand:'Rain Bird',family:'5000 Series',model:'5000',kind:'rotor',minR:7.6,maxR:15.2,minP:1.7,recP:3.1,baseFlow90:3.0,arcMin:40,arcMax:360}
+];
+
+function arcFlow(prod,arc){
+  // grobe Planung: matched-precipitation-artige Skalierung über Sektor
+  return Math.max(.2, prod.baseFlow90*(arc/90));
+}
+function chooseProduct(radiusM,arc,zoneArea){
+  let brand=$('brand').value,forced=$('sprType').value,pAvail=+$('pWork').value||+$('headPressure').value||0;
+  let kind=forced;
+  if(kind==='auto'){
+    // Kleine/verwinkelte Flächen → Rotationsdüse, große Reichweiten → Rotor.
+    kind=(radiusM<=7.0 || zoneArea<180)?'rotary':'rotor';
+  }
+  let arr=PRODUCTS.filter(p=>(brand==='auto'||p.brand===brand)&&p.kind===kind&&arc>=p.arcMin&&arc<=p.arcMax);
+  if(!arr.length)arr=PRODUCTS.filter(p=>(brand==='auto'||p.brand===brand)&&p.kind===kind);
+  let fitting=arr.filter(p=>radiusM>=p.minR*.82 && radiusM<=p.maxR*1.03);
+  if(!fitting.length)fitting=arr.slice();
+  fitting.sort((a,b)=>{
+    let ap=pAvail&&pAvail<a.minP?100:0,bp=pAvail&&pAvail<b.minP?100:0;
+    let ar=Math.abs(Math.min(Math.max(radiusM,a.minR),a.maxR)-radiusM);
+    let br=Math.abs(Math.min(Math.max(radiusM,b.minR),b.maxR)-radiusM);
+    return (ap+ar)-(bp+br);
+  });
+  return fitting[0]||PRODUCTS[0];
+}
+function cornerArc(prev,p,next,poly){
+  // Innenwinkel grob ermitteln, auf praxisübliche Sektoren runden.
+  let v1={x:prev.x-p.x,y:prev.y-p.y},v2={x:next.x-p.x,y:next.y-p.y};
+  let dot=v1.x*v2.x+v1.y*v2.y,l=Math.hypot(v1.x,v1.y)*Math.hypot(v2.x,v2.y)||1;
+  let a=Math.acos(Math.max(-1,Math.min(1,dot/l)))*180/Math.PI;
+  let opts=[45,90,120,135,180,210,270,360],best=opts.reduce((x,y)=>Math.abs(y-a)<Math.abs(x-a)?y:x,90);
+  return best;
+}
+function addHeadCandidate(list,c,z,radM,arc,area){
+  if(inBlocked(c))return;
+  let prod=chooseProduct(radM,arc,area),usedR=Math.min(Math.max(radM,prod.minR),prod.maxR);
+  let flow=arcFlow(prod,arc);
+  list.push({...c,radiusM:usedR,flow,arc,brand:prod.brand,family:prod.family,model:prod.model,kind:prod.kind,minP:prod.minP,recP:prod.recP});
+}
+
+function orientedBox(pts){
+  let c=centroid(pts),xx=0,yy=0,xy=0;
+  pts.forEach(p=>{let x=p.x-c.x,y=p.y-c.y;xx+=x*x;yy+=y*y;xy+=x*y});
+  let ang=.5*Math.atan2(2*xy,xx-yy),ca=Math.cos(ang),sa=Math.sin(ang);
+  let vals=pts.map(p=>{let dx=p.x-c.x,dy=p.y-c.y;return{u:dx*ca+dy*sa,v:-dx*sa+dy*ca}});
+  let u0=Math.min(...vals.map(q=>q.u)),u1=Math.max(...vals.map(q=>q.u)),v0=Math.min(...vals.map(q=>q.v)),v1=Math.max(...vals.map(q=>q.v));
+  let L=(u1-u0)/(S.scalePxPerM||1),W=(v1-v0)/(S.scalePxPerM||1);
+  if(W>L){
+    ang+=Math.PI/2;ca=Math.cos(ang);sa=Math.sin(ang);
+    vals=pts.map(p=>{let dx=p.x-c.x,dy=p.y-c.y;return{u:dx*ca+dy*sa,v:-dx*sa+dy*ca}});
+    u0=Math.min(...vals.map(q=>q.u));u1=Math.max(...vals.map(q=>q.u));v0=Math.min(...vals.map(q=>q.v));v1=Math.max(...vals.map(q=>q.v));
+    L=(u1-u0)/(S.scalePxPerM||1);W=(v1-v0)/(S.scalePxPerM||1);
+  }
+  return{c,ang,ca,sa,L,W,u0,u1,v0,v1};
+}
+function localToWorld(box,u,v){return{x:box.c.x+u*box.ca-v*box.sa,y:box.c.y+u*box.sa+v*box.ca}}
+function stripProduct(kind){
+  let brand=$('brand').value;
+  return PRODUCTS.find(x=>x.kind===kind&&(brand==='auto'||x.brand===brand))||null;
+}
+function detectStrip(z){
+  let ob=orientedBox(z.pts),aspect=ob.L/Math.max(.01,ob.W);
+  return (ob.W<=1.9 && ob.L>=3.0 && aspect>=2.5)?ob:null;
+}
+function planStrip(z,zi,ob){
+  let result=[];
+  if(ob.L<=5.2){
+    let lp=stripProduct('strip-corner-left'),rp=stripProduct('strip-corner-right');
+    if(lp&&rp){
+      let a=localToWorld(ob,ob.u0,ob.v0),b=localToWorld(ob,ob.u1,ob.v0);
+      result.push({...a,zone:zi,pattern:'strip',stripW:ob.W,stripL:ob.L/2,orientation:ob.ang,brand:lp.brand,family:lp.family,model:lp.model,kind:lp.kind,flow:lp.flow,minP:lp.minP,recP:lp.recP,arc:'STRIP'});
+      result.push({...b,zone:zi,pattern:'strip',stripW:ob.W,stripL:ob.L/2,orientation:ob.ang+Math.PI,brand:rp.brand,family:rp.family,model:rp.model,kind:rp.kind,flow:rp.flow,minP:rp.minP,recP:rp.recP,arc:'STRIP'});
+    }
+  }else{
+    let sp=stripProduct('strip-side');
+    if(sp){
+      let maxLen=Math.min(9.1,sp.maxL||9.1),n=Math.max(1,Math.ceil(ob.L/(maxLen*.9)));
+      for(let i=0;i<n;i++){
+        let t=(i+.5)/n,u=ob.u0+(ob.u1-ob.u0)*t,p=localToWorld(ob,u,ob.v0),segL=Math.min(maxLen,ob.L/n*1.12);
+        result.push({...p,zone:zi,pattern:'strip-side',stripW:ob.W,stripL:segL,orientation:ob.ang,brand:sp.brand,family:sp.family,model:sp.model,kind:sp.kind,flow:sp.flow,minP:sp.minP,recP:sp.recP,arc:'STRIP'});
+      }
+    }
+  }
+  return result;
+}
+
+function autoPlan(){
+ if(!S.scalePxPerM)return alert('Bitte zuerst den Maßstab kalibrieren.');
+ let lawns=S.zones.filter(z=>z.type==='lawn');if(!lawns.length)return alert('Bitte mindestens eine Rasenfläche zeichnen.');
+ let desired=Math.max(.8,+$('radius').value||5);
+ S.sprinklers=[];
+ lawns.forEach((z,zi)=>{
+   let strip=detectStrip(z);
+   if(strip){let hs=planStrip(z,zi,strip);if(hs.length){S.sprinklers.push(...hs);return;}}
+   let area=polyArea(z.pts),b=bbox(z.pts),rPx=desired*S.scalePxPerM,step=rPx*1.60,cands=[];
+   // Ecken: Sektor aus Geometrie ableiten
+   z.pts.forEach((p,i)=>{
+      let prev=z.pts[(i-1+z.pts.length)%z.pts.length],next=z.pts[(i+1)%z.pts.length];
+      let arc=cornerArc(prev,p,next,z.pts);
+      addHeadCandidate(cands,{x:p.x,y:p.y,zone:zi},z,desired,arc,area);
+   });
+   // Kanten-Mittelpunkte bei langen Kanten
+   for(let i=0;i<z.pts.length;i++){
+      let a=z.pts[i],b2=z.pts[(i+1)%z.pts.length],L=Math.hypot(b2.x-a.x,b2.y-a.y);
+      if(L>rPx*1.35){
+        let n=Math.ceil(L/(rPx*1.65));
+        for(let k=1;k<n;k++){
+          let q={x:a.x+(b2.x-a.x)*k/n,y:a.y+(b2.y-a.y)*k/n,zone:zi};
+          addHeadCandidate(cands,q,z,desired,180,area);
+        }
+      }
+   }
+   // Innenbereich
+   for(let y=b.miny+rPx*.8;y<=b.maxy-rPx*.5;y+=step)
+    for(let x=b.minx+rPx*.8;x<=b.maxx-rPx*.5;x+=step)
+      if(pointInPoly({x,y},z.pts)&&!inBlocked({x,y}))
+        addHeadCandidate(cands,{x,y,zone:zi},z,desired,360,area);
+
+   cands.forEach(c=>{
+     if(!S.sprinklers.some(q=>Math.hypot(q.x-c.x,q.y-c.y)<rPx*.38))
+       S.sprinklers.push(c);
+   });
+ });
+ // Kreise: verfügbare Wassermenge mit Reserve und Mindestdruck
+ let avail=+$('flow').value||0,res=(+$('reserve').value||15)/100,cap=avail?avail*(1-res):20;
+ S.circuits=[];let cur={id:1,heads:[],flow:0,brands:new Set(),minReqP:0};
+ S.sprinklers.forEach((h,i)=>{
+   if(cur.heads.length&&cur.flow+h.flow>cap){
+     cur.brands=[...cur.brands];S.circuits.push(cur);
+     cur={id:S.circuits.length+1,heads:[],flow:0,brands:new Set(),minReqP:0};
+   }
+   cur.heads.push(i);cur.flow+=h.flow;cur.brands.add(h.brand);cur.minReqP=Math.max(cur.minReqP,h.minP);h.circuit=cur.id;
+ });
+ if(cur.heads.length){cur.brands=[...cur.brands];S.circuits.push(cur);}
+ renderResults();draw();
+}
+function renderResults(){
+ let avail=+$('flow').value||0,p=+$('pWork').value||0;
+ if(!S.sprinklers.length){$('circuits').innerHTML='<span class="note">Noch keine Planung.</span>';$('materials').innerHTML='';return}
+ $('circuits').innerHTML='<table><tr><th>Kreis</th><th>Regner</th><th>Bedarf</th><th>System</th><th>Status</th></tr>'+
+ S.circuits.map(c=>`<tr><td>K${c.id}</td><td>${c.heads.length}</td><td>${c.flow.toFixed(1)} l/min</td><td>${c.brands.join(' / ')}</td><td>${(!avail||c.flow<=avail)&&(!p||p>=c.minReqP)?'<span class="ok">OK</span>':'<span class="warn">prüfen</span>'}</td></tr>`).join('')+'</table>';
+
+ let counts={};S.sprinklers.forEach(h=>{let k=`${h.brand} ${h.model}`;counts[k]=(counts[k]||0)+1});
+ let productRows=Object.entries(counts).map(([k,v])=>`<tr><td>${k}</td><td>${v} Stk.</td></tr>`).join('');
+ let lawns=S.zones.filter(z=>z.type==='lawn'),beds=S.zones.filter(z=>['bed','drip'].includes(z.type));
+ let lawnA=lawns.reduce((s,z)=>s+polyArea(z.pts),0),bedA=beds.reduce((s,z)=>s+polyArea(z.pts),0);
+ let filter=($('source').value==='well'&&$('sediment').value!=='none')||beds.length;
+ let pipe=Math.max(10,Math.round((S.sprinklers.length*3.5 + S.circuits.length*6)*10)/10);
+
+ $('materials').innerHTML=`<table>
+ <tr><th>Komponente</th><th>Menge</th></tr>
+ ${productRows}
+ <tr><td>Magnetventile Hunter/Rain Bird</td><td>${S.circuits.length} Stk.</td></tr>
+ <tr><td>Steuergerät</td><td>${Math.max(4,S.circuits.length)} Stationen</td></tr>
+ <tr><td>PE-Rohr grob</td><td>ca. ${pipe} m</td></tr>
+ <tr><td>Rasenfläche</td><td>${lawnA.toFixed(1)} m²</td></tr>
+ <tr><td>Beet/Tropfzone</td><td>${bedA.toFixed(1)} m²</td></tr>
+ <tr><td>Filter</td><td>${filter?'einplanen / prüfen':'nicht automatisch erforderlich'}</td></tr>
+ <tr><td>Druckminderer</td><td>${beds.length?'für Tropfzone prüfen':'nach Komponenten prüfen'}</td></tr>
+ </table>
+ <div class="note" style="margin-top:7px">
+ Hersteller/Serie werden bereits automatisch gewählt. Düsennummer, exakte Hersteller-Durchflusskennlinie,
+ Rohrdimensionierung und Fittings folgen mit der detaillierten Hydraulik.
+ </div>`;
+
+ let stripCount=S.sprinklers.filter(h=>(h.pattern||'').startsWith('strip')).length;
+ $('planMsg').innerHTML=`${S.sprinklers.length} Regner auf ${S.circuits.length} Kreise verteilt. `+
+ (stripCount?`<b>${stripCount} Strip-Düse(n) für schmale Rasenbereiche erkannt.</b><br>`:'')+
+ `<b>${Object.entries(counts).map(([k,v])=>`${v}× ${k}`).join(' · ')}</b>`;
+}
+function draw(){
+ ctx.clearRect(0,0,cv.width,cv.height);
+ ctx.fillStyle='#fafafa';ctx.fillRect(0,0,cv.width,cv.height);
+ if(S.bgImg){let r=Math.min(cv.width/S.bgImg.width,cv.height/S.bgImg.height),w=S.bgImg.width*r,h=S.bgImg.height*r;ctx.globalAlpha=.72;ctx.drawImage(S.bgImg,(cv.width-w)/2,(cv.height-h)/2,w,h);ctx.globalAlpha=1}
+ S.zones.forEach((z,idx)=>{
+   ctx.beginPath();z.pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();
+   ctx.fillStyle=ZCOL[z.type]||'rgba(0,0,0,.1)';ctx.fill();ctx.strokeStyle=z.type==='exclusion'?'#c33':'#445';ctx.lineWidth=2;ctx.stroke();
+   let c=centroid(z.pts);ctx.fillStyle='#111';ctx.font='bold 14px system-ui';ctx.fillText(`${z.type} ${S.scalePxPerM?polyArea(z.pts).toFixed(1)+' m²':''}`,c.x,c.y);
+ });
+ if(S.draft.length){
+   ctx.beginPath();S.draft.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.stroke();
+   S.draft.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fillStyle='#111';ctx.fill()});
+ }
+ if(S.calPts.length){
+   S.calPts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,6,0,Math.PI*2);ctx.fillStyle='#d79b18';ctx.fill()});
+   if(S.calPts.length===2){ctx.beginPath();ctx.moveTo(S.calPts[0].x,S.calPts[0].y);ctx.lineTo(S.calPts[1].x,S.calPts[1].y);ctx.strokeStyle='#d79b18';ctx.lineWidth=3;ctx.stroke()}
+ }
+ if(S.waterPt){ctx.beginPath();ctx.arc(S.waterPt.x,S.waterPt.y,10,0,Math.PI*2);ctx.fillStyle='#1565c0';ctx.fill();ctx.fillStyle='#fff';ctx.fillText('W',S.waterPt.x-5,S.waterPt.y+5)}
+ if(S.valvePt){ctx.fillStyle='#263238';ctx.fillRect(S.valvePt.x-9,S.valvePt.y-9,18,18);ctx.fillStyle='#fff';ctx.fillText('V',S.valvePt.x-5,S.valvePt.y+5)}
+ S.sprinklers.forEach((h,i)=>{
+   let r=(h.radiusM||5)*(S.scalePxPerM||1);
+   ctx.beginPath();ctx.arc(h.x,h.y,r,0,Math.PI*2);ctx.fillStyle='rgba(25,118,210,.08)';ctx.fill();ctx.strokeStyle='rgba(25,118,210,.38)';ctx.stroke();
+   ctx.beginPath();ctx.arc(h.x,h.y,6,0,Math.PI*2);ctx.fillStyle='#1976d2';ctx.fill();
+   ctx.fillStyle='#0d1b2a';ctx.font='bold 12px system-ui';ctx.fillText(`R${i+1}/K${h.circuit||'-'} · ${h.brand||''} ${h.model||''} · ${h.arc||360}°`,h.x+8,h.y-8);
+ });
+}
+function save(){
+ let data={...S,bgImg:null};localStorage.setItem('mb_irrigation_v1',JSON.stringify(data));
+ $('planMsg').textContent='Projekt lokal gespeichert.';
+}
+function load(){
+ let d=localStorage.getItem('mb_irrigation_v1');if(!d)return;
+ S=JSON.parse(d);if(S.bg){let im=new Image();im.onload=()=>{S.bgImg=im;draw()};im.src=S.bg}else draw();
+ $('scaleOut').value=S.scalePxPerM?S.scalePxPerM.toFixed(1)+' px/m':'';
+ renderResults();setMode(S.mode||'lawn');
+}
+function exportJSON(){
+ let data={project:$('project').value,address:$('address').value,water:{source:$('source').value,connection:$('connection').value,pStatic:+$('pStatic').value,pWork:+$('pWork').value,flow:+$('flow').value,reserve:+$('reserve').value},site:{scalePxPerM:S.scalePxPerM,zones:S.zones,waterPt:S.waterPt,valvePt:S.valvePt},irrigation:{sprinklers:S.sprinklers,circuits:S.circuits,brands:['Hunter','Rain Bird']}};
+ let b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='MB_Bewaesserungsplanung.json';a.click();
+}
+draw();assessWater();
+</script>
+</body>
+</html>
