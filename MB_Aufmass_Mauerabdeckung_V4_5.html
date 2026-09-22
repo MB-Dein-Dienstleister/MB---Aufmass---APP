@@ -42,7 +42,9 @@ main{max-width:1450px;margin:auto;padding:12px}.grid{display:grid;grid-template-
   .print-cover-table th{background:#ece9e2;color:#0d1b2a}
   .print-cover-foot{display:flex;justify-content:space-between;margin-top:7mm;padding-top:3mm;border-top:1px solid #d8d1c4;font-size:9px;color:#68727d}
   body.print-all>main,body.print-all>header{display:none!important}
+  body.print-all main,body.print-all main *{display:none!important}
   body.print-all #printAllContainer{display:block!important;margin:0!important;padding:0!important;height:auto!important;overflow:visible!important}
+  body.print-all #printAllContainer .print-sheet{display:block!important}
 }
 @media screen{.print-only{display:none}}
 </style></head><body>
