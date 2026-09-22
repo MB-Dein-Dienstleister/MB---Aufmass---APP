@@ -1,10 +1,11 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MB Aufmaß – Mauerabdeckungen V2</title>
+<title>MB Aufmaß – Mauerabdeckungen V4</title>
 <style>
 :root{--n:#0d1b2a;--g:#c7a35b;--p:#fffdf8;--bg:#ece9e2;--b:#1976d2;--gr:#1f9d55;--v:#8b5cf6;--r:#d64545;--o:#f28c28;--y:#e4b400;--br:#8b5a2b}
 *{box-sizing:border-box}body{margin:0;font:14px system-ui,-apple-system,sans-serif;background:var(--bg);color:#17202a}header{background:var(--n);color:#fff;border-bottom:3px solid var(--g);padding:15px}header b{font-size:21px;letter-spacing:.08em}header small{display:block;color:#dbcba8}
 main{max-width:1450px;margin:auto;padding:12px}.grid{display:grid;grid-template-columns:500px 1fr;gap:12px;align-items:start}.card{background:var(--p);border:1px solid #d8d1c4;border-radius:13px;padding:13px;margin-bottom:11px}.sticky{position:sticky;top:8px}h2{font-size:17px;margin:0 0 10px;color:var(--n)}h3{font-size:14px;margin:12px 0 7px}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}.f3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}label{font-size:11px;font-weight:800;color:#5b6570;text-transform:uppercase}input,select,textarea{width:100%;padding:9px;margin-top:4px;border:1px solid #c9c3b8;border-radius:8px;font:16px system-ui}input[readonly]{background:#eee}button{padding:9px 11px;border:1px solid #bbb4a8;border-radius:9px;background:#fff;font-weight:800}.gold{background:var(--g);border-color:var(--g)}.navy{background:var(--n);color:#fff}.bad{color:#a23832}.toolbar,.tabs,.checks{display:flex;gap:6px;flex-wrap:wrap}.tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:7px}.tab{white-space:nowrap}.tab.on{background:var(--n);color:#fff}.section{border-top:1px solid #ddd7cc;margin-top:11px;padding-top:11px}.cut,.edge{border:1px solid #ddd6ca;border-radius:10px;padding:9px;margin-top:8px}.cut{border-left:4px solid var(--g)}.head{display:flex;justify-content:space-between;align-items:center;gap:8px}.checks label{display:flex;align-items:center;gap:4px;background:#f1efea;border-radius:999px;padding:5px 7px;text-transform:none}.checks input{width:auto;margin:0}.sw{width:16px;height:4px;display:inline-block}
+.toolbar label[for="wallJsonInput"]{display:inline-flex;align-items:center;padding:9px 11px;border:1px solid #bbb4a8;border-radius:9px;background:#fff;color:#17202a;font-size:14px;font-weight:800;text-transform:none;cursor:pointer}
 .arrows{display:grid;grid-template-columns:40px 40px 40px;grid-template-rows:38px 38px;gap:3px;margin-top:7px}.arrows button{padding:0;background:var(--n);color:#fff}.up{grid-column:2}.le{grid-column:1;grid-row:2}.dn{grid-column:2;grid-row:2}.ri{grid-column:3;grid-row:2}.note{font-size:12px;color:#68727d}.view{background:#fff;border:1px solid #cec7bb;border-radius:10px;overflow:auto}.view svg{width:100%;height:auto;display:block;min-width:700px}.v3 svg{min-width:0}table{width:100%;border-collapse:collapse;font-size:12px}td,th{padding:6px;border-bottom:1px solid #e3ded4;text-align:left}
 @media(max-width:900px){.grid{grid-template-columns:1fr}.sticky{position:static}}@media(max-width:520px){.fields,.f3{grid-template-columns:1fr}}
 @media print{header,.left,.noPrint{display:none!important}.grid{display:block}.card{border:0}.sticky{position:static}.view{border:0}.view svg{min-width:0}}
@@ -22,15 +23,12 @@ main{max-width:1450px;margin:auto;padding:12px}.grid{display:grid;grid-template-
   .print-meta{font-size:10px;line-height:1.35;text-align:right}
   .print-plan{width:100%;height:155mm;border:1px solid #aaa}
   .print-note{font-size:10px;margin-top:2mm}
+  body.print-all main{display:none!important}
+  body.print-all #printAllContainer{display:block!important}
 }
 @media screen{.print-only{display:none}}
 </style></head><body>
-<div class="noPrint" style="position:fixed;right:12px;bottom:12px;z-index:9999">
-<button onclick="printAllCovers()" style="padding:12px 16px;border-radius:10px;border:0;background:#c9a454;color:#0d1b2a;font-weight:800;box-shadow:0 4px 18px #0003">
-Alle Abdeckungen drucken
-</button>
-</div>
-<header><b>MB AUFMASS</b><small>MAUERABDECKUNGEN · MEHRTEILIGER AUFTRAG · STEINMETZ V3</small></header>
+<header><b>MB AUFMASS</b><small>MAUERABDECKUNGEN · MEHRTEILIGER AUFTRAG · STEINMETZ V4</small></header>
 <main><div class="grid"><div class="left">
 <div class="card"><h2>Auftrag</h2><div class="fields"><label>Projekt / Kunde<input id="project" value="Mauerabdeckungen"></label><label>Auftragsnummer<input id="jobNo"></label><label>Material<input id="material" value="Granit"></label><label>Steinsorte / Farbton<input id="stone"></label><label>Oberfläche<select id="surface"><option>roh</option><option>geschliffen</option><option>poliert</option><option selected>satiniert</option><option>geflammt</option><option>gebürstet</option><option>geflammt + gebürstet</option></select></label><label>Standardstärke mm<input id="defT" type="number" value="30"></label></div></div>
 <div class="card"><div class="head"><h2>Abdeckungen</h2><button class="gold" onclick="addPart()">+ Abdeckung</button></div><div id="tabs" class="tabs"></div><div class="toolbar"><button onclick="dup()">Duplizieren</button><button class="bad" onclick="delPart()">Löschen</button></div></div>
@@ -39,7 +37,7 @@ Alle Abdeckungen drucken
 <div class="section"><div class="head"><h3>Ausschnitte</h3><div class="toolbar"><button onclick="addCut('circle')">+ Rund</button><button onclick="addCut('rect')">+ Rechteck</button><button onclick="addCut('L')">+ L</button></div></div><div id="cuts"></div></div>
 <div class="section"><h3>Kantenbearbeitung · Mehrfachauswahl</h3><div id="edges"></div></div>
 <div class="section"><label>Hinweise<textarea id="notes"></textarea></label></div></div>
-<div class="card noPrint"><div class="toolbar"><button class="navy" onclick="save()">Auftrag speichern</button><button onclick="load()">Laden</button><button onclick="jsonOut()">JSON</button><button onclick="dxf()">DXF aktive Abdeckung</button><button class="gold" onclick="print()">PDF / Drucken</button></div><div id="status" class="note"></div></div>
+<div class="card noPrint"><div class="toolbar"><button onclick="location.href='index.html'">← Hauptmenü</button><button class="navy" onclick="save()">Auftrag speichern</button><button onclick="load()">Laden</button><label for="wallJsonInput" style="cursor:pointer">JSON-Datei öffnen</label><input id="wallJsonInput" type="file" accept=".json,application/json,text/plain" aria-label="Mauerabdeckungen aus JSON-Datei öffnen" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0" onchange="importWallJson(this.files[0],this)"><button onclick="jsonOut()">JSON sichern</button><button onclick="dxf()">DXF aktive Abdeckung</button><button class="gold" onclick="printAllCovers()">Alle Fertigungsblätter / PDF</button></div><div id="status" class="note"></div></div>
 </div>
 <div><div class="card sticky"><div class="head"><div><h2>Fertigungsansicht · <span id="vno"></span></h2><div class="note">Alle Maße mm · Maße verbindlich</div></div><b id="count"></b></div><div id="draw" class="view"></div><div id="legend" class="checks" style="margin-top:8px"></div>
 <div class="section"><h3>3D-Kontrollansicht</h3><div id="view3" class="view v3"></div></div>
@@ -226,68 +224,32 @@ p.cuts.filter(c=>c.type=='circle').forEach(c=>{let q=Q({x:c.x,y:c.y}),r=(c.diam+
 p.cuts.filter(c=>c.type=='circle').forEach(c=>{let q=Q({x:c.x,y:c.y}),r=(c.diam+c.clear)/2;h+=`<ellipse cx="${q[0]}" cy="${q[1]}" rx="${r*sx}" ry="${Math.max(4,r*sy)}" fill="none" stroke="#1976d2" stroke-width="2.5"/>`});[['A',0,1],['B',1,2],['C',2,3],['D',3,0]].forEach(([e,i,j])=>p.edges[e].forEach(o=>h+=profileMark(o,tt[i],tt[j],d)));$('view3').innerHTML=h+`<text x="70" y="305">${p.no} · Stärke ${p.thick} mm · Profil gilt über die komplette gewählte Seite</text></svg>`}
 function fab(g){let p=P(),r=['A','B','C','D'].map((e,i)=>`<tr><td>${e}</td><td>${p[e]} mm</td><td>${F(g.as[i])}°</td><td>${p.edges[e].join(' + ')||'—'}</td></tr>`).join('');p.cuts.forEach(c=>{let info='';if(c.type=='circle'){let md=actualCutDimensions(c,g);info=md.opening?(md.along.map(m=>`${m.e} ${F(m.val)}`).join(' · ')+(md.depth?` · ${md.depth.e} ${F(md.depth.val)}`:'')):md.clearance.map(m=>`${m.e} ${F(m.val)}`).join(' · ');}else{let b=box(c),xs=g.ps.map(q=>q.x),ys=g.ps.map(q=>q.y);info=`A ${F(b.t-Math.min(...ys))} · B ${F(Math.max(...xs)-b.r)} · C ${F(Math.max(...ys)-b.b)} · D ${F(b.l-Math.min(...xs))}`};r+=`<tr><td>${c.name}</td><td>${c.type=='circle'?'Ø '+F(c.diam+c.clear):c.w+'×'+c.h}</td><td colspan="2">${info}</td></tr>`});$('fab').innerHTML=`<table><tr><th>Seite/Ausschnitt</th><th>Maß</th><th>Winkel</th><th>Bearbeitung / Lage</th></tr>${r}</table><p><b>Achsenabstand zum nächsten:</b> ${p.axis||'—'} mm · <b>Montage:</b> ${p.pos||'—'}</p><p class="note">Negative Kantenabstände kennzeichnen einen offenen Ausschnitt / eine Überschneidung mit der betreffenden Außenkante.</p>`}
 function meta(){return{project:$('project').value,jobNo:$('jobNo').value,material:$('material').value,stone:$('stone').value,surface:$('surface').value,defT:$('defT').value}}function save(){store();J.meta=meta();localStorage.setItem('mb_mauer_v2',JSON.stringify(J));$('status').textContent='Auftrag mit '+J.parts.length+' Abdeckungen gespeichert.'}function load(){let z=localStorage.getItem('mb_mauer_v2');if(!z)return;J=JSON.parse(z);Object.entries(J.meta||{}).forEach(([k,v])=>{if($(k))$(k).value=v});act=0;tabs();fill()}function dl(n,t,ty='text/plain'){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:ty}));a.download=n;a.click()}function jsonOut(){save();dl('MB_Mauerabdeckungen.json',JSON.stringify(J,null,2),'application/json')}function dxf(){store();let p=P(),g=geom(p),o=['0','SECTION','2','ENTITIES'],ln=(a,b)=>o.push('0','LINE','8','KONTUR','10',a.x,'20',-a.y,'11',b.x,'21',-b.y);g.ps.forEach((q,i)=>ln(q,g.ps[(i+1)%4]));p.cuts.filter(c=>c.type=='circle').forEach(c=>o.push('0','CIRCLE','8','AUSSCHNITT','10',c.x,'20',-c.y,'40',(c.diam+c.clear)/2));o.push('0','ENDSEC','0','EOF');dl(p.no+'_Mauerabdeckung.dxf',o.join('\n'),'application/dxf')}
+function importWallJson(file,input){
+ if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const data=JSON.parse(String(reader.result).replace(/^\uFEFF/,''));
+   if(!data||!Array.isArray(data.parts)||!data.parts.length||!data.meta||typeof data.meta!=='object')throw new Error('Kein Mauerabdeckungsprojekt');
+   if(!data.parts.every(p=>p&&['A','B','C','D'].every(k=>Number.isFinite(Number(p[k])))&&p.edges&&['A','B','C','D'].every(k=>Array.isArray(p.edges[k]))&&Array.isArray(p.cuts)))throw new Error('Ungültige Abdeckungsdaten');
+   store();
+   if(!confirm('Aktuellen Auftrag durch „'+(data.meta.project||file.name)+'“ ersetzen? Nicht gespeicherte Änderungen gehen verloren.'))return;
+   J=data;act=0;
+   Object.entries(J.meta).forEach(([k,v])=>{if($(k))$(k).value=v??''});
+   tabs();fill();save();
+   $('status').textContent='JSON-Datei „'+file.name+'“ geladen: '+J.parts.length+' Abdeckungen.';
+  }catch(error){console.error('Mauerabdeckungs-Import:',error);$('status').textContent='JSON konnte nicht geöffnet werden: Bitte eine Mauerabdeckungen-Datei wählen.'}
+  finally{input.value=''}
+ };
+ reader.onerror=()=>{$('status').textContent='Datei konnte nicht gelesen werden.';input.value=''};
+ reader.readAsText(file);
+}
 ['project','jobNo','material','stone','surface','defT','no','name','thick','ref','A','B','C','D','aA','diag','axis','pos','notes'].forEach(id=>$(id).addEventListener('input',()=>J.parts.length&&update()));for(let i=0;i<6;i++)J.parts.push(blank(i));tabs();fill();
 
 function mbEsc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function mbProject(){
-  try{
-    let p=(typeof state!=='undefined'&&state.project)?state.project:{};
-    return {name:p.projectName||p.name||'',customer:p.customer||'',material:p.material||p.stoneType||'',date:p.date||''};
-  }catch(e){return{name:'',customer:'',material:'',date:''}}
-}
-function mbCovers(){
-  try{
-    if(typeof state!=='undefined'){
-      if(Array.isArray(state.covers)) return state.covers;
-      if(Array.isArray(state.coverings)) return state.coverings;
-      if(Array.isArray(state.plates)) return state.plates;
-    }
-    if(typeof covers!=='undefined'&&Array.isArray(covers)) return covers;
-  }catch(e){}
-  return [];
-}
-function mbActiveIndex(){
-  try{
-    if(typeof state!=='undefined'){
-      if(Number.isInteger(state.currentCover))return state.currentCover;
-      if(Number.isInteger(state.activeCover))return state.activeCover;
-      if(Number.isInteger(state.selectedCover))return state.selectedCover;
-    }
-    if(typeof currentCover!=='undefined'&&Number.isInteger(currentCover))return currentCover;
-  }catch(e){}
-  return 0;
-}
-function mbSelect(i){
-  try{
-    if(typeof selectCover==='function'){selectCover(i);return}
-    if(typeof setCurrentCover==='function'){setCurrentCover(i);return}
-    if(typeof activateCover==='function'){activateCover(i);return}
-    if(typeof switchCover==='function'){switchCover(i);return}
-    if(typeof state!=='undefined'){
-      if('currentCover' in state)state.currentCover=i;
-      if('activeCover' in state)state.activeCover=i;
-      if('selectedCover' in state)state.selectedCover=i;
-    }
-    if(typeof render==='function')render();
-    if(typeof draw==='function')draw();
-  }catch(e){}
-}
-function mbMainPlanSvg(){
-  let svgs=[...document.querySelectorAll('svg')].filter(s=>{
-    if(s.closest('.print-only')) return false;
-    let r=s.getBoundingClientRect();
-    return r.width>260&&r.height>180;
-  });
-  // choose largest visible SVG, typically the top-view drawing, not tiny profile icon
-  svgs.sort((a,b)=>{
-    let ra=a.getBoundingClientRect(), rb=b.getBoundingClientRect();
-    return rb.width*rb.height-ra.width*ra.height;
-  });
-  return svgs[0]||null;
-}
 function mbSheet(c,i){
-  mbSelect(i);
-  let svg=mbMainPlanSvg(), svgHtml='';
+  sel(i);
+  let svg=$('draw').querySelector('svg'),svgHtml='';
   if(svg){
     let cl=svg.cloneNode(true);
     cl.removeAttribute('style');cl.setAttribute('width','100%');cl.setAttribute('height','100%');
@@ -296,8 +258,8 @@ function mbSheet(c,i){
   }else{
     svgHtml='<div style="padding:20mm">Draufsicht nicht gefunden.</div>';
   }
-  let p=mbProject();
-  let title=(c&&((c.no)||(c.name)||(c.id)))||('Abdeckung '+(i+1));
+  let p=J.meta||meta();
+  let title=`${c.no||('A'+String(i+1).padStart(2,'0'))} · ${c.name||('Abdeckung '+(i+1))}`;
   let edges=c?.edges||{};
   let edgeTxt=['A','B','C','D'].map(k=>{
     let v=edges[k]??c?.['edge'+k]??'';
@@ -307,19 +269,21 @@ function mbSheet(c,i){
   return `<section class="print-sheet">
     <div class="print-head">
       <div><div class="print-title">${mbEsc(title)}</div><div class="print-note">${mbEsc(edgeTxt)}</div></div>
-      <div class="print-meta">${mbEsc(p.name)}<br>${mbEsc(p.customer)}<br>${mbEsc(p.material)}<br>${mbEsc(p.date)}</div>
+      <div class="print-meta"><b>${mbEsc(p.project||'Mauerabdeckungen')}</b><br>${mbEsc(p.jobNo||'')}<br>${mbEsc([p.material,p.stone,p.surface].filter(Boolean).join(' · '))}<br>Stärke ${mbEsc(c.thick)} mm · Blatt ${i+1}/${J.parts.length}</div>
     </div>
     <div class="print-plan">${svgHtml}</div>
-    <div class="print-note">Draufsicht + Bemaßung/Kantenbearbeitung. 3D-Darstellung nicht im Ausdruck.</div>
+    <div class="print-note">Bezugskante: ${mbEsc(c.ref||'—')} · Montageposition: ${mbEsc(c.pos||'—')} · Achsenabstand: ${mbEsc(c.axis||'—')} mm${c.notes?` · Hinweis: ${mbEsc(c.notes)}`:''}</div>
   </section>`;
 }
 function printAllCovers(){
-  let arr=mbCovers(), n=arr.length||6, old=mbActiveIndex(), box=document.getElementById('printAllContainer');
+  store();J.meta=meta();
+  let old=act,box=document.getElementById('printAllContainer');
   box.innerHTML='';
-  for(let i=0;i<n;i++) box.insertAdjacentHTML('beforeend',mbSheet(arr[i]||{},i));
-  mbSelect(old);
-  setTimeout(()=>window.print(),180);
+  J.parts.forEach((part,i)=>box.insertAdjacentHTML('beforeend',mbSheet(part,i)));
+  sel(old);document.body.classList.add('print-all');
+  setTimeout(()=>window.print(),220);
 }
+window.addEventListener('afterprint',()=>{document.body.classList.remove('print-all')});
 
 </script><div id="printAllContainer" class="print-only"></div>
 </body></html>
