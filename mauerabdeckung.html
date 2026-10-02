@@ -500,6 +500,27 @@ function coverBytesToBase64(bytes){let out='';for(let i=0;i<bytes.length;i+=3276
 function coverBase64ToBytes(text){const raw=atob(text),out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out}
 function coverCleanName(v){return String(v||'').trim().replace(/[\\/:*?"<>|]+/g,'-').replace(/\s+/g,'_').replace(/_+/g,'_').slice(0,80)||'Mauerabdeckung'}
 function buildCoverPrintMarkup(){store();J.meta=meta();let old=act,html=mbCoverPage();J.parts.forEach((part,i)=>html+=mbSheet(part,i));(J.photos||[]).forEach((photo,i)=>html+=mbPhotoSheet(photo,i));sel(old);return html}
+function coverPdfUsesSafariRenderer(){
+ const ua=navigator.userAgent||'';
+ return /Safari/i.test(ua)&&!/Chrome|Chromium|CriOS|Edg|OPR|Android/i.test(ua);
+}
+async function coverRenderPdfSheet(node){
+ if(document.fonts?.ready)await document.fonts.ready;
+ await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+ const safari=coverPdfUsesSafariRenderer();
+ const canvas=await html2canvas(node,{
+  scale:safari?1.35:1.6,
+  useCORS:true,
+  allowTaint:false,
+  backgroundColor:'#ffffff',
+  logging:false,
+  foreignObjectRendering:!safari,
+  imageTimeout:15000,
+  removeContainer:true
+ });
+ if(!canvas.width||!canvas.height)throw new Error('PDF-Seite konnte nicht gerendert werden.');
+ return canvas;
+}
 async function exportCoverProjectPdf(){
  save();
  if(!window.html2canvas||!window.jspdf?.jsPDF){alert('Die PDF-Technik konnte nicht geladen werden. Bitte Internetverbindung prüfen und die App neu laden.');return}
@@ -511,11 +532,10 @@ async function exportCoverProjectPdf(){
   const {jsPDF}=window.jspdf,pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
   for(let i=0;i<sheets.length;i++){
    const clone=sheets[i].cloneNode(true);stage.replaceChildren(clone);
-   // Die normale html2canvas-Textvermessung kann bei einzelnen Sonderzeichen
-   // (z. B. Maßzeichen in SVG/Texttabellen) mit einem Range-Fehler abbrechen.
-   // ForeignObject lässt Chrome/Safari die Seite selbst setzen und umgeht
-   // diesen Fehler, ohne dass Inhalte oder Projektdaten verändert werden.
-   const canvas=await html2canvas(clone,{scale:1.6,useCORS:true,backgroundColor:'#ffffff',logging:false,foreignObjectRendering:true});
+   // Safari kann mit ForeignObject vollständig schwarze PDF-Seiten erzeugen.
+   // Deshalb nutzt Safari den normalen html2canvas-Renderer; Chromium behält
+   // den bewährten ForeignObject-Weg gegen Textvermessungsfehler.
+   const canvas=await coverRenderPdfSheet(clone);
    if(i)pdf.addPage('a4','portrait');pdf.addImage(canvas.toDataURL('image/jpeg',.92),'JPEG',0,0,210,297,undefined,'FAST');
    $('status').textContent=`Projekt-PDF wird erstellt: ${i+1} von ${sheets.length} Seiten …`;await new Promise(r=>setTimeout(r,0));
   }
