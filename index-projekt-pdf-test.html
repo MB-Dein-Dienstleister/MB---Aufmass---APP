@@ -468,7 +468,9 @@ async function exportProjectPdf(){
     const trailer=new TextEncoder().encode(`\n%${PDF_DATA_BEGIN}\n${encoded}\n%${PDF_DATA_END}\n`);
     const blob=new Blob([pdf.output('arraybuffer'),trailer],{type:'application/pdf'});
     const filename=`${cleanName(state.project.projectNo)}_${cleanName(state.project.projectName||state.project.customer||'Aufmass')}.pdf`;
-    await dl(filename,blob,'application/pdf');
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),3000);
     if(status)status.textContent=`Fertig: ${filename} enthält Druckseiten und Projektdaten.`;
   }catch(e){console.error('Projekt-PDF konnte nicht erstellt werden:',e);if(status)status.textContent='Fehler beim Erstellen der Projekt-PDF.';alert('Die Projekt-PDF konnte nicht erstellt werden. Bitte lade die App neu und versuche es noch einmal.')}finally{stage.remove();document.body.style.cursor=''}
 }
