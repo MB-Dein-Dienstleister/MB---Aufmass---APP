@@ -54,6 +54,7 @@
 #landing-tile{background:linear-gradient(120deg,#25445d,#8c9aa4)}#landing-water{background:linear-gradient(120deg,#15552d,#4d8d5f)}
 .v2-top-module{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border-radius:999px;background:#eef3f7;color:var(--navy);font-size:11px;font-weight:900;margin-top:5px}.v2-top-module.water{background:#e7f4eb;color:var(--mbgreen2)}.v2-top-module.tile{background:#e8edf1;color:#405d73}
 body.module-water .side{background:linear-gradient(180deg,var(--mbgreen),var(--mbgreen2))}body.module-water .btn.primary{background:var(--mbgreen);border-color:var(--mbgreen)}
+.v2-top-module.cover{background:#f5ecda;color:#725313}.cover-workspace{display:none;height:calc(100vh - 99px);min-height:720px;background:#eceff2}.cover-workspace.active{display:block}.cover-workspace iframe{display:block;width:100%;height:100%;border:0;background:#f3f5f7}
 @media(max-width:620px){.module-trigger{min-width:54px;width:54px;font-size:0;padding:10px}.module-trigger .hamb{font-size:22px}.module-trigger span:not(.hamb){display:none}.module-dialog{border-radius:16px}.module-card{grid-template-columns:44px 1fr auto;font-size:15px;padding:15px}.module-landing{padding:16px}.landing-inner{margin-top:10px}.landing-inner p{font-size:15px}}
 
 
@@ -73,6 +74,7 @@ body.module-water .side{background:linear-gradient(180deg,var(--mbgreen),var(--m
 .print-fixed-legend{border-top:2px solid #c9a454;padding-top:7px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px 10px;font-size:9px;line-height:1.25}
 .print-legend-item{display:flex;align-items:center;gap:6px;min-width:0}.print-legend-line{width:29px;min-width:29px;height:0;border-top:4px solid #111}.print-legend-line.raw{border-top:2px dashed #9aa3ae}.print-legend-line.edge{border-color:#c9a454}.print-legend-line.water{border-color:#2876b7}.print-legend-line.control{border-top:2px dashed #2d8a57}.print-legend-line.front{border-color:#b54848}
 .print-note{font-size:8.5px;color:#5d6875;margin-top:5px}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:12px}.photo-item{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}.photo-item img{display:block;width:100%;height:120px;object-fit:cover}.photo-item div{padding:7px;font-size:11px;display:flex;justify-content:space-between;gap:5px;align-items:center}.photo-item button{border:0;background:#fff1f1;color:var(--danger);border-radius:6px;padding:4px 6px;cursor:pointer}.print-photo{width:100%;height:210mm;object-fit:contain;background:#fff}
 @media print{
   .element-sheet{height:275mm!important;min-height:275mm!important;max-height:275mm!important;padding:4mm!important}
   .element-sheet svg{height:112mm!important;max-height:112mm!important;border:0!important}
@@ -90,7 +92,7 @@ body.module-water .side{background:linear-gradient(180deg,var(--mbgreen),var(--m
   <div class="start-claim">Ein Tool.<br>Vier Bereiche.<br>Deine Projekte.</div>
   <div class="start-menu">
    <button class="start-card stone" onclick="enterModule('stone')"><span class="sico">▟</span><span class="stxt">Naturstein &amp;<br>Treppenaufmaß</span><span class="sarr">›</span></button>
-   <button class="start-card stone" onclick="location.href='MB_Aufmass_Mauerabdeckung_V4_Alle6_Druck.html'"><span class="sico">▱</span><span class="stxt">Mauerabdeckungs-<br>Aufmaß</span><span class="sarr">›</span></button>
+   <button class="start-card stone" onclick="enterModule('cover')"><span class="sico">▱</span><span class="stxt">Mauerabdeckungs-<br>Aufmaß</span><span class="sarr">›</span></button>
    <button class="start-card tile" onclick="enterModule('tile')"><span class="sico">▦</span><span class="stxt">Fliesen-Aufmaß</span><span class="sarr">›</span></button>
    <button class="start-card water" onclick="enterModule('water')"><span class="sico">◒</span><span class="stxt">Bewässerungsplanung</span><span class="sarr">›</span></button>
   </div>
@@ -103,14 +105,14 @@ body.module-water .side{background:linear-gradient(180deg,var(--mbgreen),var(--m
   <div class="brand"><img src="mb-logo.png" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="brand-fallback" style="display:none">MB AUFMASS</div></div>
   <button class="module-trigger" onclick="openModuleMenu()"><span class="hamb">☰</span><span><small>BEREICH</small><span id="moduleTriggerText">Naturstein & Treppen</span></span><span>›</span></button>
   <button class="home-start-btn" onclick="showStartScreen()">⌂ Start / Bereiche</button>
-  <div class="nav">
-    <button data-icon="⌂" class="active" onclick="showPage('project',this)">ÜBERSICHT / PROJEKT</button>
-    <button data-icon="↔" onclick="showPage('stairs',this)">TREPPEN-AUFMASS</button>
-    <button data-icon="▤" onclick="showPage('risers',this)">SETZSTUFEN</button>
-    <button data-icon="▦" onclick="showPage('podest',this)">PODEST / PLATTEN</button>
-    <button data-icon="◇" onclick="showPage('free',this)">FREIKÖRPER</button>
-    <button data-icon="⇩" onclick="showPage('import',this)">IMPORT</button>
-    <button data-icon="▣" onclick="showPage('summary',this)">FERTIGUNG / EXPORT</button>
+  <div class="nav" id="mainNav">
+    <button id="nav1" data-icon="⌂" class="active" onclick="showPage('project',this)">ÜBERSICHT / PROJEKT</button>
+    <button id="nav2" data-icon="↔" onclick="showPage('stairs',this)">TREPPEN-AUFMASS</button>
+    <button id="nav3" data-icon="▤" onclick="showPage('risers',this)">SETZSTUFEN</button>
+    <button id="nav4" data-icon="▦" onclick="showPage('podest',this)">PODEST / PLATTEN</button>
+    <button id="nav5" data-icon="◇" onclick="showPage('free',this)">FREIKÖRPER</button>
+    <button id="nav6" data-icon="⇩" onclick="showPage('import',this)">IMPORT</button>
+    <button id="nav7" data-icon="▣" onclick="showPage('summary',this)">FERTIGUNG / EXPORT</button>
   </div>
   <div class="version">MB Aufmaß V1.0<br>Fertigungs-Arbeitsstand</div>
 </aside>
@@ -118,7 +120,7 @@ body.module-water .side{background:linear-gradient(180deg,var(--mbgreen),var(--m
 <header class="top">
   <div class="toprow">
     <div class="title"><h1>MB AUFMASS</h1><small id="moduleSubtitle">NATURSTEIN · TREPPEN · PLATTEN · V1.0</small><div id="moduleBadge" class="v2-top-module">▰ Naturstein & Treppenaufmaß</div></div>
-    <div class="actions">
+    <div class="actions" id="topActions">
       <button class="btn primary" onclick="newProject()">Neues Projekt</button><button class="btn" onclick="saveLocal()">Zwischenspeichern</button>
       <button class="btn" onclick="showProjects()">Projekte auf diesem Gerät</button>
       <label class="btn" for="projectPdfInput">Projekt-PDF öffnen</label>
@@ -128,6 +130,7 @@ body.module-water .side{background:linear-gradient(180deg,var(--mbgreen),var(--m
   </div>
 </header>
 <main class="main">
+<section id="landing-cover" class="cover-workspace"><iframe id="coverFrame" title="Mauerabdeckungs-Aufmaß" src="mauerabdeckung-test-v2.html?embed=1"></iframe></section>
 <section id="landing-tile" class="module-landing tile"><div class="landing-inner"><span class="landing-badge">MB AUFMASS · FLIESEN</span><h2>Fliesen-Aufmaß</h2><p>Flächen erfassen, Fliesenformate und Fugen planen, Wand- und Bodenaufteilungen vergleichen und Materialbedarf sauber vorbereiten.</p><div class="landing-actions"><button class="landing-btn primary" onclick="alert('Fliesen-Aufmaß wird als nächstes Fachmodul aufgebaut. Die stabile Naturstein-Version bleibt dabei unangetastet.')">Neues Fliesen-Aufmaß</button><button class="landing-btn" onclick="openModuleMenu()">Bereich wechseln</button></div></div></section>
 <section id="landing-water" class="module-landing water"><div class="landing-inner"><span class="landing-badge">MB AUFMASS · BEWÄSSERUNG</span><h2>Bewässerungsplanung</h2><p>Rasen, Beete und Zonen planen, Regner und Tropfrohr platzieren, Leitungswege prüfen und Materialbedarf aus dem Plan ableiten.</p><div class="landing-actions"><button class="landing-btn primary" onclick="alert('Bewässerungsplanung wird als eigenes grünes Fachmodul aufgebaut.')">Neue Bewässerungsplanung</button><button class="landing-btn" onclick="openModuleMenu()">Bereich wechseln</button></div></div></section>
 <section id="page-project" class="page active">
@@ -147,6 +150,7 @@ body.module-water .side{background:linear-gradient(180deg,var(--mbgreen),var(--m
       <div class="field" style="margin-top:10px"><label>Notizen</label><textarea id="notes" oninput="syncProject()"></textarea></div>
     </div>
     <div class="card"><h2>Workflow</h2><p class="note">Rohmaß bleibt unverändert. Überstände und Bearbeitungen erzeugen daraus das Fertigungselement. Jede Trittstufe, Setzstufe und Podestplatte kann einzeln als DXF exportiert und im Fertigblatt gezeichnet werden.</p><div id="projectStats" class="banner"></div><p class="note"><b>Zwischenspeichern</b> sichert den Arbeitsstand auf diesem Gerät. Mit <b>Projekt-PDF speichern</b> erhältst du eine einzige PDF zum Versenden, Drucken und späteren Weiterbearbeiten. Über <b>Projekt-PDF öffnen</b> lädst du diese PDF wieder vollständig in die App.</p></div>
+    <div class="card" style="grid-column:1/-1"><div class="section-title"><h2>Aufmaßfotos / Baustelle</h2><label class="btn primary" for="projectPhotoInput">+ Fotos hinzufügen</label></div><p class="note">Optional: Übersicht, Anschlüsse, Schäden oder Einbausituation fotografieren. Die Bilder werden verkleinert und direkt in der Projekt-PDF mitgespeichert.</p><div id="projectPhotos" class="photo-grid"></div></div>
   </div>
 </section>
 
@@ -238,13 +242,14 @@ body.module-water .side{background:linear-gradient(180deg,var(--mbgreen),var(--m
 <input id="jsonInput" type="file" accept=".json,application/json,text/plain" aria-label="JSON-Projektdatei auswählen" style="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0" onchange="importJsonFile(this.files[0],this)">
 <input id="projectPdfInput" type="file" accept=".pdf,application/pdf" aria-label="MB-Projekt-PDF auswählen" style="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0" onchange="importProjectPdf(this.files[0],this)">
 <input id="measureInput" class="hidden" type="file" accept=".dxf,.csv,.pdf,application/pdf,text/csv" onchange="importMeasureFile(this.files[0])">
+<input id="projectPhotoInput" type="file" accept="image/*" multiple style="position:fixed;left:-10000px;top:0;width:1px;height:1px;opacity:0" onchange="addProjectPhotos(this.files);this.value=''">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const EDGE_OPTIONS=['Keine','Poliert','Gefast','Poliert + gefast','Poliert + Wassernase','Wassernase','Gehrung'];
 const KEY='mb_aufmass_projects_v07';
 const OLD_KEY='mb_aufmass_projects_v06';
-let state={project:{projectNo:'MB-2026-0001',date:new Date().toISOString().slice(0,10),author:'Maik Bielefeldt',status:'Aufmaß',projectName:'Außentreppe und Veranda',customer:'',address:'',material:'Granit 20 mm',notes:''},stairs:[],risers:[],podest:{rawW:3180,rawD:2970,finW:3180,finD:3000,cols:4,rows:4,joint:5,thick:20,plates:[]},free:[],imports:[]};
+let state={project:{projectNo:'MB-2026-0001',date:new Date().toISOString().slice(0,10),author:'Maik Bielefeldt',status:'Aufmaß',projectName:'Außentreppe und Veranda',customer:'',address:'',material:'Granit 20 mm',notes:'',photos:[]},stairs:[],risers:[],podest:{rawW:3180,rawD:2970,finW:3180,finD:3000,cols:4,rows:4,joint:5,thick:20,plates:[]},free:[],imports:[]};
 let currentStair=0,currentRiser=0,currentPlate=0,currentFree=0,stairView='top';
 const $=id=>document.getElementById(id);
 function esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));}
@@ -253,7 +258,11 @@ function fmt(v){return (Math.round(v*10)/10).toLocaleString('de-DE',{minimumFrac
 function blankEdges(){return {front:'Keine',back:'Keine',left:'Keine',right:'Keine'}}
 function showPage(name,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$('page-'+name).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');if(name==='stairs')renderStairs();if(name==='risers')renderRisers();if(name==='podest')renderPodest();if(name==='free')renderFree();if(name==='import')renderImport();if(name==='summary'){renderSummary();buildPrintSheets()}if(name==='project')renderStats();window.scrollTo({top:0,behavior:'smooth'})}
 function syncProject(){['projectNo','date','author','status','projectName','customer','address','material','notes'].forEach(k=>state.project[k]=$(k).value);renderStats();autoSave()}
-function fillProject(){Object.keys(state.project).forEach(k=>{if($(k))$(k).value=state.project[k]??''});}
+function fillProject(){state.project.photos=state.project.photos||[];Object.keys(state.project).forEach(k=>{if($(k)&&k!=='photos')$(k).value=state.project[k]??''});renderProjectPhotos()}
+async function compressProjectPhoto(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=reject;reader.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{const max=1200,scale=Math.min(1,max/Math.max(img.width,img.height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);resolve({id:Date.now()+Math.random(),name:file.name||'Aufmaßfoto',data:canvas.toDataURL('image/jpeg',.68),addedAt:new Date().toISOString()})};img.src=reader.result};reader.readAsDataURL(file)})}
+async function addProjectPhotos(files){state.project.photos=state.project.photos||[];for(const file of [...files]){try{state.project.photos.push(await compressProjectPhoto(file))}catch(e){console.error('Foto:',e)}}renderProjectPhotos();autoSave()}
+function removeProjectPhoto(id){state.project.photos=(state.project.photos||[]).filter(x=>String(x.id)!==String(id));renderProjectPhotos();autoSave()}
+function renderProjectPhotos(){const box=$('projectPhotos');if(!box)return;const a=state.project.photos||[];box.innerHTML=a.length?a.map(x=>`<div class="photo-item"><img src="${x.data}" alt="${esc(x.name)}"><div><span>${esc(x.name)}</span><button onclick="removeProjectPhoto('${x.id}')">Entfernen</button></div></div>`).join(''):'<p class="note">Noch keine Aufmaßfotos hinterlegt.</p>'}
 function renderStats(){state.free=state.free||[];$('projectStats').innerHTML=`<b>${state.stairs.length}</b> Trittstufen · <b>${state.risers.length}</b> Setzstufen · <b>${state.podest.plates.length}</b> Podestplatten · <b>${state.free.length}</b> Freikörper · insgesamt <b>${state.stairs.length+state.risers.length+state.podest.plates.length+state.free.length}</b> Fertigungselemente`}
 function addStair(data={}){state.stairs.push({name:`Trittstufe ${state.stairs.length+1}`,backW:1600,frontW:1600,leftD:330,rightD:330,overL:0,overR:0,overF:0,thick:20,edges:blankEdges(),surface:(state.project.defaults?.surfaceTread||'geflammt'),rightAngle:'back-left',diag1:'',diag2:'',...data});currentStair=state.stairs.length-1;renumberStairs();renderStairs();autoSave()}
 function deleteStair(){if(!state.stairs.length)return;if(!confirm(`${state.stairs[currentStair].name} wirklich löschen?`))return;state.stairs.splice(currentStair,1);currentStair=Math.max(0,Math.min(currentStair,state.stairs.length-1));renumberStairs();renderStairs();autoSave()}
@@ -302,7 +311,8 @@ function v1RiserMeasureRays(P,p,ff,cx=310,cy=195){
  const lA={x:minX,y:topY},lB={x:minX,y:P[3].y},rA={x:maxX,y:topY},rB={x:maxX,y:P[2].y};
  const left=v1MeasureRay(lB,lA,`L ${fmt(ff.l)} mm`,10000,cy,30);
  const right=v1MeasureRay(rA,rB,`R ${fmt(ff.r)} mm`,-10000,cy,30);
- return top+bottom+left+right;
+ const tm={x:(P[0].x+P[1].x)/2,y:(P[0].y+P[1].y)/2},bm={x:(P[3].x+P[2].x)/2,y:(P[3].y+P[2].y)/2},middle=v1MeasureRay(tm,bm,`M ${fmt(ff.m)} mm`,-10000,cy,72);
+ return top+bottom+left+middle+right;
 }
 function frontMarker(x,y,label='VORNE'){return `<g><text x="${x}" y="${y}" text-anchor="middle" font-size="13" font-weight="800" fill="#b54848">${label} ↓</text></g>`}
 function renderStairSvg(){if(!state.stairs.length)return;const p=state.stairs[currentStair];if(stairView==='front'){const f=stairFinish(p);$('stairSvg').innerHTML=`<svg viewBox="0 0 620 390"><rect x="90" y="145" width="440" height="${Math.max(18,num(p.thick)*2.2)}" fill="#e8e4d8" stroke="#111" stroke-width="2"/><line x1="90" y1="145" x2="530" y2="145" stroke="${edgeColor(p.edges.front)}" stroke-width="6"/><text x="310" y="120" text-anchor="middle" font-size="16">Breite vorne ${fmt(f.frontW)} mm</text><text x="310" y="235" text-anchor="middle" font-size="15">Plattenstärke ${fmt(p.thick)} mm</text>${frontMarker(310,285)}</svg>`;return}
@@ -318,10 +328,10 @@ function renumberRisers(){state.risers.forEach((p,i)=>p.name=`Setzstufe ${i+1}`)
 function moveRiserTo(pos){if(!state.risers.length)return;let to=Math.max(0,Math.min(state.risers.length-1,Math.round(num(pos))-1));let from=currentRiser;if(to===from)return;const [item]=state.risers.splice(from,1);state.risers.splice(to,0,item);currentRiser=to;renumberRisers();renderRisers();renderStats();renderSummary();buildPrintSheets();autoSave()}
 function moveRiserStep(dir){moveRiserTo(currentRiser+1+dir)}
 function deleteRiser(){if(!state.risers.length)return;if(!confirm(`${state.risers[currentRiser].name} wirklich löschen?`))return;state.risers.splice(currentRiser,1);currentRiser=Math.max(0,Math.min(currentRiser,state.risers.length-1));renumberRisers();renderRisers();autoSave()}
-function renderRisers(){v1init();const chips=$('riserChips');chips.innerHTML=state.risers.map((p,i)=>`<button class="chip ${i===currentRiser?'active':''}" onclick="currentRiser=${i};renderRisers()">${p.name}</button>`).join('');if(!state.risers.length){$('riserForm').innerHTML='<h3>Noch keine Setzstufe</h3><button class="btn primary" onclick="addRiser()">Erste Setzstufe anlegen</button>';$('riserSvg').innerHTML='';$('riserEdges').innerHTML='';return}const p=state.risers[currentRiser],ff=v1RiserFinished(p);$('riserForm').innerHTML=`<div class="section-title"><h3>${p.name}</h3><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="btn small" onclick="moveRiserStep(-1)" ${currentRiser===0?'disabled':''}>↑</button><button class="btn small" onclick="moveRiserStep(1)" ${currentRiser===state.risers.length-1?'disabled':''}>↓</button><span class="note" style="margin:0">Position</span><input type="number" min="1" max="${state.risers.length}" value="${currentRiser+1}" style="width:68px" onchange="moveRiserTo(this.value)"><button class="btn danger small" onclick="deleteRiser()">Setzstufe löschen</button></div></div><div class="fields" style="grid-template-columns:1fr 1fr"><div class="field"><label>Breite oben mm</label><input type="number" value="${p.topW}" oninput="riserSet('topW',this.value)"></div><div class="field"><label>Breite unten mm</label><input type="number" value="${p.bottomW}" oninput="riserSet('bottomW',this.value)"></div><div class="field"><label>Rohhöhe links mm</label><input type="number" value="${p.hL}" oninput="riserSet('hL',this.value)"></div><div class="field"><label>Rohhöhe rechts mm</label><input type="number" value="${p.hR}" oninput="riserSet('hR',this.value)"></div><div class="field"><label>Stärke mm</label><input type="number" value="${p.thick}" oninput="riserSet('thick',this.value)"></div><div class="field"><label>Oberfläche</label>${v1SurfaceSelect(p.surface,"state.risers[currentRiser].surface=this.value;autoSave()")}</div><div class="field"><label>90° Referenzecke</label>${v1AngleSelect(p.rightAngle,"state.risers[currentRiser].rightAngle=this.value;renderRiserSvg();autoSave()",'riser')}</div></div><div class="v1panel" style="margin-top:12px"><h3 style="margin-top:0">Aufbau / Abzüge Setzstufe</h3><div class="v1grid"><div class="field"><label>Trittstufenstärke mm</label><input type="number" step="0.5" value="${state.project.defaults.riserTreadThickness}" onchange="v1SetDefault('riserTreadThickness',this.value);renderRisers()"></div><div class="field"><label>Fuge oben mm</label><input type="number" step="0.5" value="${state.project.defaults.jointTop}" onchange="v1SetDefault('jointTop',this.value);renderRisers()"></div><div class="field"><label>Fuge unten mm</label><input type="number" step="0.5" value="${state.project.defaults.jointBottom}" onchange="v1SetDefault('jointBottom',this.value);renderRisers()"></div><div class="field"><label>Drainage / Entkopplung mm</label><input type="number" step="0.5" value="${state.project.defaults.drainage}" onchange="v1SetDefault('drainage',this.value);renderRisers()"></div><div class="field"><label>Kleberbett mm</label><input type="number" step="0.5" value="${state.project.defaults.adhesive}" onchange="v1SetDefault('adhesive',this.value);renderRisers()"></div></div><p class="note" style="margin-bottom:0"><b>Aktueller Fertigmaß-Abzug:</b> Trittstufenstärke + Fuge oben + Fuge unten. Drainage/Entkopplung und Kleberbett werden dokumentiert, aber nicht automatisch vom Setzstufenmaß abgezogen.</p></div><p class="banner"><b>Berechnung Fertighöhe:</b> Rohhöhe − ${fmt(ff.sub)} mm (${fmt(ff.tread)} mm Trittstufe + ${fmt(state.project.defaults.jointTop)} mm Fuge oben + ${fmt(state.project.defaults.jointBottom)} mm Fuge unten)<br><b>Aufbau dokumentiert:</b> Drainage/Entkopplung ${fmt(ff.drainage)} mm · Kleberbett ${fmt(ff.adhesive)} mm<br><b>Fertigmaß L/R:</b> ${fmt(ff.l)} / ${fmt(ff.r)} mm · <b>Oberfläche:</b> ${esc(p.surface)}</p>`;renderEdges('riserEdges',p.edges,'riserEdgeSet');renderRiserSvg()}
+function renderRisers(){v1init();const chips=$('riserChips');chips.innerHTML=state.risers.map((p,i)=>`<button class="chip ${i===currentRiser?'active':''}" onclick="currentRiser=${i};renderRisers()">${p.name}</button>`).join('');if(!state.risers.length){$('riserForm').innerHTML='<h3>Noch keine Setzstufe</h3><button class="btn primary" onclick="addRiser()">Erste Setzstufe anlegen</button>';$('riserSvg').innerHTML='';$('riserEdges').innerHTML='';return}const p=state.risers[currentRiser],ff=v1RiserFinished(p);p.hM=p.hM??((num(p.hL)+num(p.hR))/2);$('riserForm').innerHTML=`<div class="section-title"><h3>${p.name}</h3><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="btn small" onclick="moveRiserStep(-1)" ${currentRiser===0?'disabled':''}>↑</button><button class="btn small" onclick="moveRiserStep(1)" ${currentRiser===state.risers.length-1?'disabled':''}>↓</button><span class="note" style="margin:0">Position</span><input type="number" min="1" max="${state.risers.length}" value="${currentRiser+1}" style="width:68px" onchange="moveRiserTo(this.value)"><button class="btn danger small" onclick="deleteRiser()">Setzstufe löschen</button></div></div><div class="fields" style="grid-template-columns:1fr 1fr"><div class="field"><label>Breite oben mm</label><input type="number" value="${p.topW}" oninput="riserSet('topW',this.value)"></div><div class="field"><label>Breite unten mm</label><input type="number" value="${p.bottomW}" oninput="riserSet('bottomW',this.value)"></div><div class="field"><label>Rohhöhe links mm</label><input type="number" value="${p.hL}" oninput="riserSet('hL',this.value)"></div><div class="field"><label>Rohhöhe Mitte mm</label><input type="number" value="${p.hM}" oninput="riserSet('hM',this.value)"></div><div class="field"><label>Rohhöhe rechts mm</label><input type="number" value="${p.hR}" oninput="riserSet('hR',this.value)"></div><div class="field"><label>Stärke mm</label><input type="number" value="${p.thick}" oninput="riserSet('thick',this.value)"></div><div class="field"><label>Oberfläche</label>${v1SurfaceSelect(p.surface,"state.risers[currentRiser].surface=this.value;autoSave()")}</div><div class="field"><label>90° Referenzecke</label>${v1AngleSelect(p.rightAngle,"state.risers[currentRiser].rightAngle=this.value;renderRiserSvg();autoSave()",'riser')}</div></div><div class="v1panel" style="margin-top:12px"><h3 style="margin-top:0">Aufbau / Abzüge Setzstufe</h3><div class="v1grid"><div class="field"><label>Trittstufenstärke mm</label><input type="number" step="0.5" value="${state.project.defaults.riserTreadThickness}" onchange="v1SetDefault('riserTreadThickness',this.value);renderRisers()"></div><div class="field"><label>Fuge oben mm</label><input type="number" step="0.5" value="${state.project.defaults.jointTop}" onchange="v1SetDefault('jointTop',this.value);renderRisers()"></div><div class="field"><label>Fuge unten mm</label><input type="number" step="0.5" value="${state.project.defaults.jointBottom}" onchange="v1SetDefault('jointBottom',this.value);renderRisers()"></div><div class="field"><label>Drainage / Entkopplung mm</label><input type="number" step="0.5" value="${state.project.defaults.drainage}" onchange="v1SetDefault('drainage',this.value);renderRisers()"></div><div class="field"><label>Kleberbett mm</label><input type="number" step="0.5" value="${state.project.defaults.adhesive}" onchange="v1SetDefault('adhesive',this.value);renderRisers()"></div></div><p class="note" style="margin-bottom:0"><b>Aktueller Fertigmaß-Abzug:</b> Trittstufenstärke + Fuge oben + Fuge unten. Drainage/Entkopplung und Kleberbett werden dokumentiert, aber nicht automatisch vom Setzstufenmaß abgezogen.</p></div><p class="banner"><b>Berechnung Fertighöhe:</b> Rohhöhe − ${fmt(ff.sub)} mm (${fmt(ff.tread)} mm Trittstufe + ${fmt(state.project.defaults.jointTop)} mm Fuge oben + ${fmt(state.project.defaults.jointBottom)} mm Fuge unten)<br><b>Aufbau dokumentiert:</b> Drainage/Entkopplung ${fmt(ff.drainage)} mm · Kleberbett ${fmt(ff.adhesive)} mm<br><b>Fertigmaß L/M/R:</b> ${fmt(ff.l)} / ${fmt(ff.m)} / ${fmt(ff.r)} mm · <b>Oberfläche:</b> ${esc(p.surface)}</p>`;renderEdges('riserEdges',p.edges,'riserEdgeSet');renderRiserSvg()}
 function riserSet(k,v){state.risers[currentRiser][k]=num(v);renderRiserSvg();autoSave()}function riserEdgeSet(e,v){state.risers[currentRiser].edges[e]=v;renderRiserSvg();autoSave()}
 function riserPoints(p){const ff=v1RiserFinished(p),mw=Math.max(num(p.topW),num(p.bottomW),1),xt=(mw-num(p.topW))/2,xb=(mw-num(p.bottomW))/2;return [{x:xt,y:0},{x:xt+num(p.topW),y:0},{x:xb+num(p.bottomW),y:ff.r},{x:xb,y:ff.l}]}
-function renderRiserSvg(){if(!state.risers.length)return;const p=state.risers[currentRiser],ff=v1RiserFinished(p),pts=riserPoints(p),map=fitSvg(pts),P=pts.map(map);let s=`<svg viewBox="0 0 620 390"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="#f1eee4" stroke="#111" stroke-width="2"/>`;[[0,1,'back'],[1,2,'right'],[2,3,'front'],[3,0,'left']].forEach(([a,b,e])=>{s+=`<line x1="${P[a].x}" y1="${P[a].y}" x2="${P[b].x}" y2="${P[b].y}" stroke="${edgeColor(p.edges[e])}" stroke-width="${p.edges[e]==='Keine'?3:6}"/><line class="v1hit" x1="${P[a].x}" y1="${P[a].y}" x2="${P[b].x}" y2="${P[b].y}" onclick="v1EdgePopup('riser',${currentRiser},'${e}',event)"/>`});s+=`${v1RiserMeasureRays(P,p,ff,310,195)}${frontMarker(310,345)}${v1AngleLabels(pts,P)}${v1AngleMarkAt(P,v1CornerIndex(p.rightAngle,'riser'))}</svg>`;$('riserSvg').innerHTML=s}
+function renderRiserSvg(){if(!state.risers.length)return;const p=state.risers[currentRiser],ff=v1RiserFinished(p),pts=riserPoints(p),map=fitSvg(pts),P=pts.map(map);let s=`<svg viewBox="0 0 620 390"><polygon points="${P.map(q=>`${q.x},${q.y}`).join(' ')}" fill="#f1eee4" stroke="#111" stroke-width="2"/>`;[[0,1,'back'],[1,2,'right'],[2,3,'front'],[3,0,'left']].forEach(([a,b,e])=>{s+=`<line x1="${P[a].x}" y1="${P[a].y}" x2="${P[b].x}" y2="${P[b].y}" stroke="${edgeColor(p.edges[e])}" stroke-width="${p.edges[e]==='Keine'?3:6}"/><line class="v1hit" x1="${P[a].x}" y1="${P[a].y}" x2="${P[b].x}" y2="${P[b].y}" onclick="v1EdgePopup('riser',${currentRiser},'${e}',event)"/>`});s+=`${v1RiserMeasureRays(P,p,ff,310,195)}${frontMarker(310,345)}${v1AngleLabels(pts,P)}${v1AngleMarkAt(P,v1CornerIndex(p.rightAngle,'riser'))}</svg>`;$('riserSvg').innerHTML=s;const warning=v1RiserWarning(p,ff),banner=[...$('riserForm').querySelectorAll('.banner')].pop();if(warning&&banner&&!banner.querySelector('.riser-warning'))banner.insertAdjacentHTML('beforeend',`<span class="riser-warning">${warning}</span>`)}
 function podChanged(update=true){state.podest.rawW=num($('podRawW').value);state.podest.rawD=num($('podRawD').value);state.podest.finW=num($('podFinW').value);state.podest.finD=num($('podFinD').value);state.podest.cols=Math.max(1,parseInt($('podCols').value)||1);state.podest.rows=Math.max(1,parseInt($('podRows').value)||1);state.podest.joint=num($('podJoint').value);state.podest.thick=num($('podThick').value,20);renderPodCalc();if(update)renderPlateGrid();autoSave()}
 function plateDims(){const p=state.podest,w=(p.finW-(p.cols-1)*p.joint)/p.cols,d=(p.finD-(p.rows-1)*p.joint)/p.rows;return {w,d}}
 function renderPodCalc(){const {w,d}=plateDims();$('podCalc').innerHTML=`<b>Regelmaß:</b> ${fmt(w)} × ${fmt(d)} mm · ${state.podest.cols*state.podest.rows} Platten · ${state.podest.cols-1} Längsfugen / ${state.podest.rows-1} Querfugen`}
@@ -434,7 +444,7 @@ function bytesToBase64(bytes){let out='';const size=32768;for(let i=0;i<bytes.le
 function base64ToBytes(text){const raw=atob(text),out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out}
 function validateProjectState(imported){
   if(!imported?.project||!Array.isArray(imported.stairs)||!Array.isArray(imported.risers)||!imported.podest||!Array.isArray(imported.podest.plates))throw new Error('Kein gültiges Treppen-/Veranda-Projekt');
-  imported.free=imported.free||[];imported.imports=imported.imports||[];return imported;
+  imported.free=imported.free||[];imported.imports=imported.imports||[];imported.project.photos=imported.project.photos||[];return imported;
 }
 async function importProjectPdf(file,input){
   if(!file)return;const reset=()=>{if(input)input.value=''};
@@ -475,14 +485,22 @@ function mbPrintData(items){
 function mbPrintSheet(title,items,measureText,edges,svg){
  return `<div class="element-sheet">${mbSheetHeader(title)}${mbPrintData(items)}<div class="print-drawing"><div class="print-drawing-title">Fertigungszeichnung · alle Maßstrahlen außerhalb der Kontur</div>${svg}</div><div class="print-measures"><b>Maßangaben in Textform:</b> ${esc(measureText)}<div class="print-edge-summary"><b>Kantenbearbeitung:</b> ${esc(edgeText(edges))}</div></div>${mbPrintLegend()}</div>`;
 }
+function mbProjectCoverSheet(){
+ const rows=[];
+ state.stairs.forEach(p=>{const f=stairFinish(p);rows.push([p.name,`Trittstufe · ${fmt(f.frontW)} × L${fmt(f.leftD)}/R${fmt(f.rightD)} mm`])});
+ state.risers.forEach(p=>{const f=v1RiserFinished(p);rows.push([p.name,`Setzstufe · ${fmt(p.topW)}/${fmt(p.bottomW)} × H ${fmt(f.l)}/${fmt(f.m)}/${fmt(f.r)} mm`])});
+ (state.podest.plates||[]).forEach(p=>rows.push([`Podest ${p.name}`,`${fmt(p.w)} × ${fmt(p.d)} × ${fmt(p.thick)} mm`]));
+ (state.free||[]).forEach(p=>rows.push([p.name,`Sonderteil · ${fmt(p.w)} × ${fmt(p.d)} × ${fmt(p.thick)} mm`]));
+ return `<div class="element-sheet">${mbSheetHeader('Auftragsübersicht')}${mbPrintData([['Projektnummer',state.project.projectNo],['Status',state.project.status],['Kunde',state.project.customer||'—'],['Bearbeiter',state.project.author],['Adresse / Baustelle',state.project.address||'—'],['Aufmaßdatum',state.project.date],['Material',state.project.material],['Elemente',rows.length]])}<div class="print-drawing"><div class="print-drawing-title">Bauteilübersicht</div><table class="summarytable"><thead><tr><th>Bauteil</th><th>Art / Fertigmaß</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>${mbPrintLegend()}</div>`;
+}
 function buildStandardPrintSheets(){
- const a=[];
+ const a=[mbProjectCoverSheet()];
  state.stairs.forEach(p=>{
   const f=stairFinish(p),measure=`Hinten ${fmt(f.backW)} mm · vorne ${fmt(f.frontW)} mm · Tiefe links ${fmt(f.leftD)} mm · Tiefe rechts ${fmt(f.rightD)} mm · Stärke ${fmt(p.thick)} mm${p.diag1?` · D1 ${fmt(p.diag1)} mm`:''}${p.diag2?` · D2 ${fmt(p.diag2)} mm`:''}`;
   a.push(mbPrintSheet(`${state.project.projectNo} · ${p.name}`,[['Bauteil','Trittstufe'],['Oberfläche',v1SurfaceText('Trittstufe',p)],['90° / Winkel',v1StairAngleText(p)],['Einbaulage','Vorderkante siehe roter Pfeil']],measure,p.edges,svgForStair(p)));
  });
  state.risers.forEach(p=>{
-  const ff=v1RiserFinished(p),measure=`Breite oben ${fmt(p.topW)} mm · Breite unten ${fmt(p.bottomW)} mm · Fertighöhe links ${fmt(ff.l)} mm · Fertighöhe rechts ${fmt(ff.r)} mm · Stärke ${fmt(p.thick)} mm`;
+  const ff=v1RiserFinished(p),measure=`Breite oben ${fmt(p.topW)} mm · Breite unten ${fmt(p.bottomW)} mm · Fertighöhe links ${fmt(ff.l)} mm · Mitte ${fmt(ff.m)} mm · rechts ${fmt(ff.r)} mm · Stärke ${fmt(p.thick)} mm`;
   a.push(mbPrintSheet(`${state.project.projectNo} · ${p.name}`,[['Bauteil','Setzstufe'],['Oberfläche',v1SurfaceText('Setzstufe',p)],['90°-Referenz',v1AngleName(p.rightAngle,'riser')],['Winkel',v1AngleTextForPoints(riserPoints(p))]],measure,p.edges,svgForRiser(p)));
  });
  state.free=(state.free||[]);
@@ -496,6 +514,7 @@ function buildStandardPrintSheets(){
   const measure=`Breite ${fmt(p.w)} mm · Tiefe ${fmt(p.d)} mm · Stärke ${fmt(p.thick)} mm${cutText}`;
   a.push(mbPrintSheet(`${state.project.projectNo} · Podest ${p.name}`,[['Bauteil','Podestplatte'],['Position',`Reihe ${p.row||'—'} · Spalte ${p.col||'—'}`],['Oberfläche',v1SurfaceText('Podestplatte',p)],['Einbaulage','Vorderkante siehe roter Pfeil']],measure,p.edges,svgForPlate(p)));
  });
+ (state.project.photos||[]).forEach((photo,i)=>a.push(`<div class="element-sheet">${mbSheetHeader(`Aufmaßfoto ${i+1}`)}<div class="print-data-grid"><div class="print-data-item"><span class="print-data-label">Datei / Motiv</span><span class="print-data-value">${esc(photo.name||('Aufmaßfoto '+(i+1)))}</span></div><div class="print-data-item"><span class="print-data-label">Zuordnung</span><span class="print-data-value">${esc(state.project.projectName||state.project.projectNo)}</span></div></div><img class="print-photo" src="${photo.data}" alt="Aufmaßfoto ${i+1}"><div class="print-note">Aufmaßfoto als Projektreferenz; verbindlich sind die eingetragenen Zahlenmaße.</div></div>`));
  $('printSheets').innerHTML=a.join('')||'<p>Keine Elemente vorhanden.</p>';
 }
 buildPrintSheets=buildStandardPrintSheets;
@@ -593,7 +612,7 @@ ENDSEC
 EOF
 `}
 function stairDXF(p){const f=stairFinish(p),pts=stairPoints(p,true);let e=linesDXF(pts);e+=textDXF(0,70,18,`BW ${f.backW} FW ${f.frontW} LD ${f.leftD} RD ${f.rightD}`);e+=textDXF(0,100,15,edgeText(p.edges));return wrapDXF(e)}
-function riserDXF(p){let e=linesDXF(riserPoints(p));e+=textDXF(0,70,15,`TOP ${p.topW} BOTTOM ${p.bottomW} HL ${p.hL} HR ${p.hR}`);e+=textDXF(0,100,15,edgeText(p.edges));return wrapDXF(e)}
+function riserDXF(p){const middle=p.hM==null?(num(p.hL)+num(p.hR))/2:p.hM;let e=linesDXF(riserPoints(p));e+=textDXF(0,70,15,`TOP ${p.topW} BOTTOM ${p.bottomW} HL ${p.hL} HM ${middle} HR ${p.hR}`);e+=textDXF(0,100,15,edgeText(p.edges));return wrapDXF(e)}
 function plateDXF(p){let e=linesDXF(platePoints(p));e+=textDXF(0,70,15,`${p.name} W ${p.w} D ${p.d}`);plateCuts(p).forEach((c,i)=>e+=textDXF(0,100+i*24,15,`L-CUT ${i+1}: ${c.w} x ${c.d} ${c.corner}`));e+=textDXF(0,130+plateCuts(p).length*24,15,edgeText(p.edges));e+=textDXF(0,160+plateCuts(p).length*24,15,`SURFACE ${p.surface||''} | 90DEG ${p.rightAngle||''}`);return wrapDXF(e)}
 async function dl(name,content,type='application/dxf'){const file=new File([content],name,{type});try{if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return}}catch(e){if(e?.name==='AbortError')return}const blob=new Blob([content],{type}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000)}
 function cleanName(s){return String(s).replace(/[^a-zA-Z0-9_-]+/g,'_')}
@@ -602,7 +621,7 @@ function downloadRiserDXF(i){const p=state.risers[i];dl(`${cleanName(state.proje
 function downloadPlateDXF(i){const p=state.podest.plates[i];dl(`${cleanName(state.project.projectNo)}_Podest_${p.name}.dxf`,plateDXF(p))}function downloadCurrentPlateDXF(){if(state.podest.plates.length)downloadPlateDXF(currentPlate)}
 async function downloadAllDXFSequential(){const jobs=[];state.stairs.forEach((p,i)=>jobs.push(()=>downloadStairDXF(i)));state.risers.forEach((p,i)=>jobs.push(()=>downloadRiserDXF(i)));state.podest.plates.forEach((p,i)=>jobs.push(()=>downloadPlateDXF(i)));(state.free||[]).forEach((p,i)=>jobs.push(()=>downloadFreeDXF(i)));for(const j of jobs){j();await new Promise(r=>setTimeout(r,350))}}
 
-function newProject(){if(!confirm('Neues Projekt anlegen? Das aktuelle Projekt wird vorher lokal gespeichert.'))return;saveLocal(true);const today=new Date().toISOString().slice(0,10),nextNo=`MB-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;state={project:{projectNo:nextNo,date:today,author:'Maik Bielefeldt',status:'Aufmaß',projectName:'',customer:'',address:'',material:'Granit 20 mm',notes:''},stairs:[],risers:[],podest:{rawW:0,rawD:0,finW:0,finD:0,cols:1,rows:1,joint:5,thick:20,plates:[]},free:[],imports:[]};currentStair=currentRiser=currentPlate=currentFree=0;fillProject();renderAll();saveLocal(true);showPage('project');alert('Neues Projekt angelegt.')}
+function newProject(){if(!confirm('Neues Projekt anlegen? Das aktuelle Projekt wird vorher lokal gespeichert.'))return;saveLocal(true);const today=new Date().toISOString().slice(0,10),nextNo=`MB-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;state={project:{projectNo:nextNo,date:today,author:'Maik Bielefeldt',status:'Aufmaß',projectName:'',customer:'',address:'',material:'Granit 20 mm',notes:'',photos:[]},stairs:[],risers:[],podest:{rawW:0,rawD:0,finW:0,finD:0,cols:1,rows:1,joint:5,thick:20,plates:[]},free:[],imports:[]};currentStair=currentRiser=currentPlate=currentFree=0;fillProject();renderAll();saveLocal(true);showPage('project');alert('Neues Projekt angelegt.')}
 
 function autoSave(){clearTimeout(autoSave.t);autoSave.t=setTimeout(()=>saveLocal(true),450)}
 function saveLocal(silent=false){syncProjectNoLoop();const all=JSON.parse(localStorage.getItem(KEY)||'{}');all[state.project.projectNo]={savedAt:new Date().toISOString(),state};localStorage.setItem(KEY,JSON.stringify(all));if(!silent)alert('Projekt lokal auf diesem Gerät gespeichert.');}
@@ -662,8 +681,10 @@ function v1Panel(){
 }
 function v1RiserFinished(p){
  v1init();let d=state.project.defaults,t=num(d.riserTreadThickness||((state.stairs&&state.stairs[0])?state.stairs[0].thick:20)||20),sub=t+num(d.jointTop)+num(d.jointBottom);
- return {l:Math.max(0,num(p.hL)-sub),m:Math.max(0,num(p.hM)-sub),r:Math.max(0,num(p.hR)-sub),sub,tread:t,drainage:num(d.drainage||0),adhesive:num(d.adhesive||0)};
+ const middle=p.hM==null?(num(p.hL)+num(p.hR))/2:num(p.hM);
+ return {l:Math.max(0,num(p.hL)-sub),m:Math.max(0,middle-sub),r:Math.max(0,num(p.hR)-sub),sub,tread:t,drainage:num(d.drainage||0),adhesive:num(d.adhesive||0)};
 }
+function v1RiserWarning(p,ff=v1RiserFinished(p)){let raw=[num(p.hL),num(p.hM),num(p.hR)],spread=Math.max(...raw)-Math.min(...raw),notes=[];if(Math.min(ff.l,ff.m,ff.r)<=0)notes.push('Fertighöhe ist nicht plausibel – Aufbau/Fugen prüfen.');if(spread>10)notes.push(`Höhenabweichung links–mitte–rechts beträgt ${fmt(spread)} mm.`);return notes.length?`<br><span class="dangertext"><b>Plausibilitätsprüfung:</b> ${notes.join(' ')}</span>`:''}
 function v1SurfaceText(type,p){
  let mat=(state.project.material||'Naturstein').replace(/\s*20\s*mm\s*$/i,'').trim(),cm=num(p.thick||20)/10;
  return `${type} in ${String(cm).replace('.',',')} cm ${mat}, ${p.surface||'Oberfläche nicht angegeben'}`;
@@ -697,13 +718,33 @@ function v1OneCutDims(p,c,map){
 
 // ===== MB AUFMASS V2 module shell =====
 let activeModule='stone';
+const stoneNav=[
+ ['⌂','ÜBERSICHT / PROJEKT',"showPage('project',this)"],['↔','TREPPEN-AUFMASS',"showPage('stairs',this)"],['▤','SETZSTUFEN',"showPage('risers',this)"],['▦','PODEST / PLATTEN',"showPage('podest',this)"],['◇','FREIKÖRPER',"showPage('free',this)"],['⇩','IMPORT',"showPage('import',this)"],['▣','FERTIGUNG / EXPORT',"showPage('summary',this)"]
+];
+const coverNav=[
+ ['⌂','ÜBERSICHT / PROJEKT',"coverGo('project',this)"],['▱','ABDECKUNGEN',"coverGo('parts',this)"],['◯','AUSSCHNITTE',"coverGo('cuts',this)"],['━','KANTEN',"coverGo('edges',this)"],['▣','FERTIGUNG / PDF',"coverGo('production',this)"]
+];
+const stoneActions=$('topActions').innerHTML;
+function setModuleNav(items){
+ const buttons=[...$('mainNav').querySelectorAll('button')];
+ buttons.forEach((b,i)=>{if(!items[i]){b.style.display='none';return}let [icon,label,action]=items[i];b.style.display='';b.dataset.icon=icon;b.textContent=label;b.setAttribute('onclick',action);b.classList.toggle('active',i===0)});
+}
+function coverWindow(){return $('coverFrame')&&$('coverFrame').contentWindow}
+function coverGo(section,btn){let w=coverWindow();if(w)w.postMessage({type:'mb-cover-go',section},location.origin);document.querySelectorAll('#mainNav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active')}
+function coverCommand(command){let w=coverWindow();if(w)w.postMessage({type:'mb-cover-command',command},location.origin)}
+function renderModuleActions(mod){
+ if(mod==='stone'){$('topActions').innerHTML=stoneActions;return}
+ if(mod==='cover'){$('topActions').innerHTML='<button class="btn primary" onclick="coverCommand(\'new\')">Neuer Auftrag</button><button class="btn" onclick="coverCommand(\'save\')">Zwischenspeichern</button><button class="btn" onclick="coverCommand(\'openPdf\')">Projekt-PDF öffnen</button><button class="btn gold" onclick="coverCommand(\'savePdf\')">Projekt-PDF speichern</button>';return}
+ $('topActions').innerHTML='<button class="btn" onclick="openModuleMenu()">Bereich wechseln</button>';
+}
 function showStartScreen(){$('startScreen').classList.remove('hidden')}
 function hideStartScreen(){$('startScreen').classList.add('hidden')}
 function enterModule(mod){hideStartScreen();selectModule(mod)}
 function openModuleMenu(){$('moduleOverlay').classList.remove('hidden')}
 function closeModuleMenu(){$('moduleOverlay').classList.add('hidden')}
-function selectModule(mod){activeModule=mod;closeModuleMenu();document.body.classList.remove('module-water','module-tile');document.querySelectorAll('.module-landing').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));const nav=document.querySelector('.nav');
- if(mod==='stone'){nav.style.display='grid';$('moduleTriggerText').textContent='Naturstein & Treppen';$('moduleSubtitle').textContent='NATURSTEIN · TREPPEN · PLATTEN · V1.0';$('moduleBadge').className='v2-top-module';$('moduleBadge').textContent='▰ Naturstein & Treppenaufmaß';showPage('project',document.querySelector('.nav button'));}
+function selectModule(mod){activeModule=mod;closeModuleMenu();document.body.classList.remove('module-water','module-tile','module-cover');document.querySelectorAll('.module-landing,.cover-workspace').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));const nav=document.querySelector('.nav');renderModuleActions(mod);
+ if(mod==='stone'){nav.style.display='grid';setModuleNav(stoneNav);$('moduleTriggerText').textContent='Naturstein & Treppen';$('moduleSubtitle').textContent='NATURSTEIN · TREPPEN · PLATTEN · V1.0';$('moduleBadge').className='v2-top-module';$('moduleBadge').textContent='▰ Naturstein & Treppenaufmaß';showPage('project',$('nav1'));}
+ if(mod==='cover'){document.body.classList.add('module-cover');nav.style.display='grid';setModuleNav(coverNav);$('moduleTriggerText').textContent='Mauerabdeckungen';$('moduleSubtitle').textContent='MAUERABDECKUNGEN · TEILE · AUSSCHNITTE · FERTIGUNG';$('moduleBadge').className='v2-top-module cover';$('moduleBadge').textContent='▱ Mauerabdeckungs-Aufmaß';$('landing-cover').classList.add('active');coverGo('project',$('nav1'));window.scrollTo({top:0});}
  if(mod==='tile'){document.body.classList.add('module-tile');nav.style.display='none';$('moduleTriggerText').textContent='Fliesen-Aufmaß';$('moduleSubtitle').textContent='FLIESEN · AUFMASS · AUFTEILUNG · MATERIAL';$('moduleBadge').className='v2-top-module tile';$('moduleBadge').textContent='▦ Fliesen-Aufmaß';$('landing-tile').classList.add('active');window.scrollTo({top:0});}
  if(mod==='water'){document.body.classList.add('module-water');nav.style.display='none';$('moduleTriggerText').textContent='Bewässerungsplanung';$('moduleSubtitle').textContent='BEWÄSSERUNG · ZONEN · REGNER · MATERIAL';$('moduleBadge').className='v2-top-module water';$('moduleBadge').textContent='◒ Bewässerungsplanung';$('landing-water').classList.add('active');window.scrollTo({top:0});}
  try{localStorage.setItem('mb_aufmass_module',mod)}catch(e){}
@@ -837,6 +878,6 @@ async function downloadCombinedDXF(){
 /* V2: Startbildschirm bleibt beim App-Start sichtbar; Bereich wird dort gewählt. */
 </script>
 
-<div id="moduleOverlay" class="module-overlay hidden" onclick="if(event.target===this)closeModuleMenu()"><div class="module-dialog"><div class="module-head"><div><div style="font-size:11px;color:#c19b4b;font-weight:900;letter-spacing:.12em">MB AUFMASS</div><h2>Bereich auswählen</h2></div><button class="module-close" onclick="closeModuleMenu()">×</button></div><div class="module-cards"><button class="module-card stone" onclick="selectModule('stone')"><span class="ico">▰</span><span>Naturstein & Treppenaufmaß<small>Trittstufen · Setzstufen · Podeste · Sonderformen · DXF/PDF</small></span><span class="arr">→</span></button><button class="module-card stone" onclick="location.href='MB_Aufmass_Mauerabdeckung_V4_Alle6_Druck.html'"><span class="ico">▱</span><span>Mauerabdeckungs-Aufmaß<small>Mehrteilige Aufträge · Ausschnitte · Kanten · Fertigungsblätter</small></span><span class="arr">→</span></button><button class="module-card tile" onclick="selectModule('tile')"><span class="ico">▦</span><span>Fliesen-Aufmaß<small>Wand · Boden · Dusche · Vorwand · Terrasse · Aufteilung</small></span><span class="arr">→</span></button><button class="module-card water" onclick="selectModule('water')"><span class="ico">◒</span><span>Bewässerungsplanung<small>Rasen · Beete · Zonen · Regner · Tropfrohr · Material</small></span><span class="arr">→</span></button></div></div></div>
+<div id="moduleOverlay" class="module-overlay hidden" onclick="if(event.target===this)closeModuleMenu()"><div class="module-dialog"><div class="module-head"><div><div style="font-size:11px;color:#c19b4b;font-weight:900;letter-spacing:.12em">MB AUFMASS</div><h2>Bereich auswählen</h2></div><button class="module-close" onclick="closeModuleMenu()">×</button></div><div class="module-cards"><button class="module-card stone" onclick="selectModule('stone')"><span class="ico">▰</span><span>Naturstein & Treppenaufmaß<small>Trittstufen · Setzstufen · Podeste · Sonderformen · DXF/PDF</small></span><span class="arr">→</span></button><button class="module-card stone" onclick="selectModule('cover')"><span class="ico">▱</span><span>Mauerabdeckungs-Aufmaß<small>Mehrteilige Aufträge · Ausschnitte · Kanten · Fertigungsblätter</small></span><span class="arr">→</span></button><button class="module-card tile" onclick="selectModule('tile')"><span class="ico">▦</span><span>Fliesen-Aufmaß<small>Wand · Boden · Dusche · Vorwand · Terrasse · Aufteilung</small></span><span class="arr">→</span></button><button class="module-card water" onclick="selectModule('water')"><span class="ico">◒</span><span>Bewässerungsplanung<small>Rasen · Beete · Zonen · Regner · Tropfrohr · Material</small></span><span class="arr">→</span></button></div></div></div>
 </body>
 </html>
