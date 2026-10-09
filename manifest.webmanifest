@@ -1,0 +1,24 @@
+{
+  "name": "MB Aufmaß",
+  "short_name": "MB Aufmaß",
+  "description": "Aufmaß-App von MB Dein Dienstleister",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b3762",
+  "theme_color": "#0b3762",
+  "icons": [
+    {
+      "src": "./mb-aufmass-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./mb-aufmass-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
